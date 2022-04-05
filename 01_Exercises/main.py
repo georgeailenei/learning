@@ -1,23 +1,22 @@
 # LAB 1
 # Calculati suma a N numere naturale.
-def sum_numbers(*numbers):
-    sum = 0
-    find = 0
+def sum_numbers(numbers):
+    the_sum = 0
+    found_negative_number = False
 
-    for check in numbers:
-        if check < 0:
-            find = -1
+    for number in numbers:
+        if number < 0:
+            found_negative_number = True
+        else:
+            the_sum = the_sum + number
 
-    for num in numbers:
-        sum = sum + num
-
-    if find < 0:
+    if found_negative_number:
         print("Choose only natural numbers")
     else:
-        return sum
+        return the_sum
 
 
-print(sum_numbers(-2, 3))
+print(sum_numbers([2, 3]))
 
 
 # Verificați daca un număr citit de la tastatura este prim.
