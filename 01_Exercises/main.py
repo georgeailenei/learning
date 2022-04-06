@@ -23,19 +23,19 @@ print(sum_numbers([2, 3]))
 def only_prime_numbers(number):
     divisors = []
 
-    for i in range(1, number + 1):
+    for i in range(2, number):
         if number % i == 0:
             divisors.append(i)
 
     if number == 0 or number == 1:
         print("This is NOT a prime number")
-    elif len(divisors) > 2:
+    elif len(divisors) > 0:
         print("This is NOT a prime number")
     else:
         print("This is a prime number")
 
 
-only_prime_numbers(13)
+only_prime_numbers(4)
 
 
 # Calculați cel mai mare divizor comun a doua numere.
