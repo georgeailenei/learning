@@ -1,5 +1,3 @@
-import random
-import os
 
 
 #   Choose a random word.   - Completed.
