@@ -122,6 +122,12 @@ def return_to_menu(menu_or_exit):
 
 
 def main():
+    """
+    This is the main function of the app which provides instructions and it takes a random number input.
+    Examples:
+        1213402
+        -2-13-49 etc
+    """
     main_menu()
     selected_option = input("Choose your option here: ")
 
