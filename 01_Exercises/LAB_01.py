@@ -44,11 +44,11 @@ def highest_divisors(a, b):
     divisors_b = []
     highest_divisor = []
 
-    for i in range(1, a):
+    for i in range(1, a + 1):
         if a % i == 0:
             divisors_a.append(i)
 
-    for y in range(1, b):
+    for y in range(1, b + 1):
         if b % y == 0:
             divisors_b.append(y)
 
