@@ -52,22 +52,12 @@ def highest_divisors(a, b):
         if b % y == 0:
             divisors_b.append(y)
 
-    while True:
-        compare = 0
-        if len(divisors_a) >= len(divisors_b):
-            for find in range(len(divisors_a)):
-                if divisors_a[find] == divisors_b[compare]:
-                    highest_divisor.append(divisors_a[find])
-                    compare = compare + 1
+    for a in divisors_a:
+        for b in divisors_b:
+            if a == b:
+                highest_divisor.append(a)
 
-        elif len(divisors_b) >= len(divisors_a):
-            for find in range(len(divisors_b)):
-                if divisors_b[find] == divisors_a[compare]:
-                    highest_divisor.append(divisors_b[find])
-                    compare = compare + 1
-
-        print("Cel mai mare divizor comun este " + str(highest_divisor[-1]))
-        break
+    return highest_divisor[-1]
 
 
-highest_divisors(10, 25)
+print(highest_divisors(10, 15))
