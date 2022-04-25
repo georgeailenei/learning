@@ -16,7 +16,7 @@ def sum_numbers(numbers):
         return the_sum
 
 
-print(sum_numbers([2, 3]))
+# print(sum_numbers([2, 3]))
 
 
 # Verificați daca un număr citit de la tastatura este prim.
@@ -35,14 +35,14 @@ def only_prime_numbers(number):
         print("This is a prime number")
 
 
-only_prime_numbers(4)
+# only_prime_numbers(4)
 
 
 # Calculați cel mai mare divizor comun a doua numere.
 def highest_divisors(a, b):
     divisors_a = []
     divisors_b = []
-    highest_divisor = []
+    max_nr = -99999
 
     for i in range(1, a + 1):
         if a % i == 0:
@@ -54,10 +54,10 @@ def highest_divisors(a, b):
 
     for a in divisors_a:
         for b in divisors_b:
-            if a == b:
-                highest_divisor.append(a)
+            if a == b and a > max_nr:
+                max_nr = a
 
-    return highest_divisor[-1]
+    return max_nr
 
 
 print(highest_divisors(10, 15))
