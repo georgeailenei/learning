@@ -1,7 +1,7 @@
 import os
 
 
-def do_list_integers(random_nr):
+def generate_int_list(random_nr):
     """
     :param: must be a random number or a string number.
     :return: a list of integers;
@@ -9,14 +9,11 @@ def do_list_integers(random_nr):
     """
     random_nr = str(random_nr)
     random_list = list(random_nr)
-    all_letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-                   'u', 'v', 'w', 'x', 'y', 'z']
+    all_letters = ["-", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
     for num in random_list:
-        if num in all_letters:
+        if num not in all_letters:
             return "This random number contains letters, please try again!"
-        else:
-            pass
 
     for num in range(len(random_list)):
         if random_list[num] == "-":
@@ -30,11 +27,11 @@ def do_list_integers(random_nr):
     return random_list
 
 
-assert do_list_integers("2234s") == "This random number contains letters, please try again!"
-assert do_list_integers(-11) == [-1, 1]
-assert do_list_integers("-11") == [-1, 1]
-assert do_list_integers("23") == [2, 3]
-assert do_list_integers(23) == [2, 3]
+assert generate_int_list("2234s") == "This random number contains letters, please try again!"
+assert generate_int_list(-11) == [-1, 1]
+assert generate_int_list("-11") == [-1, 1]
+assert generate_int_list("23") == [2, 3]
+assert generate_int_list(23) == [2, 3]
 
 
 def find_prime_numbers(random_nr):
@@ -42,7 +39,7 @@ def find_prime_numbers(random_nr):
     :param random_nr: must be a random number or a string number.
     :return: the prime numbers.
     """
-    random_list = do_list_integers(random_nr)
+    random_list = generate_int_list(random_nr)
     prime_numbers = []
 
     for num in random_list:
@@ -68,7 +65,7 @@ def mountain_sequence_pattern(random_nr):
     :param random_nr: must be a random number or a string number.
     :return: FALSE OR TRUE - and - descriptive string.
     """
-    random_list = do_list_integers(random_nr)
+    random_list = generate_int_list(random_nr)
     sequence_one = 0
     sequence_two = 0
 
@@ -110,11 +107,13 @@ def main_menu():
     return menu
 
 
-def return_to_menu(menu_or_exit):
+def return_to_menu():
     """
     This function takes the user input to exit or to return to the main menu.
     """
-    if menu_or_exit == "main menu":
+    the_chosen_option = input("\n" "Write main menu to return to it or exit: ")
+
+    if the_chosen_option == "main menu":
         return main()
     else:
         print("You've exit the application")
@@ -134,37 +133,38 @@ def main():
     if selected_option == "1":
         os.system("cls")
         print("You've choose option 1: Generate a list of integers")
-        user_input = input("Write some numbers and the app will convert it into a list of integers: ")
-        user_result = do_list_integers(user_input)
+        user_input = input("Write your numbers here: ")
+        user_result = generate_int_list(user_input)
         print("Output:")
 
         for num in user_result:
             print(num, end=" ")
-        return user_result, return_to_menu(input("\nWrite main menu to return to it or exit: "))
+
+        return_to_menu()
 
     elif selected_option == "2":
         os.system("cls")
         print("You've choose option 2: Find prime numbers")
-        user_input = input("Write some numbers and the app will find the prime numbers: ")
+        user_input = input("Write your numbers here: ")
         user_result = find_prime_numbers(user_input)
         print("Output:")
 
         for num in user_result:
             print(num, end=" ")
 
-        return user_result, return_to_menu(input("\nWrite main menu to return to it or exit: "))
+        return_to_menu()
 
     elif selected_option == "3":
         os.system("cls")
         print("You've choose option 3: Detect a mountain sequence number")
-        user_input = input("Write 5 numbers to detect a mountain sequence number: ")
+        user_input = input("Write 5 numbers here: ")
         user_result = mountain_sequence_pattern(user_input)
         print("Result:")
         if user_result:
             print("The app detected a mountain sequence number")
         else:
             print("This number does NOT represent a mountain sequence number")
-        return user_result, return_to_menu(input("\nWrite main menu to return to it or exit: "))
+        return_to_menu()
 
 
 if __name__ == "__main__":
