@@ -3,6 +3,7 @@ def generate_int_list(random_nr):
     :param: must be a random numbers separated by spaces.
     :return: a list of integers;
     :note: The function will fail if the string is not numeric;
+    Some more random text here..
     """
 
     strings_to_convert = []
