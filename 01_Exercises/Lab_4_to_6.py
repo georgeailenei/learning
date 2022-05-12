@@ -1,3 +1,11 @@
+"""
+2. Ștergere.
+• Șterge toate cheltuielile pentru ziua dată
+• Șterge cheltuielile pentru un interval de timp (se dă ziua de început și
+sfârșit, se șterg toate cheltuielile pentru perioada dată)
+• Șterge toate cheltuielile de un anumit tip"""
+
+"""inainte de a face functiile de mai sus trebuie sa primeste datele corect. Corecteaza codul."""
 
 
 class Expense:
@@ -6,8 +14,39 @@ class Expense:
         self.amount = amount
         self.expense_type = expense_type
 
+    def check_date(self):
+        list_of_numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"]
+        check_date = list(self.date)
+
+        if check_date[2] == "-" and check_date[5] == "-":
+            for i in check_date:
+                if i not in list_of_numbers:
+                    return False
+                else:
+                    return True
+        else:
+            return False
+
+    def check_amount(self):
+        list_of_numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        check_amount = list(self.amount)
+
+        for i in check_amount:
+            if i not in list_of_numbers:
+                return False
+            else:
+                return True
+
+    def check_type(self):
+        expense_type_list = ["Food", "Bills", "Clothes", "Phone", "Other"]
+
+        if self.expense_type in expense_type_list:
+            return True
+        else:
+            return False
+
     def get_all_expense_details(self):  # print all the details date, amount and type.
-        return (self.date + " " + self.amount + " " + self.expense_type).split()
+        return (self.date + " " + str(self.amount) + " " + self.expense_type).split()
 
 
 def main_menu():    # information and options about the app.
@@ -19,13 +58,13 @@ def main_menu():    # information and options about the app.
     return the_option
 
 
-def exit_menu():
+def exit_to_menu():
     choose_option = input("Do you have more inputs to make? ")
     return choose_option
 
 
 def collect_data():     # collects the data and stores in as object.
-    the_date_of_expense = input("Date: ")
+    the_date_of_expense = input("Date (dd-mm-yy): ")
     the_amount_of_expense = input("Amount: ")
     the_type_of_expense = input("Type (Food, Bills, Clothes, Phone or Other): ")
     return Expense(the_date_of_expense, the_amount_of_expense, the_type_of_expense)
@@ -45,11 +84,16 @@ def main():     # the main func that puts everything together.
         print("\nYou can now input your expenses")
 
         while True:
-            data_collection = collect_data()
-            all_expenses.append(data_collection.get_all_expense_details())
+            data_collected = collect_data()
+
+            if data_collected.check_date() and data_collected.check_amount() and data_collected.check_type():
+                all_expenses.append(data_collected.get_all_expense_details())
+            else:
+                print("Please try to input your data again!")
+
             print(all_expenses)     # display the current list of expenses.
 
-            if exit_menu() == "no":
+            if exit_to_menu() == "no":
                 break
             else:
                 continue
