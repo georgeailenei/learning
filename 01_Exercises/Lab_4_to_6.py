@@ -1,9 +1,10 @@
+"""3. Căutări.
+• Tipărește toate cheltuielile mai mari decât o sumă dată
+• Tipărește toate cheltuielile efectuate înainte de o zi dată și mai mici
+decât o sumă (se dă suma și ziua, se tipăresc toate cheltuielile mai
+mici ca suma dată și efectuate înainte de ziua specificată)
+• tipărește toate cheltuielile de un anumit tip.
 """
-2. Ștergere.
-• Șterge cheltuielile pentru un interval de timp (se dă ziua de început și
-sfârșit, se șterg toate cheltuielile pentru perioada dată)
-• Șterge toate cheltuielile de un anumit tip"""
-
 
 
 class Expense:
@@ -48,12 +49,16 @@ class Expense:
 
 
 def main_menu():    # information and options about the app.
-    print("This App allows you to store your expenses.")
+    print("This App allows you to manage your family's expenses.")
     the_option = input("1. Add expenses \n"
                        "2. Update expenses \n"
                        "3. Remove expenses \n"
                        "4. Print full list of expenses \n"
-                       "5. Exit \n"
+                       "5. Search for expenses \n"
+                       "6. Reports \n"
+                       "7. Filters \n"
+                       "8. Undo \n"
+                       "9. Exit \n"
                        "Please choose an option here: ")
     return the_option
 
@@ -62,7 +67,7 @@ def remove_menu():    # the Menu for remove option.
     print("Choose from the options below")
     the_option = input("1. Remove all expenses by date \n"
                        "2. Remove all expenses by type \n"
-                       "3. Remove expenses by time \n"
+                       "3. Remove expenses by a time interval \n"
                        "4. Return to main menu \n"
                        "Please choose an option here: ")
     return the_option
@@ -87,6 +92,24 @@ def update_expense():   # collects another set of data for update.
     update_input = collect_data()
     the_update = update_input.get_all_expense_details()
     return the_update
+
+
+def remove_expense_by_time_interval(expense_list, the_start_day, the_last_day):
+    to_be_removed_list = []
+    i = 0
+    j = 0
+
+    while len(expense_list) > i:
+        if the_start_day in expense_list[i][j]:
+            to_be_removed_list.append(expense_list[i])
+            i += 1
+        elif the_last_day in expense_list[i][j]:
+            to_be_removed_list.append(expense_list[i])
+            i += 1
+        else:
+            i += 1
+
+    return to_be_removed_list
 
 
 def main():     # the main func that puts everything together.
@@ -130,22 +153,53 @@ def main():     # the main func that puts everything together.
                     print("\nYou can now remove and expense by inserting the Date")
                     the_date_of_expense = input("Date (dd-mm-yy): ")
 
+                    print(all_expenses)
+
                     for expense in all_expenses:
-                        if the_date_of_expense not in expense:
-                            print(all_expenses)
-                            f"The {expense} has been removed!"
+                        if the_date_of_expense in expense:
                             all_expenses.remove(expense)
-                            print("Your new expenses list is:")
-                            print(all_expenses)
+
+                    print("Your new expenses list is:")
+                    print(all_expenses)
 
                     if not exit_to_menu():
-                        continue
+                        break
 
                 elif other_options == "2":
-                    pass
+                    print("\nYou can now remove expense by inserting the type/category")
+                    type_of_expense = input("Type (Food, Bills, Clothes, Phone or Other): ")
+
+                    print(all_expenses)
+
+                    for expense in all_expenses:
+                        if type_of_expense in expense:
+                            all_expenses.remove(expense)
+
+                    print("Your new expenses list is:")
+                    print(all_expenses)
+
+                    if not exit_to_menu():
+                        break
 
                 elif other_options == "3":
-                    pass
+                    print("\nYou can now remove expense by time interval")
+                    the_start_date = input("Start Day Date (dd): ")
+                    the_last_date = input("Last Day Date (dd): ")
+
+                    to_be_remove_expenses = remove_expense_by_time_interval(all_expenses, the_start_date, the_last_date)
+
+                    print("This is the list that its about to be remove")
+                    print(to_be_remove_expenses)
+
+                    for expense in to_be_remove_expenses:
+                        if expense in all_expenses:
+                            all_expenses.remove(expense)
+
+                    print("Your new expenses list is:")
+                    print(all_expenses)
+
+                    if not exit_to_menu():
+                        break
 
                 elif other_options == "4":
                     break
@@ -157,7 +211,39 @@ def main():     # the main func that puts everything together.
             if not exit_to_menu():
                 continue
 
-        elif options == "5":       # exit app
+        elif options == "5":
+            print("\nYou can now search of an expense")
+            print("This is the current list of expenses:")
+            print(all_expenses)
+
+            if not exit_to_menu():
+                continue
+
+        elif options == "6":
+            print("\nReports")
+            print("This is the current list of expenses:")
+            print(all_expenses)
+
+            if not exit_to_menu():
+                continue
+
+        elif options == "7":
+            print("\nFilters")
+            print("This is the current list of expenses:")
+            print(all_expenses)
+
+            if not exit_to_menu():
+                continue
+
+        elif options == "8":
+            print("\nUndo")
+            print("This is the current list of expenses:")
+            print(all_expenses)
+
+            if not exit_to_menu():
+                continue
+
+        elif options == "9":       # exit app
             if len(all_expenses) == 0:
                 print("You really didn't spend any money? ok. goodbye!")
                 break
