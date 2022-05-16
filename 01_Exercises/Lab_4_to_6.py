@@ -1,11 +1,3 @@
-"""3. Căutări.
-• Tipărește toate cheltuielile mai mari decât o sumă dată
-• Tipărește toate cheltuielile efectuate înainte de o zi dată și mai mici
-decât o sumă (se dă suma și ziua, se tipăresc toate cheltuielile mai
-mici ca suma dată și efectuate înainte de ziua specificată)
-• tipărește toate cheltuielile de un anumit tip.
-"""
-
 
 class Expense:
     def __init__(self, date, amount, expense_type):  # the data that we're getting.
@@ -73,6 +65,28 @@ def remove_menu():    # the Menu for remove option.
     return the_option
 
 
+def search_menu_options():
+    # when cleaning: remember to make only one function that
+    # contains all the secondary menus.
+    print("Choose from the options below")
+    the_option = input("1. Print all expenses higher than input \n"
+                       "2. Print all expenses of the same type \n"
+                       "3. Print smaller expenses than in put and before the given day \n"
+                       "4. Return to main menu \n"
+                       "Please choose an option here: ")
+    return the_option
+
+
+def report_menu_options():
+    the_option = input("1. Print sum of all expenses from a category \n"
+                       "2. Find the max expense in a day \n"
+                       "3. Print all expenses with the same amount \n"
+                       "4. Print all expenses by category \n"
+                       "5. Return to main menu \n"
+                       "Please choose an option here: ")
+    return the_option
+
+
 def exit_to_menu():
     choose_option = input("Do you want to continue? ")
     if choose_option == "no":
@@ -110,6 +124,63 @@ def remove_expense_by_time_interval(expense_list, the_start_day, the_last_day):
             i += 1
 
     return to_be_removed_list
+
+
+def check_expense_by_day(the_date):
+    the_day = []
+
+    for day in the_date:
+        if day == "-":
+            break
+        else:
+            the_day.append(day)
+
+    for i in the_day:
+        if i == "0":
+            the_day.remove(i)
+
+    the_actual_day = "".join(the_day)
+    return int(the_actual_day)
+
+
+def sum_expenses(amount):
+    the_sum = 0
+
+    for i in amount:
+        the_sum = the_sum + int(i)
+
+    return the_sum
+
+
+def expensive_day(all_expenses):
+    expenses_by_day_list = []
+    all_sums = []
+    the_results = []
+    i = 0
+    j = 0
+    k = 0
+    x = 1   # cannot change this variable
+
+    for expense in all_expenses:
+        expenses_by_day_list.append(expense[i])
+
+    while len(expenses_by_day_list) > i:
+        if expenses_by_day_list[i] == all_expenses[j][k]:
+            all_sums.append(all_expenses[j][x])
+            j += 1
+        elif j > len(all_expenses):
+            the_results.append(sum_expenses(all_sums))
+            all_sums.clear()
+            i += 1
+        else:
+            j += 1
+
+    the_result = 0
+    for highest_sum in all_sums:
+        if the_result < highest_sum:
+            the_result = highest_sum
+
+    return the_result
 
 
 def main():     # the main func that puts everything together.
@@ -213,19 +284,103 @@ def main():     # the main func that puts everything together.
 
         elif options == "5":
             print("\nYou can now search of an expense")
-            print("This is the current list of expenses:")
-            print(all_expenses)
+            options = search_menu_options()
 
-            if not exit_to_menu():
-                continue
+            while True:
+                if options == "1":
+                    print("Write an expense and the APP will print all higher expenses")
+                    the_expense = input("Write expense: ")
+                    high_expenses_list = []
+                    i = 0
+                    j = 1
+
+                    while len(all_expenses) > i:
+                        if int(all_expenses[i][j]) > int(the_expense):
+                            high_expenses_list.append(all_expenses[i][j])
+                            i += 1
+                        else:
+                            i += 1
+
+                    print(high_expenses_list)
+                    if not exit_to_menu():
+                        break
+
+                elif options == "2":
+                    print("You can now choose to print expenses by type")
+                    expense_type = input("Write either (Food, Bills, Clothes, Phone or Other): ")
+                    expenses_by_list = []
+                    i = 0
+                    j = 2
+
+                    while len(all_expenses) > i:
+                        if all_expenses[i][j] == expense_type:
+                            expenses_by_list.append(all_expenses[i])
+                            i += 1
+                        else:
+                            i += 1
+
+                    print(expenses_by_list)
+                    if not exit_to_menu():
+                        break
+
+                elif options == "3":
+                    print("Choose a day and the amount to print the list")
+                    expense_by_sum = input("Write expense: ")
+                    expense_by_day = input("Write day: ")
+                    expense_list = []
+                    i = 0
+                    j = 0
+                    x = 1
+
+                    while len(all_expenses) > i:
+                        if check_expense_by_day(all_expenses[i][j]) < int(expense_by_day):
+                            if int(expense_by_sum) > int(all_expenses[i][x]):
+                                expense_list.append(all_expenses[i])
+                                i += 1
+                            else:
+                                i += 1
+                        else:
+                            i += 1
+
+                    print(expense_list)
+                    if not exit_to_menu():
+                        break
+
+                elif options == "4":
+                    break
 
         elif options == "6":
-            print("\nReports")
-            print("This is the current list of expenses:")
-            print(all_expenses)
+            print("\nReports - various actions for the expense list")
+            options = report_menu_options()
 
-            if not exit_to_menu():
-                continue
+            while True:
+                if options == "1":
+                    print("Sum Up all the expenses in a category")
+                    expense_by_type = input("Write either (Food, Bills, Clothes, Phone or Other): ")
+                    the_expenses_list = []
+                    i = 0
+                    j = 1
+                    x = 2
+
+                    while len(all_expenses) > i:
+                        if all_expenses[i][x] == expense_by_type:
+                            the_expenses_list.append(all_expenses[i][j])
+                            i += 1
+                        else:
+                            i += 1
+
+                    the_sum = sum_expenses(the_expenses_list)
+                    print(the_sum)
+
+                if not exit_to_menu():
+                    break
+
+                elif options == "2":
+                    print("This is the most expensive day -_-")
+                    print(expensive_day(all_expenses))
+
+                if not exit_to_menu():
+                    break
 
         elif options == "7":
             print("\nFilters")
@@ -253,3 +408,5 @@ def main():     # the main func that puts everything together.
 
 if __name__ == '__main__':
     main()
+
+
