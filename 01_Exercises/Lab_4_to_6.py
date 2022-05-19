@@ -152,35 +152,15 @@ def sum_expenses(amount):
     return the_sum
 
 
-def expensive_day(all_expenses):
+def expensive_day_list(all_expenses):
+    """This function returns a list with all the dates from the all expenses"""
     expenses_by_day_list = []
-    all_sums = []
-    the_results = []
     i = 0
-    j = 0
-    k = 0
-    x = 1   # cannot change this variable
 
-    for expense in all_expenses:
+    for expense in all_expenses:            # Add the date to the list
         expenses_by_day_list.append(expense[i])
 
-    while len(expenses_by_day_list) > i:
-        if expenses_by_day_list[i] == all_expenses[j][k]:
-            all_sums.append(all_expenses[j][x])
-            j += 1
-        elif j > len(all_expenses):
-            the_results.append(sum_expenses(all_sums))
-            all_sums.clear()
-            i += 1
-        else:
-            j += 1
-
-    the_result = 0
-    for highest_sum in all_sums:
-        if the_result < highest_sum:
-            the_result = highest_sum
-
-    return the_result
+    return expenses_by_day_list
 
 
 def main():     # the main func that puts everything together.
