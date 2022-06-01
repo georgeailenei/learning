@@ -40,6 +40,7 @@ class Expense:
 
 
 class UI:
+    """User interface menu and options"""
     menu = '1. Add expenses \n' \
            '2. Update expenses \n' \
            '3. Remove expenses \n' \
@@ -66,32 +67,40 @@ class UI:
                            "2. Remove smaller expenses \n"}
 
     def main_menu(self):
+        """Prints the main menu"""
         print(self.menu)
 
     def submenu(self, option):
+        """This method takes a variable as option to print the right submenu"""
         print(self.sub_menu[option])
 
 
+#   Functions which interacts with the UI.
 def choose_option():
+    """The func returns """
     return input("Choose an option: ")
 
 
 def exit_to_menu():
+    """It returns False or True depending on the input"""
     option = input("Do you want to continue? ")
-    if option == "no":
+    if option == "no" or option == "No":
         return False
     else:
         return True
 
 
-def collect_data():  # collects the data and stores in as object.
+#   Functions.
+def collect_data():
+    """It collects the data and stores it as object"""
     the_date_of_expense = input("Date (dd-mm-yy): ")
     the_amount_of_expense = input("Amount: ")
     the_type_of_expense = input("Type (Food, Bills, Clothes, Phone or Other): ")
     return Expense(the_date_of_expense, the_amount_of_expense, the_type_of_expense)
 
 
-def update_expense():  # collects another set of data for update.
+def update_expense():
+    """It collects another set of data for update."""
     update_input = collect_data()
     the_update = update_input.get_all_expense_details()
     return the_update
@@ -294,11 +303,14 @@ def main():  # the main func that puts everything together.
                 else:
                     print("Please try to input your data again!")
 
-                print(all_expenses)  # display the current list of expenses.
+                print(all_expenses)
+
                 if not exit_to_menu():
                     break
 
         elif options == "2":  # update expenses
+            print("Please choose the expense that you want to update.")
+            print(all_expenses)
             update_the_expense = update_expense()
 
             if update_the_expense in all_expenses:
