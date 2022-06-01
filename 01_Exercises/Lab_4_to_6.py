@@ -1,4 +1,3 @@
-
 class Expense:
     def __init__(self, date, amount, expense_type):  # the data that we're getting.
         self.date = date
@@ -40,69 +39,59 @@ class Expense:
         return (self.date + " " + str(self.amount) + " " + self.expense_type).split()
 
 
-def main_menu():    # information and options about the app.
-    print("This App allows you to manage your family's expenses.")
-    the_option = input("1. Add expenses \n"
-                       "2. Update expenses \n"
-                       "3. Remove expenses \n"
-                       "4. Print full list of expenses \n"
-                       "5. Search for expenses \n"
-                       "6. Reports \n"
-                       "7. Filters \n"
-                       "8. Undo \n"
-                       "9. Exit \n"
-                       "Please choose an option here: ")
-    return the_option
+class UI:
+    menu = '1. Add expenses \n' \
+           '2. Update expenses \n' \
+           '3. Remove expenses \n' \
+           '4. Print full list of expenses \n' \
+           '5. Search for expenses \n' \
+           '6. Reports \n' \
+           '7. Filters \n' \
+           '8. Undo \n' \
+           '9. Exit \n'
+
+    sub_menu = {"Remove": "1. Remove all expenses by date \n"
+                          "2. Remove all expenses by type \n"
+                          "3. Remove expenses by a time interval \n"
+                          "4. Return to main menu \n",
+                "Search": "1. Print all expenses higher than input \n"
+                          "2. Print all expenses of the same type \n"
+                          "3. Print smaller expenses than in put and before the given day \n"
+                          "4. Return to main menu \n",
+                "Reports": "1. Print sum of all expenses from a category \n"
+                           "2. Find the max expense in a day \n"
+                           "3. Print all expenses with the same amount \n"
+                           "4. Print all expenses by category \n",
+                "Filters": "1. Remove all expenses by category \n"
+                           "2. Remove smaller expenses \n"}
+
+    def main_menu(self):
+        print(self.menu)
+
+    def submenu(self, option):
+        print(self.sub_menu[option])
 
 
-def remove_menu():    # the Menu for remove option.
-    print("Choose from the options below")
-    the_option = input("1. Remove all expenses by date \n"
-                       "2. Remove all expenses by type \n"
-                       "3. Remove expenses by a time interval \n"
-                       "4. Return to main menu \n"
-                       "Please choose an option here: ")
-    return the_option
-
-
-def search_menu_options():
-    # when cleaning: remember to make only one function that
-    # contains all the secondary menus.
-    print("Choose from the options below")
-    the_option = input("1. Print all expenses higher than input \n"
-                       "2. Print all expenses of the same type \n"
-                       "3. Print smaller expenses than in put and before the given day \n"
-                       "4. Return to main menu \n"
-                       "Please choose an option here: ")
-    return the_option
-
-
-def report_menu_options():
-    the_option = input("1. Print sum of all expenses from a category \n"
-                       "2. Find the max expense in a day \n"
-                       "3. Print all expenses with the same amount \n"
-                       "4. Print all expenses by category \n"
-                       "5. Return to main menu \n"
-                       "Please choose an option here: ")
-    return the_option
+def choose_option():
+    return input("Choose an option: ")
 
 
 def exit_to_menu():
-    choose_option = input("Do you want to continue? ")
-    if choose_option == "no":
+    option = input("Do you want to continue? ")
+    if option == "no":
         return False
     else:
         return True
 
 
-def collect_data():     # collects the data and stores in as object.
+def collect_data():  # collects the data and stores in as object.
     the_date_of_expense = input("Date (dd-mm-yy): ")
     the_amount_of_expense = input("Amount: ")
     the_type_of_expense = input("Type (Food, Bills, Clothes, Phone or Other): ")
     return Expense(the_date_of_expense, the_amount_of_expense, the_type_of_expense)
 
 
-def update_expense():   # collects another set of data for update.
+def update_expense():  # collects another set of data for update.
     update_input = collect_data()
     the_update = update_input.get_all_expense_details()
     return the_update
@@ -152,24 +141,150 @@ def sum_expenses(amount):
     return the_sum
 
 
-def expensive_day_list(all_expenses):
-    """This function returns a list with all the dates from the all expenses"""
-    expenses_by_day_list = []
+# insert the code here
+def get_date(all_expenses):
+    """This function returns the date from expenses"""
+    list_with_dates = []
     i = 0
 
-    for expense in all_expenses:            # Add the date to the list
-        expenses_by_day_list.append(expense[i])
+    for date in all_expenses:
+        list_with_dates.append(date[i])
 
-    return expenses_by_day_list
+    return list_with_dates
 
 
-def main():     # the main func that puts everything together.
+def get_day(all_expenses):
+    """This function returns the day from the date"""
+    """Also it using get_date func."""
+    list_with_dates = get_date(all_expenses)
+    list_with_days = []
+    j = 0
+    i = 0
+
+    for day in list_with_dates:
+        for num in day:
+            if num == "-":
+                list_with_days.append(day[i:j])
+                j = 0
+                break
+            else:
+                j += 1
+
+    return list_with_days
+
+
+def sum_expenses_by_day(all_the_expenses):
+    """This func returns the sum of all expenses for a given day"""
+    expenses = all_the_expenses
+    day = input("Write a day to sum up the expenses: ")
+    sum_up_these_expenses = []
+    the_sum = 0
+    i = 0
+    j = 0
+    x = 1
+
+    # make a list with the expenses that are related to the day.
+    for it in expenses:
+        if day in expenses[i][j]:
+            sum_up_these_expenses.append(expenses[i][x])
+            i += 1
+        else:
+            i += 1
+
+    # sum the expenses. you might want to remove these two lines of code when implementing in the main file.
+    for i in sum_up_these_expenses:
+        the_sum = the_sum + int(i)
+
+    return the_sum
+
+
+def get_expenses_by_amount(all_expenses):
+    list_with_all_amounts = []
+    the_expenses_list = []
+    i = 1
+
+    for amount in all_expenses:
+        list_with_all_amounts.append(amount[i])
+
+    # get input from the user
+    the_amount = input("Please insert the expense amount: ")
+
+    for amount in all_expenses:
+        if the_amount in amount[i]:
+            the_expenses_list.append(amount)
+
+    return the_expenses_list
+
+
+def get_expenses_by_category(all_expenses):
+    list_with_all_categories = []
+    the_expenses_list = []
+    i = 2
+
+    for amount in all_expenses:
+        list_with_all_categories.append(amount[i])
+
+    # get input from the user
+    the_category = input("Please insert the category: ")
+
+    for category in all_expenses:
+        if the_category in category[i]:
+            the_expenses_list.append(category)
+
+    return the_expenses_list
+
+
+def remove_expenses_by_category(all_expenses):
+    # get input from the user
+    the_category = input("Please insert the category: ")
+    new_expenses_list = []
+    i = 2
+
+    for category in all_expenses:
+        if the_category == category[i]:
+            pass
+        else:
+            new_expenses_list.append(category)
+
+    all_expenses = new_expenses_list
+
+    return all_expenses
+
+
+def remove_expense_by_amount(all_expenses):
+    list_with_all_amounts = []
+    expenses_tb_removed = []
+    new_list_with_expenses = []
+    i = 1
+
+    for amount in all_expenses:
+        list_with_all_amounts.append(amount[i])
+
+    # get input from the user
+    the_amount = input("Please insert the expense amount: ")
+
+    for amount in all_expenses:
+        if int(the_amount) > int(amount[i]):
+            expenses_tb_removed.append(amount)
+
+    for expense in all_expenses:
+        if expense in expenses_tb_removed:
+            pass
+        else:
+            new_list_with_expenses.append(expense)
+
+    return new_list_with_expenses
+
+
+def main():  # the main func that puts everything together.
     all_expenses = []
 
     while True:
-        options = main_menu()
+        user_interface = UI()
+        user_interface.main_menu()
+        options = choose_option()
 
-        if options == "1":      # add expenses
+        if options == "1":  # add expenses
             print("\nYou can now input your expenses")
 
             while True:
@@ -179,11 +294,11 @@ def main():     # the main func that puts everything together.
                 else:
                     print("Please try to input your data again!")
 
-                print(all_expenses)     # display the current list of expenses.
+                print(all_expenses)  # display the current list of expenses.
                 if not exit_to_menu():
                     break
 
-        elif options == "2":       # update expenses
+        elif options == "2":  # update expenses
             update_the_expense = update_expense()
 
             if update_the_expense in all_expenses:
@@ -198,9 +313,11 @@ def main():     # the main func that puts everything together.
                 continue
 
         elif options == "3":
-            other_options = remove_menu()
+            user_interface.submenu("Remove")
+            options = choose_option()
+
             while True:
-                if other_options == "1":
+                if options == "1":
                     print("\nYou can now remove and expense by inserting the Date")
                     the_date_of_expense = input("Date (dd-mm-yy): ")
 
@@ -216,7 +333,7 @@ def main():     # the main func that puts everything together.
                     if not exit_to_menu():
                         break
 
-                elif other_options == "2":
+                elif options == "2":
                     print("\nYou can now remove expense by inserting the type/category")
                     type_of_expense = input("Type (Food, Bills, Clothes, Phone or Other): ")
 
@@ -232,7 +349,7 @@ def main():     # the main func that puts everything together.
                     if not exit_to_menu():
                         break
 
-                elif other_options == "3":
+                elif options == "3":
                     print("\nYou can now remove expense by time interval")
                     the_start_date = input("Start Day Date (dd): ")
                     the_last_date = input("Last Day Date (dd): ")
@@ -252,7 +369,7 @@ def main():     # the main func that puts everything together.
                     if not exit_to_menu():
                         break
 
-                elif other_options == "4":
+                elif options == "4":
                     break
 
         elif options == "4":
@@ -264,7 +381,8 @@ def main():     # the main func that puts everything together.
 
         elif options == "5":
             print("\nYou can now search of an expense")
-            options = search_menu_options()
+            user_interface.submenu("Search")
+            options = choose_option()
 
             while True:
                 if options == "1":
@@ -331,7 +449,8 @@ def main():     # the main func that puts everything together.
 
         elif options == "6":
             print("\nReports - various actions for the expense list")
-            options = report_menu_options()
+            user_interface.submenu("Reports")
+            options = choose_option()
 
             while True:
                 if options == "1":
@@ -352,33 +471,57 @@ def main():     # the main func that puts everything together.
                     the_sum = sum_expenses(the_expenses_list)
                     print(the_sum)
 
-                if not exit_to_menu():
-                    break
+                    if not exit_to_menu():
+                        break
 
                 elif options == "2":
                     print("This is the most expensive day -_-")
-                    print(expensive_day(all_expenses))
+                    print(sum_expenses_by_day(all_expenses))
 
-                if not exit_to_menu():
-                    break
+                    if not exit_to_menu():
+                        break
+
+                elif options == "3":
+                    print("Print all the expenses with the same amount")
+                    print(get_expenses_by_amount(all_expenses))
+
+                    if not exit_to_menu():
+                        break
+
+                elif options == "4":
+                    print("Print all the expenses by category")
+                    print(get_expenses_by_category(all_expenses))
+                    if not exit_to_menu():
+                        break
 
         elif options == "7":
-            print("\nFilters")
-            print("This is the current list of expenses:")
-            print(all_expenses)
+            print("\nFilters - Various Actions")
+            user_interface.submenu("Filters")
+            options = choose_option()
 
-            if not exit_to_menu():
-                continue
+            while True:
+                if options == "1":
+                    print("You can now remove all the expenses by category")
+                    print(remove_expenses_by_category(all_expenses))
+
+                    if not exit_to_menu():
+                        break
+
+                elif options == "2":
+                    print("You can now remove all the smaller expenses")
+                    print(remove_expense_by_amount(all_expenses))
+
+                    if not exit_to_menu():
+                        break
 
         elif options == "8":
             print("\nUndo")
-            print("This is the current list of expenses:")
-            print(all_expenses)
+            print("Are you sure that you want to go back in time? ")
 
             if not exit_to_menu():
                 continue
 
-        elif options == "9":       # exit app
+        elif options == "9":  # exit app
             if len(all_expenses) == 0:
                 print("You really didn't spend any money? ok. goodbye!")
                 break
@@ -388,5 +531,3 @@ def main():     # the main func that puts everything together.
 
 if __name__ == '__main__':
     main()
-
-
