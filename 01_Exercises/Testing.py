@@ -1,11 +1,5 @@
-def exit_to_menu():
-    """It returns False or True depending on the input"""
-    option = input("Do you want to continue? ")
+# Just testing, nothing to see here :))
+# random_expenses = [["02-06-2022", "20", "Phone"], ["02-06-2022", "55", "Bills"]]
 
-    if option == "no" or option == "No":
-        return False
-    else:
-        return True
+print("Everything is good..")
 
-
-print(exit_to_menu())

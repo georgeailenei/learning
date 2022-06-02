@@ -1,5 +1,6 @@
 import repository
 import interface
+import os
 
 
 #   Functions which interacts with the UI.
@@ -212,25 +213,38 @@ def remove_expense_by_amount(all_expenses):
     return new_list_with_expenses
 
 
-def main():  # the main func that puts everything together.
+def display_expense(expenses):
+    print("  Date", "    Amount", "Type  ")
+    for i in expenses:
+        print("   ".join(i))
+
+
+# The main func which puts everything together.
+def main():
     all_expenses = []
 
     while True:
+        os.system("cls")
         user_interface = interface.UI()
         user_interface.main_menu()
         options = choose_option()
 
         if options == "1":  # add expenses
-            print("\nYou can now input your expenses")
-
             while True:
+                os.system("cls")
+                print("\nPlease write your expenses")
                 data_collected = collect_data()
-                if data_collected.check_date() and data_collected.check_amount() and data_collected.check_type():
-                    all_expenses.append(data_collected.get_all_expense_details())
+
+                if data_collected.check_date_format() and data_collected.check_amount() and data_collected.check_type():
+                    if data_collected.check_day_format() and data_collected.check_month_format() and data_collected.check_year_format() and data_collected.check_amount_int():
+                        all_expenses.append(data_collected.get_all_expense_details())
+                    else:
+                        print("Please try to input your data again!")
                 else:
                     print("Please try to input your data again!")
 
-                print(all_expenses)
+                os.system("cls")
+                display_expense(all_expenses)
 
                 if not exit_to_menu():
                     break
