@@ -1,78 +1,5 @@
-class Expense:
-    def __init__(self, date, amount, expense_type):  # the data that we're getting.
-        self.date = date
-        self.amount = amount
-        self.expense_type = expense_type
-
-    def check_date(self):
-        list_of_numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"]
-        check_date = list(self.date)
-
-        if check_date[2] == "-" and check_date[5] == "-":
-            for i in check_date:
-                if i not in list_of_numbers:
-                    return False
-                else:
-                    return True
-        else:
-            return False
-
-    def check_amount(self):
-        list_of_numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-        check_amount = list(self.amount)
-
-        for i in check_amount:
-            if i not in list_of_numbers:
-                return False
-            else:
-                return True
-
-    def check_type(self):
-        expense_type_list = ["Food", "Bills", "Clothes", "Phone", "Other"]
-
-        if self.expense_type in expense_type_list:
-            return True
-        else:
-            return False
-
-    def get_all_expense_details(self):  # print all the details date, amount and type.
-        return (self.date + " " + str(self.amount) + " " + self.expense_type).split()
-
-
-class UI:
-    """User interface menu and options"""
-    menu = '1. Add expenses \n' \
-           '2. Update expenses \n' \
-           '3. Remove expenses \n' \
-           '4. Print full list of expenses \n' \
-           '5. Search for expenses \n' \
-           '6. Reports \n' \
-           '7. Filters \n' \
-           '8. Undo \n' \
-           '9. Exit \n'
-
-    sub_menu = {"Remove": "1. Remove all expenses by date \n"
-                          "2. Remove all expenses by type \n"
-                          "3. Remove expenses by a time interval \n"
-                          "4. Return to main menu \n",
-                "Search": "1. Print all expenses higher than input \n"
-                          "2. Print all expenses of the same type \n"
-                          "3. Print smaller expenses than in put and before the given day \n"
-                          "4. Return to main menu \n",
-                "Reports": "1. Print sum of all expenses from a category \n"
-                           "2. Find the max expense in a day \n"
-                           "3. Print all expenses with the same amount \n"
-                           "4. Print all expenses by category \n",
-                "Filters": "1. Remove all expenses by category \n"
-                           "2. Remove smaller expenses \n"}
-
-    def main_menu(self):
-        """Prints the main menu"""
-        print(self.menu)
-
-    def submenu(self, option):
-        """This method takes a variable as option to print the right submenu"""
-        print(self.sub_menu[option])
+import repository
+import interface
 
 
 #   Functions which interacts with the UI.
@@ -96,7 +23,7 @@ def collect_data():
     the_date_of_expense = input("Date (dd-mm-yy): ")
     the_amount_of_expense = input("Amount: ")
     the_type_of_expense = input("Type (Food, Bills, Clothes, Phone or Other): ")
-    return Expense(the_date_of_expense, the_amount_of_expense, the_type_of_expense)
+    return repository.Expense(the_date_of_expense, the_amount_of_expense, the_type_of_expense)
 
 
 def update_expense():
@@ -289,7 +216,7 @@ def main():  # the main func that puts everything together.
     all_expenses = []
 
     while True:
-        user_interface = UI()
+        user_interface = interface.UI()
         user_interface.main_menu()
         options = choose_option()
 
