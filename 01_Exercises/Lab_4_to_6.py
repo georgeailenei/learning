@@ -27,11 +27,14 @@ def collect_data():
     return repository.Expense(the_date_of_expense, the_amount_of_expense, the_type_of_expense)
 
 
-def update_expense():
-    """It collects another set of data for update."""
-    update_input = collect_data()
-    the_update = update_input.get_all_expense_details()
-    return the_update
+def find_data_location(all_expenses, data):
+    location = []
+
+    for i in range(len(all_expenses)):
+        if data == all_expenses[i]:
+            location.append(i)
+
+    return location
 
 
 def remove_expense_by_time_interval(expense_list, the_start_day, the_last_day):
@@ -219,6 +222,12 @@ def display_expense(expenses):
         print("   ".join(i))
 
 
+def check_all_data(data_collected):
+    if data_collected.check_date_format() and data_collected.check_amount() and data_collected.check_type():
+        if data_collected.check_day_format() and data_collected.check_month_format() and data_collected.check_year_format() and data_collected.check_amount_int():
+            return True
+
+
 # The main func which puts everything together.
 def main():
     all_expenses = []
@@ -235,11 +244,8 @@ def main():
                 print("\nPlease write your expenses")
                 data_collected = collect_data()
 
-                if data_collected.check_date_format() and data_collected.check_amount() and data_collected.check_type():
-                    if data_collected.check_day_format() and data_collected.check_month_format() and data_collected.check_year_format() and data_collected.check_amount_int():
-                        all_expenses.append(data_collected.get_all_expense_details())
-                    else:
-                        print("Please try to input your data again!")
+                if check_all_data(data_collected):
+                    all_expenses.append(data_collected.get_all_expense_details())
                 else:
                     print("Please try to input your data again!")
 
@@ -250,20 +256,34 @@ def main():
                     break
 
         elif options == "2":  # update expenses
-            print("Please choose the expense that you want to update.")
-            print(all_expenses)
-            update_the_expense = update_expense()
+            while True:
+                os.system("cls")
+                print("Please choose the expense that you want to update")
+                display_expense(all_expenses)
+                update_the_expense = collect_data()
 
-            if update_the_expense in all_expenses:
-                all_expenses.remove(update_the_expense)
-                print("Insert a new expense to update")
-                update_the_expense = update_expense()
-                all_expenses.append(update_the_expense)
-            else:
-                print("We could not find your expense, try again!")
+                if update_the_expense.get_all_expense_details() in all_expenses:
+                    expense_location = find_data_location(all_expenses, update_the_expense.get_all_expense_details())
+                    all_expenses.remove(update_the_expense.get_all_expense_details())
 
-            if not exit_to_menu():
-                continue
+                    while True:
+                        print("\nUpdate your expense")
+                        update_the_expense = collect_data()
+
+                        if check_all_data(update_the_expense):
+                            all_expenses.insert(expense_location[0], update_the_expense.get_all_expense_details())
+                            break
+                        else:
+                            print("Please try to input your data again!")
+
+                else:
+                    print("We could not find your expense, try again!")
+
+                print("Updated list")
+                display_expense(all_expenses)
+
+                if not exit_to_menu():
+                    break
 
         elif options == "3":
             user_interface.submenu("Remove")
