@@ -32,3 +32,9 @@ class UI:
     def submenu(self, option):
         """This method takes a variable as option to print the right submenu"""
         print(self.sub_menu[option])
+
+
+def display_expense(expenses):
+    print("  Date", "    Amount", "Type  ")
+    for i in expenses:
+        print("   ".join(i))

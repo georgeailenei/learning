@@ -1,3 +1,4 @@
+import removeExpenses
 import repository
 import interface
 import os
@@ -216,18 +217,6 @@ def remove_expense_by_amount(all_expenses):
     return new_list_with_expenses
 
 
-def display_expense(expenses):
-    print("  Date", "    Amount", "Type  ")
-    for i in expenses:
-        print("   ".join(i))
-
-
-def check_all_data(data_collected):
-    if data_collected.check_date_format() and data_collected.check_amount() and data_collected.check_type():
-        if data_collected.check_day_format() and data_collected.check_month_format() and data_collected.check_year_format() and data_collected.check_amount_int():
-            return True
-
-
 # The main func which puts everything together.
 def main():
     all_expenses = []
@@ -244,13 +233,13 @@ def main():
                 print("\nPlease write your expenses")
                 data_collected = collect_data()
 
-                if check_all_data(data_collected):
+                if repository.check_all_data(data_collected):
                     all_expenses.append(data_collected.get_all_expense_details())
                 else:
                     print("Please try to input your data again!")
 
                 os.system("cls")
-                display_expense(all_expenses)
+                interface.display_expense(all_expenses)
 
                 if not exit_to_menu():
                     break
@@ -259,7 +248,7 @@ def main():
             while True:
                 os.system("cls")
                 print("Please choose the expense that you want to update")
-                display_expense(all_expenses)
+                interface.display_expense(all_expenses)
                 update_the_expense = collect_data()
 
                 if update_the_expense.get_all_expense_details() in all_expenses:
@@ -270,7 +259,7 @@ def main():
                         print("\nUpdate your expense")
                         update_the_expense = collect_data()
 
-                        if check_all_data(update_the_expense):
+                        if repository.check_all_data(update_the_expense):
                             all_expenses.insert(expense_location[0], update_the_expense.get_all_expense_details())
                             break
                         else:
@@ -279,45 +268,47 @@ def main():
                 else:
                     print("We could not find your expense, try again!")
 
-                print("Updated list")
-                display_expense(all_expenses)
+                print("\nUpdated list")
+                interface.display_expense(all_expenses)
 
                 if not exit_to_menu():
                     break
 
-        elif options == "3":
+        elif options == "3":    # Remove
             user_interface.submenu("Remove")
             options = choose_option()
 
             while True:
                 if options == "1":
                     print("\nYou can now remove and expense by inserting the Date")
-                    the_date_of_expense = input("Date (dd-mm-yy): ")
+                    interface.display_expense(all_expenses)
 
-                    print(all_expenses)
+                    date_of_expense = input("Date (dd-mm-yy): ")
+                    check_date = repository.Expense(date_of_expense, "", "")
 
-                    for expense in all_expenses:
-                        if the_date_of_expense in expense:
-                            all_expenses.remove(expense)
-
-                    print("Your new expenses list is:")
-                    print(all_expenses)
+                    if check_date.check_date_format():
+                        all_expenses = removeExpenses.remove_expense(all_expenses, date_of_expense)
+                        print("\nUpdated list")
+                        interface.display_expense(all_expenses)
+                    else:
+                        print("Please try to use the date format (dd-mm-yy)")
 
                     if not exit_to_menu():
                         break
 
                 elif options == "2":
                     print("\nYou can now remove expense by inserting the type/category")
-                    type_of_expense = input("Type (Food, Bills, Clothes, Phone or Other): ")
+                    interface.display_expense(all_expenses)
 
-                    print(all_expenses)
+                    expense_type = input("Type (Food, Bills, Clothes, Phone or Other): ")
+                    check_type = repository.Expense("", "", expense_type)
 
-                    for expense in all_expenses:
-                        if type_of_expense in expense:
-                            all_expenses.remove(expense)
-
-                    print("Your new expenses list is:")
-                    print(all_expenses)
+                    if check_type.check_type():
+                        all_expenses = removeExpenses.remove_expense(all_expenses, expense_type)
+                        print("\nUpdated list")
+                        interface.display_expense(all_expenses)
+                    else:
+                        print("The app does not contain that type of expenses")
 
                     if not exit_to_menu():
                         break
@@ -347,7 +338,7 @@ def main():
 
         elif options == "4":
             print("\nThis is your list of expenses:")
-            print(all_expenses)
+            interface.display_expense(all_expenses)
 
             if not exit_to_menu():
                 continue
