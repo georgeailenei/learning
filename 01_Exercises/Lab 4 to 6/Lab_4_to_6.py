@@ -38,24 +38,6 @@ def find_data_location(all_expenses, data):
     return location
 
 
-def remove_expense_by_time_interval(expense_list, the_start_day, the_last_day):
-    to_be_removed_list = []
-    i = 0
-    j = 0
-
-    while len(expense_list) > i:
-        if the_start_day in expense_list[i][j]:
-            to_be_removed_list.append(expense_list[i])
-            i += 1
-        elif the_last_day in expense_list[i][j]:
-            to_be_removed_list.append(expense_list[i])
-            i += 1
-        else:
-            i += 1
-
-    return to_be_removed_list
-
-
 def check_expense_by_day(the_date):
     the_day = []
 
@@ -274,64 +256,66 @@ def main():
                 if not exit_to_menu():
                     break
 
-        elif options == "3":    # Remove
-            user_interface.submenu("Remove")
-            options = choose_option()
-
+        elif options == "3":    # Remove submenu
             while True:
+                user_interface.submenu("Remove")
+                options = choose_option()
+
                 if options == "1":
-                    print("\nYou can now remove and expense by inserting the Date")
-                    interface.display_expense(all_expenses)
-
-                    date_of_expense = input("Date (dd-mm-yy): ")
-                    check_date = repository.Expense(date_of_expense, "", "")
-
-                    if check_date.check_date_format():
-                        all_expenses = removeExpenses.remove_expense(all_expenses, date_of_expense)
-                        print("\nUpdated list")
+                    while True:
+                        print("\nYou can now remove and expense by inserting the Date")
                         interface.display_expense(all_expenses)
-                    else:
-                        print("Please try to use the date format (dd-mm-yy)")
 
-                    if not exit_to_menu():
-                        break
+                        date_of_expense = input("Date (dd-mm-yy): ")
+                        check_date = repository.Expense(date_of_expense, "", "")
+
+                        if check_date.check_date_format():
+                            all_expenses = removeExpenses.remove_expense(all_expenses, date_of_expense)
+                            print("\nUpdated list")
+                            interface.display_expense(all_expenses)
+                        else:
+                            print("Please try to use the date format (dd-mm-yy)")
+
+                        if not exit_to_menu():
+                            break
 
                 elif options == "2":
-                    print("\nYou can now remove expense by inserting the type/category")
-                    interface.display_expense(all_expenses)
-
-                    expense_type = input("Type (Food, Bills, Clothes, Phone or Other): ")
-                    check_type = repository.Expense("", "", expense_type)
-
-                    if check_type.check_type():
-                        all_expenses = removeExpenses.remove_expense(all_expenses, expense_type)
-                        print("\nUpdated list")
+                    while True:
+                        print("\nYou can now remove expense by inserting the type/category")
                         interface.display_expense(all_expenses)
-                    else:
-                        print("The app does not contain that type of expenses")
 
-                    if not exit_to_menu():
-                        break
+                        expense_type = input("Type (Food, Bills, Clothes, Phone or Other): ")
+                        check_type = repository.Expense("", "", expense_type)
+
+                        if check_type.check_type():
+                            all_expenses = removeExpenses.remove_expense(all_expenses, expense_type)
+                            print("\nUpdated list")
+                            interface.display_expense(all_expenses)
+                        else:
+                            print("The app does not contain that type of expenses")
+
+                        if not exit_to_menu():
+                            break
 
                 elif options == "3":
-                    print("\nYou can now remove expense by time interval")
-                    the_start_date = input("Start Day Date (dd): ")
-                    the_last_date = input("Last Day Date (dd): ")
+                    while True:
+                        print("\nYou can now remove expense by time interval")
+                        interface.display_expense(all_expenses)
 
-                    to_be_remove_expenses = remove_expense_by_time_interval(all_expenses, the_start_date, the_last_date)
+                        from_day = input("From Date (dd-mm-yy): ")
+                        to_day = input("To Date (dd-mm-yy): ")
+                        dates = [repository.Expense(from_day, "", ""), repository.Expense(to_day, "", "")]
 
-                    print("This is the list that its about to be remove")
-                    print(to_be_remove_expenses)
+                        if dates[0].check_date_format() and dates[1].check_date_format():
+                            if dates[0].check_day_format() and dates[1].check_day_format():
+                                all_expenses = removeExpenses.remove_by_time_interval(all_expenses, from_day, to_day)
+                                print("\nUpdated list")
+                                interface.display_expense(all_expenses)
+                        else:
+                            print("\nPlease try to input a date again.\n")
 
-                    for expense in to_be_remove_expenses:
-                        if expense in all_expenses:
-                            all_expenses.remove(expense)
-
-                    print("Your new expenses list is:")
-                    print(all_expenses)
-
-                    if not exit_to_menu():
-                        break
+                        if not exit_to_menu():
+                            break
 
                 elif options == "4":
                     break
