@@ -30,6 +30,15 @@ def get_day(the_date):
     return int("".join(the_day))
 
 
+def get_multi_days(all_expenses):
+    dates = get_date(all_expenses)
+    days = []
+
+    for date in dates:
+        days.append(get_day(date))
+
+    return days
+
 def get_month(the_date):
     the_month = [the_date[3], the_date[4]]
     return "".join(the_month)

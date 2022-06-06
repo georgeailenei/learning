@@ -1,4 +1,6 @@
 import removeExpenses
+import findExpenses
+import reports
 import repository
 import interface
 import os
@@ -55,15 +57,6 @@ def check_expense_by_day(the_date):
     return int(the_actual_day)
 
 
-def sum_expenses(amount):
-    the_sum = 0
-
-    for i in amount:
-        the_sum = the_sum + int(i)
-
-    return the_sum
-
-
 # insert the code here
 def get_date(all_expenses):
     """This function returns the date from expenses"""
@@ -94,31 +87,6 @@ def get_day(all_expenses):
                 j += 1
 
     return list_with_days
-
-
-def sum_expenses_by_day(all_the_expenses):
-    """This func returns the sum of all expenses for a given day"""
-    expenses = all_the_expenses
-    day = input("Write a day to sum up the expenses: ")
-    sum_up_these_expenses = []
-    the_sum = 0
-    i = 0
-    j = 0
-    x = 1
-
-    # make a list with the expenses that are related to the day.
-    for it in expenses:
-        if day in expenses[i][j]:
-            sum_up_these_expenses.append(expenses[i][x])
-            i += 1
-        else:
-            i += 1
-
-    # sum the expenses. you might want to remove these two lines of code when implementing in the main file.
-    for i in sum_up_these_expenses:
-        the_sum = the_sum + int(i)
-
-    return the_sum
 
 
 def get_expenses_by_amount(all_expenses):
@@ -328,106 +296,94 @@ def main():
                 continue
 
         elif options == "5":
-            print("\nYou can now search of an expense")
-            user_interface.submenu("Search")
-            options = choose_option()
-
             while True:
+                print("\nYou can now search for expenses")
+                user_interface.submenu("Search")
+                options = choose_option()
+
                 if options == "1":
-                    print("Write an expense and the APP will print all higher expenses")
-                    the_expense = input("Write expense: ")
-                    high_expenses_list = []
-                    i = 0
-                    j = 1
+                    while True:
+                        print("\nDisplay higher expenses\n")
+                        interface.display_expense(all_expenses)
 
-                    while len(all_expenses) > i:
-                        if int(all_expenses[i][j]) > int(the_expense):
-                            high_expenses_list.append(all_expenses[i][j])
-                            i += 1
+                        amount = input("\nWrite amount: ")
+                        check_amount = repository.Expense("", amount, "")
+
+                        if check_amount.check_amount():
+                            interface.display_expense(findExpenses.find_greater_expenses(all_expenses, amount))
                         else:
-                            i += 1
+                            print("\nPlease insert a number not random things.")
 
-                    print(high_expenses_list)
-                    if not exit_to_menu():
-                        break
+                        if not exit_to_menu():
+                            break
 
                 elif options == "2":
-                    print("You can now choose to print expenses by type")
-                    expense_type = input("Write either (Food, Bills, Clothes, Phone or Other): ")
-                    expenses_by_list = []
-                    i = 0
-                    j = 2
+                    while True:
+                        print("\nPrint expenses by type\n")
+                        interface.display_expense(all_expenses)
 
-                    while len(all_expenses) > i:
-                        if all_expenses[i][j] == expense_type:
-                            expenses_by_list.append(all_expenses[i])
-                            i += 1
+                        expense_type = input("\nWrite type (Food, Bills, Clothes, Phone or Other): ")
+                        check_type = repository.Expense("", "", expense_type)
+
+                        if check_type.check_type():
+                            interface.display_expense(findExpenses.find_expenses_by_type(all_expenses, expense_type))
                         else:
-                            i += 1
+                            print("\nThe apps does not contain that category")
 
-                    print(expenses_by_list)
-                    if not exit_to_menu():
-                        break
+                        if not exit_to_menu():
+                            break
 
                 elif options == "3":
-                    print("Choose a day and the amount to print the list")
-                    expense_by_sum = input("Write expense: ")
-                    expense_by_day = input("Write day: ")
-                    expense_list = []
-                    i = 0
-                    j = 0
-                    x = 1
+                    while True:
+                        print("\nChoose a day and amount to print a list with smaller amounts from previous days\n")
+                        interface.display_expense(all_expenses)
 
-                    while len(all_expenses) > i:
-                        if check_expense_by_day(all_expenses[i][j]) < int(expense_by_day):
-                            if int(expense_by_sum) > int(all_expenses[i][x]):
-                                expense_list.append(all_expenses[i])
-                                i += 1
-                            else:
-                                i += 1
+                        amount = input("\nWrite amount: ")
+                        expense_date_day = input("Write day (dd): ")
+
+                        check_amount = repository.Expense("", amount, "")
+                        check_date = repository.Expense(expense_date_day, "", "")
+
+                        if check_date.check_day_format() and check_amount.check_amount():
+                            interface.display_expense(findExpenses.display_lower_expenses(all_expenses, expense_date_day, amount))
                         else:
-                            i += 1
+                            print("\nWrong inputs, please try again!")
 
-                    print(expense_list)
-                    if not exit_to_menu():
-                        break
+                        if not exit_to_menu():
+                            break
 
                 elif options == "4":
                     break
 
         elif options == "6":
-            print("\nReports - various actions for the expense list")
-            user_interface.submenu("Reports")
-            options = choose_option()
-
             while True:
+                print("\nReports\n")
+                user_interface.submenu("Reports")
+                options = choose_option()
+
                 if options == "1":
-                    print("Sum Up all the expenses in a category")
-                    expense_by_type = input("Write either (Food, Bills, Clothes, Phone or Other): ")
-                    the_expenses_list = []
-                    i = 0
-                    j = 1
-                    x = 2
+                    while True:
+                        print("Sum Up all the expenses in a category")
+                        interface.display_expense(all_expenses)
 
-                    while len(all_expenses) > i:
-                        if all_expenses[i][x] == expense_by_type:
-                            the_expenses_list.append(all_expenses[i][j])
-                            i += 1
+                        expense_type = input("Write either (Food, Bills, Clothes, Phone or Other): ")
+                        check_expense_type = repository.Expense("", "", expense_type)
+
+                        if check_expense_type.check_type():
+                            print("\n", f"The sum for {expense_type} category is: ", reports.sum_expenses_by_type(all_expenses, expense_type), "\n")
                         else:
-                            i += 1
+                            print("The app does not contain that category")
 
-                    the_sum = sum_expenses(the_expenses_list)
-                    print(the_sum)
-
-                    if not exit_to_menu():
-                        break
+                        if not exit_to_menu():
+                            break
 
                 elif options == "2":
-                    print("This is the most expensive day -_-")
-                    print(sum_expenses_by_day(all_expenses))
+                    while True:
+                        print("This is the most expensive day -_-")
+                        interface.display_expense(all_expenses)
 
-                    if not exit_to_menu():
-                        break
+                        if not exit_to_menu():
+                            break
 
                 elif options == "3":
                     print("Print all the expenses with the same amount")

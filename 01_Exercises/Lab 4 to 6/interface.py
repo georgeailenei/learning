@@ -35,6 +35,6 @@ class UI:
 
 
 def display_expense(expenses):
-    print("  Date", "    Amount", "Type  ")
+    print("\n  Date", "    Amount", "Type  ")
     for i in expenses:
         print("   ".join(i))

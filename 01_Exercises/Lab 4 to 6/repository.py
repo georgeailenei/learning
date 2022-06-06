@@ -84,8 +84,7 @@ class Expense:
     # assert check_year_format("01-05-202250") == False
 
     def check_amount(self):
-        """This method checks if the amount given by the user relates to a number excluding 0.
-        As you cannot spend 0. Also, it returns a boolean"""
+        """This method checks if the amount given by the user relates to a number"""
         list_of_numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         check_amount = list(self.amount)
 
