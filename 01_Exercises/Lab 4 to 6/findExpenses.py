@@ -1,6 +1,6 @@
 import removeExpenses
 
-# Search for expenses
+# Functions for the submenu - Find expenses
 def find_greater_expenses(all_expenses, amount):
     expenses = []
     i = 0
@@ -46,5 +46,29 @@ def display_lower_expenses(all_expenses, date_day, amount):
                 i += 1
         else:
             i += 1
+
+    return expenses
+
+
+def find_date_location(all_expenses):
+    dates = removeExpenses.get_date(all_expenses)
+    check_if_date_used = []
+    locations = []
+
+    for date in dates:
+        if date not in check_if_date_used:
+            locations.append(dates.index(date))
+            check_if_date_used.append(date)
+
+    return locations
+
+
+def find_expenses_with_same_amount(all_expenses, amount):
+    expenses = []
+    amounts = 1
+
+    for expense in all_expenses:
+        if amount == expense[amounts]:
+            expenses.append(expense)
 
     return expenses

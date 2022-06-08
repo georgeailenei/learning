@@ -21,9 +21,11 @@ class UI:
                 "Reports": "1. Print sum of all expenses from a category \n"
                            "2. Find the max expense in a day \n"
                            "3. Print all expenses with the same amount \n"
-                           "4. Print all expenses by category \n",
+                           "4. Print all expenses by category \n"
+                           "5. Return to main menu \n",
                 "Filters": "1. Remove all expenses by category \n"
-                           "2. Remove smaller expenses \n"}
+                           "2. Remove smaller expenses \n"
+                           "3. Return to main menu \n"}
 
     def main_menu(self):
         """Prints the main menu"""
@@ -35,6 +37,20 @@ class UI:
 
 
 def display_expense(expenses):
-    print("\n  Date", "    Amount", "Type  ")
+    print("  Date", "    Amount", "Type  ")
     for i in expenses:
         print("   ".join(i))
+
+
+def choose_option():
+    """The func returns """
+    return input("Choose an option: ")
+
+
+def exit_to_menu():
+    """It returns False or True depending on the input"""
+    option = input("\nDo you want to continue? ")
+    if option == "no" or option == "No":
+        return False
+    else:
+        return True

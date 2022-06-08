@@ -44,6 +44,16 @@ def get_month(the_date):
     return "".join(the_month)
 
 
+def remove_expense_by_amount(all_expenses, amount):
+    expenses = []
+
+    for expense in all_expenses:
+        if int(amount) <= int(expense[1]):
+            expenses.append(expense)
+
+    return expenses
+
+
 def remove_by_time_interval(all_expenses, from_date, to_date):
     the_dates = get_date(all_expenses)
     the_month = [get_month(from_date), get_month(to_date)]
@@ -64,4 +74,3 @@ def remove_by_time_interval(all_expenses, from_date, to_date):
         print("The time interval is too long, please choose same month or subscribe to premium :))")
 
     return updated_expenses_list
-
