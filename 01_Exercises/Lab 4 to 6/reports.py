@@ -3,6 +3,7 @@ import findExpenses
 
 # Functions for the submenu - Reports
 def sum_expenses(amounts):
+    """It returns an integer that represents the sum of something"""
     total = 0
 
     for amount in amounts:
@@ -12,6 +13,8 @@ def sum_expenses(amounts):
 
 
 def sum_expenses_by_type(all_expenses, expense_type):
+    """The function returns the sum of expenses for a specific expense type
+    It returns an integer that represents the sum of the expenses requested"""
     expenses = []
     i = 0
     j = 1
@@ -28,6 +31,8 @@ def sum_expenses_by_type(all_expenses, expense_type):
 
 
 def sum_expenses_by_day(all_expenses, day):
+    """The function returns the sum of expenses for a specific day
+    It returns an int"""
     day_amounts = []
     date = 0
     amount = 1
@@ -40,6 +45,8 @@ def sum_expenses_by_day(all_expenses, day):
 
 
 def expensive_day(all_expenses):
+    """The function takes the entire list of expenses and finds the most expensive day
+    It returns a string/message"""
     dates = removeExpenses.get_date(all_expenses)
     days = removeExpenses.get_multi_days(all_expenses)
     check_if_day_used = []

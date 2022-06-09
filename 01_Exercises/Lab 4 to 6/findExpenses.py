@@ -1,7 +1,9 @@
 import removeExpenses
 
-# Functions for the submenu - Find expenses
+
 def find_greater_expenses(all_expenses, amount):
+    """The function saves greater numbers than given by user.
+    It returns a list of different elements"""
     expenses = []
     i = 0
     j = 1
@@ -17,6 +19,7 @@ def find_greater_expenses(all_expenses, amount):
 
 
 def find_expenses_by_type(all_expenses, expense_type):
+    """The function returns a list of elements of the same type"""
     expenses = []
     i = 0
     j = 2
@@ -32,6 +35,8 @@ def find_expenses_by_type(all_expenses, expense_type):
 
 
 def display_lower_expenses(all_expenses, date_day, amount):
+    """The function saves lower numbers than given by user.
+    It returns a list of different elements"""
     expenses = []
     i = 0
     j = 0
@@ -51,6 +56,8 @@ def display_lower_expenses(all_expenses, date_day, amount):
 
 
 def find_date_location(all_expenses):
+    """The function returns the location of a date in a list.
+    It returns indexes for those dates"""
     dates = removeExpenses.get_date(all_expenses)
     check_if_date_used = []
     locations = []
@@ -64,6 +71,8 @@ def find_date_location(all_expenses):
 
 
 def find_expenses_with_same_amount(all_expenses, amount):
+    """The function save the expenses that have same amounts
+    It returns a list with those expenses"""
     expenses = []
     amounts = 1
 

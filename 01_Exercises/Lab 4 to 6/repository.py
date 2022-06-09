@@ -132,9 +132,6 @@ class Expense:
         return (self.date + " " + str(self.amount) + " " + self.expense_type).split()
 
 
-
-
-
 def check_all_data(data_collected):
     if data_collected.check_date_format() and data_collected.check_amount() and data_collected.check_type():
         if data_collected.check_day_format() and data_collected.check_month_format() and data_collected.check_year_format() and data_collected.check_amount_int():

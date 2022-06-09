@@ -2,6 +2,7 @@ import removeExpenses
 import findExpenses
 import repository
 import interface
+import undoRedo
 import reports
 import os
 
@@ -16,6 +17,7 @@ def collect_data():
 
 def main():
     all_expenses = []
+    undo = []
 
     while True:
         os.system("cls")
@@ -137,14 +139,14 @@ def main():
                 elif options == "4":
                     break
 
-        elif options == "4":
+        elif options == "4":    # Prints all expenses
             print("\nThis is your list of expenses:")
             interface.display_expense(all_expenses)
 
             if not interface.exit_to_menu():
                 continue
 
-        elif options == "5":
+        elif options == "5":    # Search for expenses
             while True:
                 print("\nYou can now search for expenses")
                 user_interface.submenu("Search")
@@ -205,7 +207,7 @@ def main():
                 elif options == "4":
                     break
 
-        elif options == "6":
+        elif options == "6":    # Reports submenu
             while True:
                 print("\nReports\n")
                 user_interface.submenu("Reports")
@@ -274,7 +276,7 @@ def main():
                 elif options == "5":
                     break
 
-        elif options == "7":
+        elif options == "7":    # Filters submenu
             while True:
                 print("\nFilters")
                 user_interface.submenu("Filters")
@@ -320,9 +322,10 @@ def main():
                 elif options == "3":
                     break
 
-        elif options == "8":
+        elif options == "8":    # Undo
             print("\nUndo")
             print("Are you sure that you want to go back in time? ")
+
 
             if not interface.exit_to_menu():
                 continue

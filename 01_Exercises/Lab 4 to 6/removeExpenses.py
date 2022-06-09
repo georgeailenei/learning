@@ -1,5 +1,7 @@
 # Functions for the submenu - Remove Expenses
 def remove_expense(all_expenses, requested_format):
+    """The function takes expense list and remove the expenses depending on the requested format
+    It returns a new list of expense"""
     updated_expense = []
 
     for expense in all_expenses:
@@ -10,7 +12,7 @@ def remove_expense(all_expenses, requested_format):
 
 
 def get_date(all_expenses):
-    """This function returns the date from expenses"""
+    """This function returns a list with dates from expenses"""
     list_with_dates = []
     i = 0
 
@@ -21,6 +23,7 @@ def get_date(all_expenses):
 
 
 def get_day(the_date):
+    """The function returns an int representing a day from a date"""
     the_day = [the_date[0], the_date[1]]
 
     for i in the_day:
@@ -31,6 +34,7 @@ def get_day(the_date):
 
 
 def get_multi_days(all_expenses):
+    """The function returns a list of int that represent days"""
     dates = get_date(all_expenses)
     days = []
 
@@ -39,12 +43,16 @@ def get_multi_days(all_expenses):
 
     return days
 
+
 def get_month(the_date):
+    """The function returns a string that represents the month in date"""
     the_month = [the_date[3], the_date[4]]
     return "".join(the_month)
 
 
 def remove_expense_by_amount(all_expenses, amount):
+    """The function saves smaller expenses
+    It return a list of expenses with smaller expenses than given by the user"""
     expenses = []
 
     for expense in all_expenses:
