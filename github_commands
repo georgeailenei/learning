@@ -1,0 +1,6 @@
+1. `git init` - To start repo
+2. `git status` - to display status
+3. `git add <files>` - to add files to staging
+4. `git commit -m "<message>" - to create a commit
+5. `git push` - upload files to github
+6. `git pull` - retrieve changes from github
