@@ -1,0 +1,3 @@
+- de refactorat totul cu odar 3 clase - UI - Controller - Repository
+- UI apeleaza controller, controller apeleaza repository si nu invers. One way dataflow
+- La initializare repository-ul este transmis controllerului

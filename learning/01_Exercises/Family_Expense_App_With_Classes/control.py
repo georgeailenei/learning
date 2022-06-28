@@ -7,6 +7,9 @@ UI = ConsoleUI()
 
 
 class Controller:
+    def __init__(self, repository):
+        self.repository = repository
+
     def adding_expenses(self):
         while True:
             # Interface
