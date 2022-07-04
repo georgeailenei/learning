@@ -45,19 +45,4 @@ class Memory(Repository, ABC):
 
 
 memory = Memory()
-# repository = memory.get_all()
-# memory.save_it(Expense("23-04-2020", "10", "Other").__repr__())
-# memory.save_it(Expense("25-04-2020", "20", "Phone").__repr__())
-# memory.save_it(Expense("27-04-2020", "350", "Bills").__repr__())
-# memory.save_it(Expense("23-04-2020", "10", "Other").__repr__())
-
-
-n = True
-a = 0
-
-while n:
-    a += 1
-
-    if a == 5:
-        n = False
-    print(a)
+repository = memory.get_all()

@@ -39,42 +39,35 @@ class ConsoleUI(UI):
                            "3. Return to main menu \n"}
 
     options = {"Write": "Please write your expense",
-               "Error": "Please write yes or no"}
+               "Error": "Please write yes or no",
+               "Update Expense": "Select the expense for update\n",
+               "Update": "\nWrite the new expense",
+               "Question": "\nDo you want to continue (Yes/No)? ",
+               "Choose": "Choose and option: "}
+
+    data_type = {"Date": "\nDate (dd-mm-yy): ",
+                 "Amount": "Write an amount: ",
+                 "Type": "Type (Food, Bills, Clothes, Phone or Other): ",
+                 "From date": "\nDate (dd-mm-yy): ",
+                 "To date": "Date (dd-mm-yy): "}
 
     def __init__(self, controller):
         self.controller = controller
 
     def user_input(self):
         """The method returns the user input"""
-        option = input("Choose and option: ")
+        option = input(self.display_options_text("Choose"))
         return option
-
-    def display_options_text(self, option):
-        print(self.options[option])
-
-    def display_adding_expenses(self):
-        self.refresh()
-        self.display_options_text("Write")
-        data_collected = self.collected_data()
-        self.controller.adding_expenses(data_collected)
-        self.display_all_expenses()
-
-    def display_maximum_spending(self):
-        self.controller.display_sum_expenses()
-        self.refresh()
-        self.display_all_expenses()
 
     def main_menu(self):
         print(self.menu)
 
     def submenu(self, option):
-        """This method takes a variable as option to print the right submenu"""
         print(self.sub_menu[option])
 
     def exit(self):
         """It returns False or True depending on the input"""
-        option = input("\nDo you want to continue (Yes/No)? ")
-
+        option = input(self.display_options_text("Question"))
         if option == "no" or option == "No":
             return False
         elif option == "yes" or option == "Yes":
@@ -82,19 +75,20 @@ class ConsoleUI(UI):
         else:
             return False
 
+    def display_options_text(self, option):
+        print(self.options[option])
+
+    def get_data_type(self, option):
+        print(self.data_type[option])
+
     def display_all_expenses(self):
         """This function prints all expenses"""
         print("\nCurrent expenses list:")
         for expense in self.controller.expense_list():
             print(expense)
 
-    def display_expenses(self, expenses):
-        """This function prints all expenses"""
-        print("Expenses that you are looking for:")
-        for expense in expenses:
-            print(expense)
-
-    def refresh(self):
+    @staticmethod
+    def refresh():
         return os.system("cls")
 
     @staticmethod
@@ -105,8 +99,51 @@ class ConsoleUI(UI):
         expense_type = input("Type (Food, Bills, Clothes, Phone or Other): ")
         return Expense(expense_date, expense_amount, expense_type)
 
+    def display_adding_expenses(self):
+        self.refresh()
+        self.display_options_text("Write")
+        data_collected = self.collected_data()
+        self.controller.adding_expenses(data_collected)
+        self.display_all_expenses()
+
+    def update_expenses(self):
+        self.refresh()
+        self.display_options_text("Update Expense")
+        self.display_all_expenses()
+        data_collected = self.collected_data()
+        self.display_options_text("Update")
+        updated_expense = self.collected_data()
+        self.controller.update_expenses(data_collected, updated_expense)
+        self.display_all_expenses()
+
+    def remove_expenses_by_date(self):
+        self.refresh()
+        self.display_all_expenses()
+        data_collected = input(self.get_data_type("Date"))
+        self.controller.remove_expenses_by_date(data_collected)
+        self.display_all_expenses()
+
+    def remove_expenses_by_type(self):
+        self.refresh()
+        self.display_all_expenses()
+        data_collected = input(self.get_data_type("Type"))
+        self.controller.remove_expenses_by_type(data_collected)
+        self.display_all_expenses()
+
+    def remove_expenses_by_time(self):
+        self.refresh()
+        self.display_all_expenses()
+        from_date = input(self.get_data_type("From Date"))
+        to_date = input(self.get_data_type("To Date"))
+        self.controller.remove_expenses_by_time(from_date, to_date)
+        self.display_all_expenses()
+
+    def display_maximum_spending(self):
+        self.controller.display_sum_expenses()
+        self.refresh()
+        self.display_all_expenses()
+
     def start(self):
-        """The method prints the main menu"""
         while True:
             self.refresh()
             self.main_menu()
@@ -119,33 +156,45 @@ class ConsoleUI(UI):
                     if not self.exit():
                         break
 
-            # # Update expenses
-            # elif option == "2":
-            #     self.controller.update_expense()
-            #
-            # # Remove expenses
-            # elif option == "3":
-            #     while True:
-            #         self.refresh()
-            #         self.submenu("Remove")
-            #         option = self.user_input()
-            #
-            #         # Remove expenses by inserting dates
-            #         if option == "1":
-            #             self.controller.remove_expenses_by_date()
-            #
-            #         # Remove expenses by type
-            #         elif option == "2":
-            #             self.controller.remove_expenses_by_type()
-            #
-            #         # Remove expenses by time
-            #         elif option == "3":
-            #             self.controller.remove_expenses_by_time()
-            #
-            #         # Return to main menu
-            #         elif option == "4":
-            #             break
-            #
+            # Update expenses
+            elif option == "2":
+                while True:
+                    self.update_expenses()
+                    if not self.exit():
+                        break
+
+            # Remove expenses
+            elif option == "3":
+                while True:
+                    self.refresh()
+                    self.submenu("Remove")
+                    option = self.user_input()
+
+                    # Remove expenses by inserting dates
+                    if option == "1":
+                        while True:
+                            self.remove_expenses_by_date()
+                            if not self.exit():
+                                break
+
+                    # Remove expenses by type
+                    elif option == "2":
+                        while True:
+                            self.remove_expenses_by_type()
+                            if not self.exit():
+                                break
+
+                    # Remove expenses by time
+                    elif option == "3":
+                        while True:
+                            self.remove_expenses_by_time()
+                            if not self.exit():
+                                break
+
+                    # Return to main menu
+                    elif option == "4":
+                        break
+
             # # Print the full list with expenses
             # elif option == "4":
             #     while True:
@@ -226,4 +275,3 @@ class ConsoleUI(UI):
             # Stop app
             elif option == "9":
                 break
-
