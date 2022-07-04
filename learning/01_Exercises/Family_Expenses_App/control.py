@@ -1,6 +1,6 @@
 from entity import Expense
 from repository import repository
-from entity_features import MultipleDataFeatures
+from entity_features import MultipleDataFeatures, EntityFeatures
 
 
 class Controller:
@@ -57,3 +57,19 @@ class Controller:
                 MultipleDataFeatures(self.memory.get_all(), from_date, to_date).remove_by_time_interval()
         else:
             print("\nPlease try to input a date again.\n")
+
+    def search_higher_expenses(self, data_collected):
+        expense = Expense("", data_collected, "")
+        if expense.check_amount():
+            found_expenses = EntityFeatures(self.memory, data_collected).find_greater_expenses()
+            if len(found_expenses) == 0:
+                found_expenses.append(f"There aren't bigger numbers than {data_collected}")
+                return found_expenses
+            else:
+                return found_expenses
+        else:
+            return ["Please insert a number not random things."]
+
+
+random_expenses = [Expense("23-04-2022", "2", "Other"), Expense("24-04-2022", "5", "Phone"), Expense("23-04-2022", "10", "Other"), Expense("25-04-2022", "15", "Bills")]
+print(Controller(random_expenses).search_higher_expenses("2"))

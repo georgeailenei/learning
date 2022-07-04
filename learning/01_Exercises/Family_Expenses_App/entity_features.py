@@ -74,7 +74,6 @@ class EntityFeatures:
 
         while len(self.expenses) > i:
             expense = self.expenses[i].split()
-
             if int(expense[j]) > int(self.data_collected):
                 expenses_found.append(" ".join(expense))
                 i += 1

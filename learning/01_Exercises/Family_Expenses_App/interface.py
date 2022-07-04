@@ -47,9 +47,7 @@ class ConsoleUI(UI):
 
     data_type = {"Date": "\nDate (dd-mm-yy): ",
                  "Amount": "Write an amount: ",
-                 "Type": "Type (Food, Bills, Clothes, Phone or Other): ",
-                 "From date": "\nDate (dd-mm-yy): ",
-                 "To date": "Date (dd-mm-yy): "}
+                 "Type": "Type (Food, Bills, Clothes, Phone or Other): "}
 
     def __init__(self, controller):
         self.controller = controller
@@ -88,6 +86,11 @@ class ConsoleUI(UI):
             print(expense)
 
     @staticmethod
+    def display_found_expenses(expenses):
+        for expense in expenses:
+            print(expense)
+
+    @staticmethod
     def refresh():
         return os.system("cls")
 
@@ -100,43 +103,68 @@ class ConsoleUI(UI):
         return Expense(expense_date, expense_amount, expense_type)
 
     def display_adding_expenses(self):
-        self.refresh()
-        self.display_options_text("Write")
-        data_collected = self.collected_data()
-        self.controller.adding_expenses(data_collected)
-        self.display_all_expenses()
+        while True:
+            self.refresh()
+            self.display_options_text("Write")
+            data_collected = self.collected_data()
+            self.controller.adding_expenses(data_collected)
+            self.display_all_expenses()
+            if not self.exit():
+                break
 
     def update_expenses(self):
-        self.refresh()
-        self.display_options_text("Update Expense")
-        self.display_all_expenses()
-        data_collected = self.collected_data()
-        self.display_options_text("Update")
-        updated_expense = self.collected_data()
-        self.controller.update_expenses(data_collected, updated_expense)
-        self.display_all_expenses()
+        while True:
+            self.refresh()
+            self.display_options_text("Update Expense")
+            self.display_all_expenses()
+            data_collected = self.collected_data()
+            self.display_options_text("Update")
+            updated_expense = self.collected_data()
+            self.controller.update_expenses(data_collected, updated_expense)
+            self.display_all_expenses()
+            if not self.exit():
+                break
 
     def remove_expenses_by_date(self):
-        self.refresh()
-        self.display_all_expenses()
-        data_collected = input(self.get_data_type("Date"))
-        self.controller.remove_expenses_by_date(data_collected)
-        self.display_all_expenses()
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            data_collected = input(self.get_data_type("Date"))
+            self.controller.remove_expenses_by_date(data_collected)
+            self.display_all_expenses()
+            if not self.exit():
+                break
 
     def remove_expenses_by_type(self):
-        self.refresh()
-        self.display_all_expenses()
-        data_collected = input(self.get_data_type("Type"))
-        self.controller.remove_expenses_by_type(data_collected)
-        self.display_all_expenses()
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            data_collected = input(self.get_data_type("Type"))
+            self.controller.remove_expenses_by_type(data_collected)
+            self.display_all_expenses()
+            if not self.exit():
+                break
 
     def remove_expenses_by_time(self):
-        self.refresh()
-        self.display_all_expenses()
-        from_date = input(self.get_data_type("From Date"))
-        to_date = input(self.get_data_type("To Date"))
-        self.controller.remove_expenses_by_time(from_date, to_date)
-        self.display_all_expenses()
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            from_date = input(self.get_data_type("Date"))
+            to_date = input(self.get_data_type("Date"))
+            self.controller.remove_expenses_by_time(from_date, to_date)
+            self.display_all_expenses()
+            if not self.exit():
+                break
+
+    def search_higher_expenses(self):
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            data_collected = input(self.get_data_type("Amount"))
+            data_found = self.controller.search_higher_expenses(data_collected)
+            self.display_found_expenses(data_found)
+            if not self.exit():
+                break
 
     def display_maximum_spending(self):
         self.controller.display_sum_expenses()
@@ -151,17 +179,11 @@ class ConsoleUI(UI):
 
             # Add expenses
             if option == "1":
-                while True:
-                    self.display_adding_expenses()
-                    if not self.exit():
-                        break
+                self.display_adding_expenses()
 
             # Update expenses
             elif option == "2":
-                while True:
-                    self.update_expenses()
-                    if not self.exit():
-                        break
+                self.update_expenses()
 
             # Remove expenses
             elif option == "3":
@@ -172,48 +194,39 @@ class ConsoleUI(UI):
 
                     # Remove expenses by inserting dates
                     if option == "1":
-                        while True:
-                            self.remove_expenses_by_date()
-                            if not self.exit():
-                                break
+                        self.remove_expenses_by_date()
 
                     # Remove expenses by type
                     elif option == "2":
-                        while True:
-                            self.remove_expenses_by_type()
-                            if not self.exit():
-                                break
+                        self.remove_expenses_by_type()
 
                     # Remove expenses by time
                     elif option == "3":
-                        while True:
-                            self.remove_expenses_by_time()
-                            if not self.exit():
-                                break
+                        self.remove_expenses_by_time()
 
                     # Return to main menu
                     elif option == "4":
                         break
 
-            # # Print the full list with expenses
-            # elif option == "4":
-            #     while True:
-            #         self.refresh()
-            #         self.display_all_expenses()
-            #         if not self.exit_menu():
-            #             break
-            #
-            # # Search for expenses
-            # elif option == "5":
-            #     while True:
-            #         self.refresh()
-            #         self.submenu("Search")
-            #         option = self.user_input()
-            #
-            #         # Print all expenses higher than input
-            #         if option == "1":
-            #             self.controller.search_higher_expenses()
-            #
+            # Print the full list with expenses
+            elif option == "4":
+                while True:
+                    self.refresh()
+                    self.display_all_expenses()
+                    if not self.exit():
+                        break
+
+            # Search for expenses
+            elif option == "5":
+                while True:
+                    self.refresh()
+                    self.submenu("Search")
+                    option = self.user_input()
+
+                    # Print all expenses higher than input
+                    if option == "1":
+                        self.search_higher_expenses()
+
             #         # Print all expenses of the same type
             #         elif option == "2":
             #             self.controller.search_same_type_expeses()
