@@ -15,6 +15,12 @@ class Controller:
         else:
             print("Please try to input your data again!")
 
+    def check_expense_list(self):
+        if len(self.memory.get_all()) == 0:
+            return False
+        else:
+            return True
+
     def update_expenses(self, data_collected, updated_expense):
         expense = data_collected.__repr__()
         if expense in self.memory.get_all():
@@ -49,11 +55,31 @@ class Controller:
         else:
             print("The app does not support that type of expense")
 
+    def remove_by_time_interval(self, from_date, to_date):
+        the_dates = SingleDataFeatures(self.memory.get_all()).get_date()
+        the_month = [SingleDataFeatures(self.memory.get_all()).get_month(from_date), SingleDataFeatures(self.memory.get_all()).get_month(to_date)]
+        remove_from_day = SingleDataFeatures(self.memory.get_all()).get_day(from_date)
+        remove_to_day = SingleDataFeatures(self.memory.get_all()).get_day(to_date)
+        update_expenses = []
+        i = 0
+
+        if the_month[0] == the_month[1]:
+            while len(self.memory.get_all()) > i:
+                if remove_from_day <= SingleDataFeatures(self.memory.get_all()).get_day(the_dates[i]) <= remove_to_day:
+                    i += 1
+                else:
+                    update_expenses.append(self.memory.get_all()[i])
+                    i += 1
+            self.memory.remove_all()
+            self.memory.add_to_repository(update_expenses)
+        else:
+            print("The time interval is too long, please choose same month or subscribe to premium :))")
+
     def remove_expenses_by_time(self, from_date, to_date):
         dates = [Expense(from_date, "", ""), Expense(to_date, "", "")]
         if dates[0].check_date_format() and dates[1].check_date_format():
             if dates[0].check_day_format() and dates[1].check_day_format():
-                MultipleDataFeatures(self.memory.get_all(), from_date, to_date).remove_by_time_interval()
+                self.remove_by_time_interval(from_date, to_date)
         else:
             print("\nPlease try to input a date again.\n")
 
@@ -108,7 +134,6 @@ class Controller:
         check_if_day_used = []
         list_with_amounts = []
         i = 0
-
         while len(self.memory.get_all()) > i:
             if days[i] == SingleDataFeatures(self.memory.get_all()).get_day(dates[i]) and days[i] not in check_if_day_used:
                 list_with_amounts.append(SingleDataFeatures(self.memory.get_all()).sum_expenses_by_day(days[i]))
@@ -116,7 +141,6 @@ class Controller:
                 i += 1
             else:
                 i += 1
-
         the_result = 0
         dates_locations = SingleDataFeatures(self.memory.get_all()).find_date_location()
         for amount in list_with_amounts:

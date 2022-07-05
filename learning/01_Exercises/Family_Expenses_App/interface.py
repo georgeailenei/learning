@@ -38,23 +38,36 @@ class ConsoleUI(UI):
                            "2. Remove smaller expenses \n"
                            "3. Return to main menu \n"}
 
-    options = {"Write": "Please write your expense",
-               "Error": "Please write yes or no",
-               "Update Expense": "Select the expense for update\n",
-               "Update": "\nWrite the new expense",
-               "Question": "\nDo you want to continue (Yes/No)? ",
-               "Choose": "Choose and option: "}
+    errors = {"addExpenses": "The list is empty please add expenses and than come back here to update if necessary",
+              "emptyList": "The list is empty please add expenses to see the most expensive day"}
 
-    data_type = {"Date": "\nDate (dd-mm-yy): ",
+    data_type = {"Question": "\nDo you want to continue (Yes/No)? ",
+                 "Choose": "Choose and option: ",
+                 "Date": "\nDate (dd-mm-yy): ",
                  "Amount": "Write an amount: ",
                  "Type": "Type (Food, Bills, Clothes, Phone or Other): "}
+
+    titles = {"expenseList": "\nCurrent expense list:",
+              "addExpenses": "Add an expense",
+              "updateExpense": "Select an expense to update",
+              "update": "\nWrite the new expense",
+              "removeDates": "Please insert a date",
+              "removeType": "Please insert a category - Food, Bills, Clothes, Phone or Other",
+              "removeByTime": "Please insert a time interval in date format to remove expenses",
+              "removeSmallerExpenses": "Please write an amount",
+              "findHigherExpenses": "Please write an amount",
+              "findSameTypeExpenses": "Please write a category - Food, Bills, Clothes, Phone or Other",
+              "findSmallerExpenses": "Please write an amount and a date",
+              "sumExpensesByCategory": "Please write a category - Food, Bills, Clothes, Phone or Other",
+              "displayExpensesWithSameAmount": "Please write an amount",
+              "displayExpensesByCategory": "Please write a category - Food, Bills, Clothes, Phone or Other"}
 
     def __init__(self, controller):
         self.controller = controller
 
     def user_input(self):
         """The method returns the user input"""
-        option = input(self.display_options_text("Choose"))
+        option = input(self.display_data_type("Choose"))
         return option
 
     def main_menu(self):
@@ -65,7 +78,7 @@ class ConsoleUI(UI):
 
     def exit(self):
         """It returns False or True depending on the input"""
-        option = input(self.display_options_text("Question"))
+        option = input(self.display_data_type("Question"))
         if option == "no" or option == "No":
             return False
         elif option == "yes" or option == "Yes":
@@ -73,15 +86,18 @@ class ConsoleUI(UI):
         else:
             return False
 
-    def display_options_text(self, option):
-        print(self.options[option])
+    def display_data_type(self, option):
+        return self.data_type[option]
 
-    def get_data_type(self, option):
-        print(self.data_type[option])
+    def display_title(self, option):
+        print(self.titles[option])
+
+    def display_error(self, option):
+        print(self.errors[option])
 
     def display_all_expenses(self):
         """This function prints all expenses"""
-        print("\nCurrent expenses list:")
+        self.display_title("expenseList")
         for expense in self.controller.expense_list():
             print(expense)
 
@@ -105,7 +121,7 @@ class ConsoleUI(UI):
     def display_adding_expenses(self):
         while True:
             self.refresh()
-            self.display_options_text("Write")
+            self.display_title("addExpenses")
             data_collected = self.collected_data()
             self.controller.adding_expenses(data_collected)
             self.display_all_expenses()
@@ -115,12 +131,15 @@ class ConsoleUI(UI):
     def update_expenses(self):
         while True:
             self.refresh()
-            self.display_options_text("Update Expense")
-            self.display_all_expenses()
-            data_collected = self.collected_data()
-            self.display_options_text("Update")
-            updated_expense = self.collected_data()
-            self.controller.update_expenses(data_collected, updated_expense)
+            self.display_title("updateExpense")
+            if self.controller.check_expense_list():
+                self.display_all_expenses()
+                data_collected = self.collected_data()
+                self.display_title("update")
+                updated_expense = self.collected_data()
+                self.controller.update_expenses(data_collected, updated_expense)
+            else:
+                self.display_error("addExpenses")
             self.display_all_expenses()
             if not self.exit():
                 break
@@ -128,8 +147,9 @@ class ConsoleUI(UI):
     def remove_expenses_by_date(self):
         while True:
             self.refresh()
+            self.display_title("removeDates")
             self.display_all_expenses()
-            data_collected = input(self.get_data_type("Date"))
+            data_collected = input(self.display_data_type("Date"))
             self.controller.remove_expenses_by_date(data_collected)
             self.display_all_expenses()
             if not self.exit():
@@ -138,8 +158,9 @@ class ConsoleUI(UI):
     def remove_expenses_by_type(self):
         while True:
             self.refresh()
+            self.display_title("removeType")
             self.display_all_expenses()
-            data_collected = input(self.get_data_type("Type"))
+            data_collected = input(self.display_data_type("Type"))
             self.controller.remove_expenses_by_type(data_collected)
             self.display_all_expenses()
             if not self.exit():
@@ -148,9 +169,10 @@ class ConsoleUI(UI):
     def remove_expenses_by_time(self):
         while True:
             self.refresh()
+            self.display_title("removeByTime")
             self.display_all_expenses()
-            from_date = input(self.get_data_type("Date"))
-            to_date = input(self.get_data_type("Date"))
+            from_date = input(self.display_data_type("Date"))
+            to_date = input(self.display_data_type("Date"))
             self.controller.remove_expenses_by_time(from_date, to_date)
             self.display_all_expenses()
             if not self.exit():
@@ -159,8 +181,9 @@ class ConsoleUI(UI):
     def search_higher_expenses(self):
         while True:
             self.refresh()
+            self.display_title("findHigherExpenses")
             self.display_all_expenses()
-            data_collected = input(self.get_data_type("Amount"))
+            data_collected = input(self.display_data_type("Amount"))
             data_found = self.controller.search_higher_expenses(data_collected)
             self.display_found_expenses(data_found)
             if not self.exit():
@@ -169,8 +192,9 @@ class ConsoleUI(UI):
     def search_same_type_expenses(self):
         while True:
             self.refresh()
+            self.display_title("findSameTypeExpenses")
             self.display_all_expenses()
-            data_collected = input(self.get_data_type("Type"))
+            data_collected = input(self.display_data_type("Type"))
             data_found = self.controller.search_same_type_expenses(data_collected)
             self.display_found_expenses(data_found)
             if not self.exit():
@@ -179,9 +203,10 @@ class ConsoleUI(UI):
     def search_smaller_expenses(self):
         while True:
             self.refresh()
+            self.display_title("findSmallerExpenses")
             self.display_all_expenses()
-            data_amount = input(self.get_data_type("Amount"))
-            data_date = input(self.get_data_type("Date"))
+            data_amount = input(self.display_data_type("Amount"))
+            data_date = input(self.display_data_type("Date"))
             data_found = self.controller.search_smaller_expenses(data_amount, data_date)
             self.display_found_expenses(data_found)
             if not self.exit():
@@ -190,8 +215,9 @@ class ConsoleUI(UI):
     def display_sum_expenses(self):
         while True:
             self.refresh()
+            self.display_title("sumExpensesByCategory")
             self.display_all_expenses()
-            data_collected = input(self.get_data_type("Type"))
+            data_collected = input(self.display_data_type("Type"))
             self.controller.display_sum_expenses(data_collected)
             if not self.exit():
                 break
@@ -200,15 +226,19 @@ class ConsoleUI(UI):
         while True:
             self.refresh()
             self.display_all_expenses()
-            self.controller.display_maximum_spending()
+            if self.controller.check_expense_list():
+                self.controller.display_maximum_spending()
+            else:
+                self.display_error("emptyList")
             if not self.exit():
                 break
 
     def display_same_amount_expenses(self):
         while True:
             self.refresh()
+            self.display_title("displayExpensesWithSameAmount")
             self.display_all_expenses()
-            data_collected = input(self.get_data_type("Amount"))
+            data_collected = input(self.display_data_type("Amount"))
             data_found = self.controller.display_same_amount_expenses(data_collected)
             self.display_found_expenses(data_found)
             if not self.exit():
@@ -217,8 +247,9 @@ class ConsoleUI(UI):
     def display_expenses_by_type(self):
         while True:
             self.refresh()
+            self.display_title("displayExpensesByCategory")
             self.display_all_expenses()
-            data_collected = input(self.get_data_type("Type"))
+            data_collected = input(self.display_data_type("Type"))
             data_found = self.controller.display_expenses_by_type(data_collected)
             self.display_found_expenses(data_found)
             if not self.exit():
@@ -227,8 +258,9 @@ class ConsoleUI(UI):
     def remove_expenses_type(self):
         while True:
             self.refresh()
+            self.display_title("removeType")
             self.display_all_expenses()
-            data_collected = input(self.get_data_type("Type"))
+            data_collected = input(self.display_data_type("Type"))
             self.controller.remove_expenses_by_type(data_collected)
             self.display_all_expenses()
             if not self.exit():
@@ -237,8 +269,9 @@ class ConsoleUI(UI):
     def remove_smaller_expenses(self):
         while True:
             self.refresh()
+            self.display_title("removeSmallerExpenses")
             self.display_all_expenses()
-            data_collected = input(self.get_data_type("Amount"))
+            data_collected = input(self.display_data_type("Amount"))
             self.controller.remove_smaller_expenses(data_collected)
             self.display_all_expenses()
             if not self.exit():

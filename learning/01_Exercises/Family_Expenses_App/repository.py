@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-# from entity import Expense
 
 
 class Repository(ABC):
@@ -45,4 +44,3 @@ class Memory(Repository, ABC):
 
 
 memory = Memory()
-repository = memory.get_all()

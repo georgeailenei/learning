@@ -1,5 +1,3 @@
-from repository import memory
-
 
 class EntityFeatures:
     def __init__(self, expenses, data_collected):
@@ -153,32 +151,6 @@ class SingleDataFeatures:
                 check_if_date_used.append(date)
         return locations
 
-    def expensive_day(self):
-        """The function takes the entire list of expenses and finds the most expensive day
-        It returns a string/message, but it doesn't consider the month. Consider fixing it."""
-        dates = SingleDataFeatures(self.expenses).get_date()
-        days = SingleDataFeatures(self.expenses).get_multi_days()
-        check_if_day_used = []
-        list_with_amounts = []
-        i = 0
-
-        while len(self.expenses) > i:
-            if days[i] == SingleDataFeatures(self.expenses).get_day(dates[i]) and days[i] not in check_if_day_used:
-                list_with_amounts.append(SingleDataFeatures(self.expenses).sum_expenses_by_day(days[i]))
-                check_if_day_used.append(days[i])
-                i += 1
-            else:
-                i += 1
-
-        the_result = 0
-        dates_locations = SingleDataFeatures(self.expenses).find_date_location()
-
-        for amount in list_with_amounts:
-            if the_result < amount:
-                the_result = amount
-        return f"\nThe most expensive day is {dates[dates_locations[list_with_amounts.index(the_result)]]} with a total of" \
-               f" {the_result} spent"
-
 
 class MultipleDataFeatures:
     def __init__(self, expenses, data_collected, data_collected_two):
@@ -196,7 +168,6 @@ class MultipleDataFeatures:
 
         while len(self.expenses) > i:
             expense = self.expenses[i].split()
-
             if SingleDataFeatures(self.expenses).get_day(expense[j]) < SingleDataFeatures(self.expenses).get_day(self.data_collected):
                 if int(self.data_collected_two) > int(expense[x]):
                     expenses_found.append(" ".join(expense))
@@ -206,23 +177,3 @@ class MultipleDataFeatures:
             else:
                 i += 1
         return expenses_found
-
-    def remove_by_time_interval(self):
-        the_dates = SingleDataFeatures(self.expenses).get_date()
-        the_month = [SingleDataFeatures(self.expenses).get_month(self.data_collected), SingleDataFeatures(self.expenses).get_month(self.data_collected_two)]
-        remove_from_day = SingleDataFeatures(self.expenses).get_day(self.data_collected)
-        remove_to_day = SingleDataFeatures(self.expenses).get_day(self.data_collected_two)
-        update_expenses = []
-        i = 0
-
-        if the_month[0] == the_month[1]:
-            while len(self.expenses) > i:
-                if remove_from_day <= SingleDataFeatures(self.expenses).get_day(the_dates[i]) <= remove_to_day:
-                    i += 1
-                else:
-                    update_expenses.append(self.expenses[i])
-                    i += 1
-            memory.remove_all()
-            memory.add_to_repository(update_expenses)
-        else:
-            print("The time interval is too long, please choose same month or subscribe to premium :))")
