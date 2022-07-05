@@ -166,10 +166,83 @@ class ConsoleUI(UI):
             if not self.exit():
                 break
 
+    def search_same_type_expenses(self):
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            data_collected = input(self.get_data_type("Type"))
+            data_found = self.controller.search_same_type_expenses(data_collected)
+            self.display_found_expenses(data_found)
+            if not self.exit():
+                break
+
+    def search_smaller_expenses(self):
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            data_amount = input(self.get_data_type("Amount"))
+            data_date = input(self.get_data_type("Date"))
+            data_found = self.controller.search_smaller_expenses(data_amount, data_date)
+            self.display_found_expenses(data_found)
+            if not self.exit():
+                break
+
+    def display_sum_expenses(self):
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            data_collected = input(self.get_data_type("Type"))
+            self.controller.display_sum_expenses(data_collected)
+            if not self.exit():
+                break
+
     def display_maximum_spending(self):
-        self.controller.display_sum_expenses()
-        self.refresh()
-        self.display_all_expenses()
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            self.controller.display_maximum_spending()
+            if not self.exit():
+                break
+
+    def display_same_amount_expenses(self):
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            data_collected = input(self.get_data_type("Amount"))
+            data_found = self.controller.display_same_amount_expenses(data_collected)
+            self.display_found_expenses(data_found)
+            if not self.exit():
+                break
+
+    def display_expenses_by_type(self):
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            data_collected = input(self.get_data_type("Type"))
+            data_found = self.controller.display_expenses_by_type(data_collected)
+            self.display_found_expenses(data_found)
+            if not self.exit():
+                break
+
+    def remove_expenses_type(self):
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            data_collected = input(self.get_data_type("Type"))
+            self.controller.remove_expenses_by_type(data_collected)
+            self.display_all_expenses()
+            if not self.exit():
+                break
+
+    def remove_smaller_expenses(self):
+        while True:
+            self.refresh()
+            self.display_all_expenses()
+            data_collected = input(self.get_data_type("Amount"))
+            self.controller.remove_smaller_expenses(data_collected)
+            self.display_all_expenses()
+            if not self.exit():
+                break
 
     def start(self):
         while True:
@@ -227,63 +300,63 @@ class ConsoleUI(UI):
                     if option == "1":
                         self.search_higher_expenses()
 
-            #         # Print all expenses of the same type
-            #         elif option == "2":
-            #             self.controller.search_same_type_expeses()
-            #
-            #         # Print smaller expenses than input and before the given day
-            #         elif option == "3":
-            #             self.controller.search_smaller_expenses()
-            #
-            #         # Return to main menu
-            #         elif option == "4":
-            #             break
-            #
-            # # Reports
-            # elif option == "6":
-            #     while True:
-            #         self.refresh()
-            #         self.submenu("Reports")
-            #         option = self.user_input()
-            #
-            #         # Display the sum of all expenses from a category
-            #         if option == "1":
-            #             self.controller.display_sum_expenses()
-            #
-            #         # Find the max expense in a day
-            #         elif option == "2":
-            #             self.display_maximum_spending()
-            #
-            #         # Print all expenses with the same amount
-            #         elif option == "3":
-            #             self.controller.display_expenses_amount()
-            #
-            #         # Print all expenses by category
-            #         elif option == "4":
-            #             self.controller.display_expenses_by_type()
-            #
-            #         # Return to main menu
-            #         elif option == "5":
-            #             break
-            #
-            # # Filters
-            # elif option == "7":
-            #     while True:
-            #         self.refresh()
-            #         self.submenu("Filters")
-            #         option = self.user_input()
-            #
-            #         # Remove all expenses by category
-            #         if option == "1":
-            #             self.controller.remove_expenses_by_type()
-            #
-            #         # Remove smaller expenses
-            #         elif option == "2":
-            #             self.controller.remove_smaller_expenses()
-            #
-            #         # Return to main menu
-            #         elif option == "3":
-            #             break
+                    # Print all expenses of the same type
+                    elif option == "2":
+                        self.search_same_type_expenses()
+
+                    # Print smaller expenses than input and before the given day
+                    elif option == "3":
+                        self.search_smaller_expenses()
+
+                    # Return to main menu
+                    elif option == "4":
+                        break
+
+            # Reports
+            elif option == "6":
+                while True:
+                    self.refresh()
+                    self.submenu("Reports")
+                    option = self.user_input()
+
+                    # Display the sum of all expenses from a category
+                    if option == "1":
+                        self.display_sum_expenses()
+
+                    # Find the max expense in a day
+                    elif option == "2":
+                        self.display_maximum_spending()
+
+                    # Print all expenses with the same amount
+                    elif option == "3":
+                        self.display_same_amount_expenses()
+
+                    # Print all expenses by category
+                    elif option == "4":
+                        self.display_expenses_by_type()
+
+                    # Return to main menu
+                    elif option == "5":
+                        break
+
+            # Filters
+            elif option == "7":
+                while True:
+                    self.refresh()
+                    self.submenu("Filters")
+                    option = self.user_input()
+
+                    # Remove all expenses by category
+                    if option == "1":
+                        self.remove_expenses_type()
+
+                    # Remove smaller expenses
+                    elif option == "2":
+                        self.remove_smaller_expenses()
+
+                    # Return to main menu
+                    elif option == "3":
+                        break
 
             # Stop app
             elif option == "9":

@@ -1,6 +1,5 @@
+from entity_features import MultipleDataFeatures, EntityFeatures, SingleDataFeatures
 from entity import Expense
-from repository import repository
-from entity_features import MultipleDataFeatures, EntityFeatures
 
 
 class Controller:
@@ -19,13 +18,13 @@ class Controller:
     def update_expenses(self, data_collected, updated_expense):
         expense = data_collected.__repr__()
         if expense in self.memory.get_all():
-            expense_location = repository.index(expense)
-            repository.remove(expense)
+            expense_location = self.memory.get_all().index(expense)
+            self.memory.get_all().remove(expense)
             while True:
                 new_expense = updated_expense
                 update_the_expense = new_expense.__repr__()
                 if Expense.check_all_data(updated_expense):
-                    repository.insert(expense_location, update_the_expense)
+                    self.memory.get_all().insert(expense_location, update_the_expense)
                     break
                 else:
                     print("Please try to input your data again!")
@@ -61,7 +60,7 @@ class Controller:
     def search_higher_expenses(self, data_collected):
         expense = Expense("", data_collected, "")
         if expense.check_amount():
-            found_expenses = EntityFeatures(self.memory, data_collected).find_greater_expenses()
+            found_expenses = EntityFeatures(self.memory.get_all(), data_collected).find_greater_expenses()
             if len(found_expenses) == 0:
                 found_expenses.append(f"There aren't bigger numbers than {data_collected}")
                 return found_expenses
@@ -70,6 +69,93 @@ class Controller:
         else:
             return ["Please insert a number not random things."]
 
+    def search_same_type_expenses(self, data_collected):
+        expense = Expense("", "", data_collected)
+        if expense.check_type():
+            expenses_found = EntityFeatures(self.memory.get_all(), data_collected).find_expenses_by_type()
+            if len(expenses_found) == 0:
+                expenses_found.append(f"There aren't any expenses in this category")
+                return expenses_found
+            else:
+                return expenses_found
+        else:
+            return ["The apps does not contain that category"]
 
-random_expenses = [Expense("23-04-2022", "2", "Other"), Expense("24-04-2022", "5", "Phone"), Expense("23-04-2022", "10", "Other"), Expense("25-04-2022", "15", "Bills")]
-print(Controller(random_expenses).search_higher_expenses("2"))
+    def search_smaller_expenses(self, data_amount, data_date):
+        expenses_amount = Expense("", data_amount, "")
+        expenses_date = Expense(data_date, "", "")
+        if expenses_amount.check_amount() and expenses_date.check_day_format():
+            found_expenses = MultipleDataFeatures(self.memory.get_all(), data_date,
+                                                  data_amount).display_lower_expenses()
+            if len(found_expenses) == 0:
+                found_expenses.append(f"There aren't any lower expenses till that day")
+                return found_expenses
+            else:
+                return found_expenses
+        else:
+            return ["Wrong inputs, please try again!"]
+
+    def display_sum_expenses(self, data_collected):
+        expense = Expense("", "", data_collected)
+        if expense.check_type():
+            return [f"\nThe sum for {data_collected} category is: {EntityFeatures(self.memory.get_all(), data_collected).sum_expenses_by_type()}"]
+
+    def display_maximum_spending(self):
+        """The function takes the entire list of expenses and finds the most expensive day
+              It returns a string/message, but it doesn't consider the month. Consider fixing it."""
+        dates = SingleDataFeatures(self.memory.get_all()).get_date()
+        days = SingleDataFeatures(self.memory.get_all()).get_multi_days()
+        check_if_day_used = []
+        list_with_amounts = []
+        i = 0
+
+        while len(self.memory.get_all()) > i:
+            if days[i] == SingleDataFeatures(self.memory.get_all()).get_day(dates[i]) and days[i] not in check_if_day_used:
+                list_with_amounts.append(SingleDataFeatures(self.memory.get_all()).sum_expenses_by_day(days[i]))
+                check_if_day_used.append(days[i])
+                i += 1
+            else:
+                i += 1
+
+        the_result = 0
+        dates_locations = SingleDataFeatures(self.memory.get_all()).find_date_location()
+        for amount in list_with_amounts:
+            if the_result < amount:
+                the_result = amount
+
+        print(
+            f"\nThe most expensive day is {dates[dates_locations[list_with_amounts.index(the_result)]]}"
+            f" with a total of {the_result} spent")
+
+    def display_same_amount_expenses(self, data_collected):
+        expense = Expense("", data_collected, "")
+        if expense.check_amount():
+            expense_found = EntityFeatures(self.memory.get_all(), data_collected).save_expenses_with_same_amount()
+            if len(expense_found) == 0:
+                return ["There aren't any expenses with same amount"]
+            else:
+                return expense_found
+        else:
+            return ["Please try to input an amount, nothing else"]
+
+    def display_expenses_by_type(self, data_collected):
+        expense = Expense("", "", data_collected)
+        if expense.check_type():
+            expense_found = EntityFeatures(self.memory.get_all(), data_collected).find_expenses_by_type()
+            if len(expense_found) == 0:
+                return [f"There aren't any expenses in this category"]
+            else:
+                expense_found.insert(0, f"\nThis is the list that is in {data_collected} category:")
+                return expense_found
+        else:
+            return ["Please try to input a category/type"]
+
+    def remove_smaller_expenses(self, data_collected):
+        expense = Expense("", data_collected, "")
+        if expense.check_amount():
+            expenses_found = EntityFeatures(self.memory.get_all(), data_collected).save_higher_expenses()
+            if len(expenses_found) == 0:
+                print(f"There aren't any smaller expenses in the list")
+            else:
+                self.memory.remove_all()
+                self.memory.add_to_repository(expenses_found)
