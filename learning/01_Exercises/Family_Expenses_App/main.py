@@ -1,10 +1,13 @@
 from interface import ConsoleUI
-from repository import memory
+from repository import InMemoryRepository
 from control import Controller
+from entity import ExpenseValidator
 
 
 def main():
-    controller = Controller(memory)
+    validator = ExpenseValidator()
+    repository = InMemoryRepository()
+    controller = Controller(repository, validator)
     user_interface = ConsoleUI(controller)
     user_interface.start()
 

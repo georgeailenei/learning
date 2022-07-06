@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from entity import Expense
 import os
+from control import ControllerError
 
 
 class UI(ABC):
@@ -99,19 +100,17 @@ class ConsoleUI(UI):
         """This function prints all expenses"""
         self.display_title("expenseList")
         for expense in self.controller.expense_list():
-            print(expense)
+            print(f'{expense.id}. {expense.date} {expense.amount} {expense.expense_type}')
 
     @staticmethod
     def display_found_expenses(expenses):
         for expense in expenses:
             print(expense)
 
-    @staticmethod
-    def refresh():
+    def refresh(self):
         return os.system("cls")
 
-    @staticmethod
-    def collected_data():
+    def collected_data(self):
         """This method collects the data from the user and returns an object"""
         expense_date = input("\nDate (dd-mm-yy): ")
         expense_amount = input("Amount: ")
@@ -120,27 +119,28 @@ class ConsoleUI(UI):
 
     def display_adding_expenses(self):
         while True:
-            self.refresh()
             self.display_title("addExpenses")
-            data_collected = self.collected_data()
-            self.controller.adding_expenses(data_collected)
+            expense = self.collected_data()
+            self.controller.add_expense(expense)
             self.display_all_expenses()
             if not self.exit():
                 break
 
     def update_expenses(self):
         while True:
-            self.refresh()
-            self.display_title("updateExpense")
-            if self.controller.check_expense_list():
-                self.display_all_expenses()
-                data_collected = self.collected_data()
-                self.display_title("update")
-                updated_expense = self.collected_data()
-                self.controller.update_expenses(data_collected, updated_expense)
-            else:
-                self.display_error("addExpenses")
             self.display_all_expenses()
+            self.display_title("updateExpense")
+
+            id_ = int(input('\nId:'))
+            expense_date = input("\nDate (dd-mm-yy): ")
+            expense_amount = input("Amount: ")
+            expense_type = input("Type (Food, Bills, Clothes, Phone or Other): ")
+
+            try:
+                self.controller.update_expenses(id_, expense_date, expense_amount, expense_type)
+            except ControllerError as ex:
+                print(str(ex))
+
             if not self.exit():
                 break
 
@@ -282,6 +282,7 @@ class ConsoleUI(UI):
             self.refresh()
             self.main_menu()
             option = self.user_input()
+            self.refresh()
 
             # Add expenses
             if option == "1":
@@ -294,7 +295,6 @@ class ConsoleUI(UI):
             # Remove expenses
             elif option == "3":
                 while True:
-                    self.refresh()
                     self.submenu("Remove")
                     option = self.user_input()
 
@@ -317,7 +317,6 @@ class ConsoleUI(UI):
             # Print the full list with expenses
             elif option == "4":
                 while True:
-                    self.refresh()
                     self.display_all_expenses()
                     if not self.exit():
                         break
@@ -325,7 +324,6 @@ class ConsoleUI(UI):
             # Search for expenses
             elif option == "5":
                 while True:
-                    self.refresh()
                     self.submenu("Search")
                     option = self.user_input()
 
@@ -348,7 +346,6 @@ class ConsoleUI(UI):
             # Reports
             elif option == "6":
                 while True:
-                    self.refresh()
                     self.submenu("Reports")
                     option = self.user_input()
 
@@ -375,7 +372,6 @@ class ConsoleUI(UI):
             # Filters
             elif option == "7":
                 while True:
-                    self.refresh()
                     self.submenu("Filters")
                     option = self.user_input()
 
