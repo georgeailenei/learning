@@ -1,3 +1,4 @@
+import copy
 from abc import ABC, abstractmethod
 from copy import deepcopy
 
@@ -71,7 +72,6 @@ class InMemoryRepository(ExpenseRepository, ABC):
         for expense in self.expenses:
             if expense.id == expense_id:
                 return deepcopy(expense)
-
         return None
 
     def update(self, to_update_expense):
@@ -81,5 +81,17 @@ class InMemoryRepository(ExpenseRepository, ABC):
                 expense.amount = to_update_expense.amount
                 expense.expense_type = to_update_expense.expense_type
                 return
-
         raise RepositoryError(f'Expense with id {to_update_expense.id} does not exist')
+
+    def timeline(self):
+        timeline = [[]]
+        lastExpenseList = -1
+
+        if self.expenses not in timeline[lastExpenseList]:
+            timeline.append([])
+            # for expense in self.expenses:
+            #     timeline[lastExpenseList].append(copy.deepcopy(expense))
+        return timeline
+
+    def redo(self):
+        pass

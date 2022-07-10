@@ -17,6 +17,8 @@ class Controller:
     def add_expense(self, expense):
         if self.validator.validate(expense):
             self.repository.save(expense)
+            self.repository.timeline()
+            print(self.repository.timeline())
         else:
             print("Please try to input your data again!")
 
@@ -182,3 +184,15 @@ class Controller:
             else:
                 self.repository.remove_all()
                 self.repository.save_all(expenses_found)
+
+    def undo(self, option):
+        timeline = self.repository.timeline()
+        tail = -1
+        step = 0
+
+        if option == "yes":
+            if timeline[tail] == self.repository:
+                step += 1
+                previous_expenses = timeline[tail - step]
+                self.repository.remove_all()
+                self.repository.save_all(previous_expenses)

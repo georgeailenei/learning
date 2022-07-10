@@ -46,7 +46,8 @@ class ConsoleUI(UI):
                  "Choose": "Choose and option: ",
                  "Date": "\nDate (dd-mm-yy): ",
                  "Amount": "Write an amount: ",
-                 "Type": "Type (Food, Bills, Clothes, Phone or Other): "}
+                 "Type": "Type (Food, Bills, Clothes, Phone or Other): ",
+                 "undo": "Do you want to undo? (Y/N) "}
 
     titles = {"expenseList": "\nCurrent expense list:",
               "addExpenses": "Add an expense",
@@ -61,7 +62,8 @@ class ConsoleUI(UI):
               "findSmallerExpenses": "Please write an amount and a date",
               "sumExpensesByCategory": "Please write a category - Food, Bills, Clothes, Phone or Other",
               "displayExpensesWithSameAmount": "Please write an amount",
-              "displayExpensesByCategory": "Please write a category - Food, Bills, Clothes, Phone or Other"}
+              "displayExpensesByCategory": "Please write a category - Food, Bills, Clothes, Phone or Other",
+              "undo": "UNDO MENU"}
 
     def __init__(self, controller):
         self.controller = controller
@@ -277,6 +279,17 @@ class ConsoleUI(UI):
             if not self.exit():
                 break
 
+    def undo(self):
+        while True:
+            self.refresh()
+            self.display_title("undo")
+            self.display_all_expenses()
+            option = input(self.display_data_type("undo"))
+            self.controller.undo(option)
+            self.display_all_expenses()
+            if not self.exit():
+                break
+
     def start(self):
         while True:
             self.refresh()
@@ -386,6 +399,9 @@ class ConsoleUI(UI):
                     # Return to main menu
                     elif option == "3":
                         break
+
+            elif option == 8:
+                self.undo()
 
             # Stop app
             elif option == "9":
