@@ -20,7 +20,8 @@ class ConsoleUI(UI):
            '6. Reports \n' \
            '7. Filters \n' \
            '8. Undo \n' \
-           '9. Exit \n'
+           '9 Redo \n' \
+           '10. Exit \n'
 
     sub_menu = {"Remove": "1. Remove all expenses by date \n"
                           "2. Remove all expenses by type \n"
@@ -47,7 +48,9 @@ class ConsoleUI(UI):
                  "Date": "\nDate (dd-mm-yy): ",
                  "Amount": "Write an amount: ",
                  "Type": "Type (Food, Bills, Clothes, Phone or Other): ",
-                 "undo": "Do you want to undo? (Y/N) "}
+                 "undo": "Do you want to undo? (Y/N) ",
+                 "redo": "Do you want to redo? (Y/N) ",
+                 }
 
     titles = {"expenseList": "\nCurrent expense list:",
               "addExpenses": "Add an expense",
@@ -63,7 +66,8 @@ class ConsoleUI(UI):
               "sumExpensesByCategory": "Please write a category - Food, Bills, Clothes, Phone or Other",
               "displayExpensesWithSameAmount": "Please write an amount",
               "displayExpensesByCategory": "Please write a category - Food, Bills, Clothes, Phone or Other",
-              "undo": "UNDO MENU"}
+              "undo": "UNDO MENU",
+              'redo': 'REDO MENU',}
 
     def __init__(self, controller):
         self.controller = controller
@@ -285,8 +289,33 @@ class ConsoleUI(UI):
             self.display_title("undo")
             self.display_all_expenses()
             option = input(self.display_data_type("undo"))
-            self.controller.undo(option)
+            if option == 'y':
+                try:
+                    self.controller.undo()
+                except ControllerError as ex:
+                    print('Cannot undo anymore')
+                    break
+
+                self.display_all_expenses()
+
+            if not self.exit():
+                break
+
+    def redo(self):
+        while True:
+            self.refresh()
+            self.display_title("redo")
             self.display_all_expenses()
+            option = input(self.display_data_type("redo"))
+            if option == 'y':
+                try:
+                    self.controller.redo()
+                except ControllerError as ex:
+                    print('Cannot redo anymore')
+                    break
+
+                self.display_all_expenses()
+
             if not self.exit():
                 break
 
@@ -400,9 +429,12 @@ class ConsoleUI(UI):
                     elif option == "3":
                         break
 
-            elif option == 8:
+            elif option == "8":
                 self.undo()
 
-            # Stop app
             elif option == "9":
+                self.redo()
+
+            # Stop app
+            elif option == "10":
                 break

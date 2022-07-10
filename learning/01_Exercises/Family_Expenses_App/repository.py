@@ -82,16 +82,3 @@ class InMemoryRepository(ExpenseRepository, ABC):
                 expense.expense_type = to_update_expense.expense_type
                 return
         raise RepositoryError(f'Expense with id {to_update_expense.id} does not exist')
-
-    def timeline(self):
-        timeline = [[]]
-        lastExpenseList = -1
-
-        if self.expenses not in timeline[lastExpenseList]:
-            timeline.append([])
-            # for expense in self.expenses:
-            #     timeline[lastExpenseList].append(copy.deepcopy(expense))
-        return timeline
-
-    def redo(self):
-        pass

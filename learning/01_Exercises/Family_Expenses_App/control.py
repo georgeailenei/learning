@@ -1,3 +1,5 @@
+import copy
+
 from entity_features import MultipleDataFeatures, EntityFeatures, SingleDataFeatures
 from entity import Expense
 
@@ -10,6 +12,9 @@ class Controller:
     def __init__(self, repository, validator):
         self.repository = repository
         self.validator = validator
+        self.undo_cursor = 0
+        self.history = []
+        self.track_timeline()
 
     def expense_list(self):
         return self.repository.get_all()
@@ -17,8 +22,7 @@ class Controller:
     def add_expense(self, expense):
         if self.validator.validate(expense):
             self.repository.save(expense)
-            self.repository.timeline()
-            print(self.repository.timeline())
+            self.track_timeline()
         else:
             print("Please try to input your data again!")
 
@@ -185,14 +189,21 @@ class Controller:
                 self.repository.remove_all()
                 self.repository.save_all(expenses_found)
 
-    def undo(self, option):
-        timeline = self.repository.timeline()
-        tail = -1
-        step = 0
+    def undo(self):
+        if self.undo_cursor == 0:
+            raise ControllerError('Can not undo anymore')
+        self.undo_cursor -= 1
+        self.repository.remove_all()
+        self.repository.save_all(self.history[self.undo_cursor])
 
-        if option == "yes":
-            if timeline[tail] == self.repository:
-                step += 1
-                previous_expenses = timeline[tail - step]
-                self.repository.remove_all()
-                self.repository.save_all(previous_expenses)
+    def redo(self):
+        if self.undo_cursor == len(self.history) - 1:
+            raise ControllerError('Can not redo anymore')
+
+        self.undo_cursor += 1
+        self.repository.remove_all()
+        self.repository.save_all(self.history[self.undo_cursor])
+
+    def track_timeline(self):
+        self.history = self.history[:self.undo_cursor + 1] + [copy.deepcopy(self.repository.get_all())]
+        self.undo_cursor = len(self.history) - 1
