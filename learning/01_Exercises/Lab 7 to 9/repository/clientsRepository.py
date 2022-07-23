@@ -7,8 +7,9 @@ class clientsRepository(repository):
         self.currentID = 1
 
     def save(self, client):
+        client.id = self.currentID
         self.clients.append(client)
-        return self.clients
+        self.currentID += 1
 
     def remove(self):
         pass

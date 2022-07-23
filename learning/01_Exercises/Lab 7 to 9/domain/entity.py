@@ -1,13 +1,13 @@
 
-class movies:
-    def __init__(self, title, description, gender):
+class movie:
+    def __init__(self, title, description, genre):
         self.id = None
         self.title = title
         self.description = description
-        self.gender = gender
+        self.genre = genre
 
     def __repr__(self):
-        return f"{self.id} | {self.title} | {self.description} | {self.gender}"
+        return f"{self.id} | {self.title} | {self.description} | {self.genre}"
 
 
 class client:

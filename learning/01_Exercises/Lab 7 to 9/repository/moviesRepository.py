@@ -7,8 +7,9 @@ class moviesRepository(repository):
         self.currentID = 1
 
     def save(self, movie):
+        movie.id = self.currentID
         self.movies.append(movie)
-        return self.movies
+        self.currentID += 1
 
     def remove(self):
         pass
