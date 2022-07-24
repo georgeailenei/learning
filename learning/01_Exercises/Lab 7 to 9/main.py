@@ -7,8 +7,8 @@ from domain.validator import clientValidator
 
 
 def main():
-    validatorForMovie = movieValidator
-    validatorForClient = clientValidator
+    validatorForMovie = movieValidator()
+    validatorForClient = clientValidator()
     moviesRepo = moviesRepository()
     clientsRepo = clientsRepository()
     controller = Controller(moviesRepo, clientsRepo, validatorForMovie, validatorForClient)

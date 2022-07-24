@@ -1,4 +1,3 @@
-
 class ControllerError(Exception):
     pass
 
@@ -11,17 +10,23 @@ class Controller:
         self.validatorForClient = validatorForClient
 
     def addClient(self, Client):
-        self.clientsRepository.save(Client)
+        # Save the client's information in the list.
+        if self.validatorForClient.validator(Client):
+            self.clientsRepository.save(Client)
+        else:
+            print(f"The {Client}'s details appears to be wrong, please try again.")
 
     def addMovie(self, movie):
-        "Aici imi crapa codul... Inca nu-mi dau seama ce scriu gresit"
-        # if self.validatorForMovie.checkGenre(movie.genre):
-        self.moviesRepository.save(movie)
-        # else:
-        #     print("Ceva")
+        # Save the movie information in the list by validating the information given.
+        if self.validatorForMovie.validator(movie):
+            self.moviesRepository.save(movie)
+        else:
+            print(f"The {movie} contains some wrong information")
 
     def movieList(self):
+        # Get all the movies from the list.
         return self.moviesRepository.getAll()
 
     def clientList(self):
+        # Get all the clients from the list.
         return self.clientsRepository.getAll()

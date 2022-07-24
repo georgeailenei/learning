@@ -7,6 +7,7 @@ class clientsRepository(repository):
         self.currentID = 1
 
     def save(self, client):
+        # Save the client given by the user and implement a unique ID.
         client.id = self.currentID
         self.clients.append(client)
         self.currentID += 1
@@ -15,4 +16,5 @@ class clientsRepository(repository):
         pass
 
     def getAll(self):
+        # Get the list with the clients.
         return self.clients
