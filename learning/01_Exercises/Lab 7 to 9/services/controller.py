@@ -18,7 +18,6 @@ class Controller:
 
     def removeMovie(self, ID):
         # Remove a movie by ID.
-        # Notes for me. This method does not work properly. I cannot figure it out why...
         newMovieList = self.moviesRepository.remove(ID)
         self.moviesRepository.removeAll()
         self.moviesRepository.saveAll(newMovieList)

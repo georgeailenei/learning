@@ -7,7 +7,7 @@ class movie:
         self.genre = genre
 
     def __repr__(self):
-        return f"{self.id} | {self.title} | {self.description} | {self.genre}"
+        return f"{self.id} - {self.title} | {self.description} | {self.genre}"
 
 
 class client:
