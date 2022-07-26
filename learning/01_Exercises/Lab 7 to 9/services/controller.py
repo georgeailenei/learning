@@ -16,6 +16,13 @@ class Controller:
         else:
             print(f"The {Client}'s details appears to be wrong, please try again.")
 
+    def removeMovie(self, ID):
+        # Remove a movie by ID.
+        # Notes for me. This method does not work properly. I cannot figure it out why...
+        newMovieList = self.moviesRepository.remove(ID)
+        self.moviesRepository.removeAll()
+        self.moviesRepository.saveAll(newMovieList)
+
     def addMovie(self, movie):
         # Save the movie information in the list by validating the information given.
         if self.validatorForMovie.validator(movie):

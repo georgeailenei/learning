@@ -24,6 +24,10 @@ class consoleUI(UI):
                  "2. Add clients\n" \
                  "3. Return to Main Menu"
 
+    removeSubMenu = "1. Remove movies\n" \
+                    "2. Remove clients\n" \
+                    "3. Return to Main Menu"
+
     def __init__(self, controller):
         self.controller = controller
 
@@ -40,6 +44,10 @@ class consoleUI(UI):
     def subMenu(self):
         # It displays the sub menu for the Add section.
         print(self.addSubMenu)
+
+    def rmvSubMenu(self):
+        # It displays the sub menu for the Remove section.
+        print(self.removeSubMenu)
 
     def exit(self):
         # The method takes and input from the user, and it returns True or False.
@@ -59,6 +67,12 @@ class consoleUI(UI):
         description = input("Description: ")
         genre = input("Genre: ")
         return movie(title, description, genre)
+
+    def collectMovieID(self):
+        # Ask the user for an ID
+        print("Please insert a movie ID")
+        movieID = input("Movie ID: ")
+        return movieID
 
     def collectClientsData(self):
         # Collects the data from the user, and it returns an entity/object.
@@ -123,6 +137,28 @@ class consoleUI(UI):
             if not self.exit():
                 break
 
+    def removeMovies(self):
+        while True:
+            # Refresh the screen.
+            self.refreshScreen()
+
+            # Display the title and the current list with clients.
+            print("Here you can remove Movies")
+            self.displayMovies()
+
+            # Collect the movie ID.
+            ID = self.collectMovieID()
+
+            # Try/remove the movie with the ID given.
+            self.controller.removeMovie(ID)
+
+            # Display the new movie list.
+            self.displayMovies()
+
+            # Ask the user if he wants to continue
+            if not self.exit():
+                break
+
     def start(self):
         while True:
             self.refreshScreen()
@@ -145,7 +181,19 @@ class consoleUI(UI):
                         break
 
             elif option == "2":
-                pass
+                while True:
+                    self.refreshScreen()
+                    self.rmvSubMenu()
+                    option = self.userInput()
+
+                    if option == "1":
+                        self.removeMovies()
+
+                    elif option == "2":
+                        pass
+
+                    elif option == "3":
+                        break
 
             elif option == "8":
                 break

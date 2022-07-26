@@ -12,8 +12,23 @@ class moviesRepository(repository):
         self.movies.append(movie)
         self.currentID += 1
 
-    def remove(self):
-        pass
+    def saveAll(self, movies):
+        # Save all the movies to the movieRepo.
+        for movie in movies:
+            self.save(movie)
+        return self.movies
+
+    def remove(self, ID):
+        # Remove the desired movie by saving all the other movies in a new list.
+        updateRepo = []
+        for movie in self.movies:
+            if movie.id != ID:
+                updateRepo.append(movie)
+        return updateRepo
+
+    def removeAll(self):
+        # Remove all the items from the list.
+        return self.movies.clear()
 
     def getAll(self):
         # Get the list with the movies.

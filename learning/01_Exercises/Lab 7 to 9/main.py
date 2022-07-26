@@ -4,6 +4,7 @@ from repository.moviesRepository import moviesRepository
 from repository.clientsRepository import clientsRepository
 from domain.validator import movieValidator
 from domain.validator import clientValidator
+from domain.entity import movie
 
 
 def main():
@@ -12,6 +13,7 @@ def main():
     moviesRepo = moviesRepository()
     clientsRepo = clientsRepository()
     controller = Controller(moviesRepo, clientsRepo, validatorForMovie, validatorForClient)
+    controller.addMovie(movie("Avengers", "CevaDes", "Action"))
     userInterface = consoleUI(controller)
     userInterface.start()
 
