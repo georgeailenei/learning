@@ -28,6 +28,10 @@ class consoleUI(UI):
                     "2. Remove clients\n" \
                     "3. Return to Main Menu"
 
+    updateSubMenu = "1. Update movies\n" \
+                    "2. Update clients\n" \
+                    "3. Return to Main Menu"
+
     def __init__(self, controller):
         self.controller = controller
 
@@ -49,6 +53,10 @@ class consoleUI(UI):
         # It displays the sub menu for the Remove section.
         print(self.removeSubMenu)
 
+    def updSubMenu(self):
+        # It displays the sub menu for the Remove section.
+        print(self.updateSubMenu)
+
     def exit(self):
         # The method takes and input from the user, and it returns True or False.
         option = input("Do you want to continue (N/Y): ")
@@ -60,23 +68,23 @@ class consoleUI(UI):
     def refreshScreen(self):
         return os.system("cls")
 
+    def collectID(self):
+        # Ask the user for an ID
+        print("\nPlease insert an ID")
+        movieID = input("Write ID: ")
+        return movieID
+
     def collectMovieData(self):
         # Collects the data from the user, and it returns an entity/object.
-        print("Please insert the following information")
+        print("\nPlease insert the following information")
         title = input("Movie title: ")
         description = input("Description: ")
         genre = input("Genre: ")
         return movie(title, description, genre)
 
-    def collectMovieID(self):
-        # Ask the user for an ID
-        print("Please insert a movie ID")
-        movieID = input("Movie ID: ")
-        return movieID
-
     def collectClientsData(self):
         # Collects the data from the user, and it returns an entity/object.
-        print("Please insert the following information")
+        print("\nPlease insert the following information")
         name = input("Name: ")
         CNP = input("CNP: ")
         return client(name, CNP)
@@ -105,7 +113,7 @@ class consoleUI(UI):
             self.refreshScreen()
 
             # Display the title and the current list with movies.
-            print("Here you can add movies")
+            print("ADD MOVIES")
             self.displayMovies()
 
             # Collect a new movie from the user.
@@ -124,7 +132,7 @@ class consoleUI(UI):
             self.refreshScreen()
 
             # Display the title and the current list with clients.
-            print("Here you can add clients")
+            print("ADD CLIENTS")
             self.displayClients()
 
             # Collect a new client from the user.
@@ -143,17 +151,61 @@ class consoleUI(UI):
             self.refreshScreen()
 
             # Display the title and the current list with clients.
-            print("Here you can remove Movies")
+            print("REMOVE MOVIES")
             self.displayMovies()
 
             # Collect the movie ID.
-            ID = self.collectMovieID()
+            ID = self.collectID()
 
             # Try/remove the movie with the ID given.
             self.controller.removeMovie(ID)
 
-            # Display the new movie list.
+            # Ask the user if he wants to continue
+            if not self.exit():
+                break
+
+    def removeClient(self):
+        while True:
+            # Refresh the screen.
+            self.refreshScreen()
+
+            # Display the title and the current list with clients.
+            print("REMOVE CLIENTS")
+            self.displayClients()
+
+            # Collect the movie ID.
+            ID = self.collectID()
+
+            # Try/remove the movie with the ID given.
+            self.controller.removeClient(ID)
+
+            # Ask the user if he wants to continue
+            if not self.exit():
+                break
+
+    def updateMovies(self):
+        while True:
+            # Refresh the screen.
+            self.refreshScreen()
+
+            # Display the title and the current list with clients.
+            print("UPDATE MOVIES")
             self.displayMovies()
+
+            # Collect the movie ID.
+            ID = self.collectID()
+            if not self.controller.validatorForMovie.checkID(ID, self.controller.idList()):
+                # You must raise an error/message for the user to know what's going on.
+                continue
+
+            # Collect new data to update the list.
+            newMovie = self.collectMovieData()
+            if not self.controller.validatorForMovie.validator(newMovie):
+                # You must raise an error/message for the user to know what's going on.
+                continue
+
+            # Try to update by ID.
+            self.controller.updateMovie(ID, newMovie)
 
             # Ask the user if he wants to continue
             if not self.exit():
@@ -161,8 +213,7 @@ class consoleUI(UI):
 
     def start(self):
         while True:
-            self.refreshScreen()
-            self.mainMenu()
+            self.refreshScreen(), self.mainMenu()
             option = self.userInput()
 
             if option == "1":
@@ -173,25 +224,32 @@ class consoleUI(UI):
 
                     if option == "1":
                         self.addMovie()
-
                     elif option == "2":
                         self.addClients()
-
                     elif option == "3":
                         break
 
             elif option == "2":
                 while True:
-                    self.refreshScreen()
-                    self.rmvSubMenu()
+                    self.refreshScreen(), self.rmvSubMenu()
                     option = self.userInput()
 
                     if option == "1":
                         self.removeMovies()
+                    elif option == "2":
+                        self.removeClient()
+                    elif option == "3":
+                        break
 
+            elif option == "3":
+                while True:
+                    self.refreshScreen(), self.updSubMenu()
+                    option = self.userInput()
+
+                    if option == "1":
+                        self.updateMovies()
                     elif option == "2":
                         pass
-
                     elif option == "3":
                         break
 

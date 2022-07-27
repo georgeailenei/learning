@@ -14,6 +14,7 @@ class moviesRepository(repository):
 
     def saveAll(self, movies):
         # Save all the movies to the movieRepo.
+        self.currentID = 1
         for movie in movies:
             self.save(movie)
         return self.database
@@ -30,3 +31,19 @@ class moviesRepository(repository):
     def getAll(self):
         # Get the list with the movies.
         return self.database
+
+    def getID(self):
+        idList = [movie.id.__repr__() for movie in self.database]
+        return idList
+
+    def update(self, ID, newMovie):
+        updatedDatabase = []
+        for movie in self.database:
+            if ID in movie.__repr__():
+                movie.title = newMovie.title
+                movie.description = newMovie.description
+                movie.genre = newMovie.genre
+                updatedDatabase.append(movie)
+            else:
+                updatedDatabase.append(movie)
+        self.removeAll(), self.saveAll(updatedDatabase)
