@@ -103,3 +103,17 @@ class Controller:
                     print(f"{client}")
         else:
             print(f"{findClient} | Could not been found! Please try again.")
+
+    # RENT SECTION - Where clients can rent movies.
+    def rentMovies(self, theClient, theMovie):
+        if theClient in self.clientNameList():
+            if theMovie in self.movieNameList():
+                if self.validatorForMovie.checkAvailability(self.moviesRepository.getMovie(theMovie).availability):
+                    self.clientsRepository.saveMovie(theClient, self.moviesRepository.getMovie(theMovie).title)
+                    self.moviesRepository.getMovie(theMovie).availability = "NOT AVAILABLE"
+                else:
+                    print(f"\n{theMovie} is not available")
+            else:
+                print(f"\nWe do not have the movie: {theMovie}")
+        else:
+            print(f"\n{theClient} is not in the client list.")

@@ -17,6 +17,10 @@ class validate:
 
 
 class movieValidator(validate):
+    def checkAvailability(self, availability):
+        trueOrFalse = True if availability == "Available" else False
+        return trueOrFalse
+
     def checkGenre(self, genre):
         # This method checks if the genre given by the user exists.
         movieGenres = ["Action", "Crime", "Drama", "Fantasy", "Horror",

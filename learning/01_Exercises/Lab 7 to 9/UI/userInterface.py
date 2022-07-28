@@ -278,11 +278,35 @@ class consoleUI(UI):
             # Display the title.
             print("SEARCH FOR CLIENTS")
 
-            # Collect the name of the movie.
+            # Collect the name of the client.
             findClient = self.collectWord()
 
-            # Try to find the movie in the movie database.
+            # Try to find the client in the client database.
             self.controller.searchClients(findClient)
+
+            # Ask the user if he wants to continue
+            if not self.exit():
+                break
+
+    def rentMovies(self):
+        while True:
+            # Refresh the screen.
+            self.refreshScreen()
+
+            # Display the title and the movie list.
+            print("RENT MOVIES")
+            self.displayMovies()
+
+            # Display the client list.
+            print("\nTHE CLIENT LIST")
+            self.displayClients()
+
+            # Collect the name of the client and the name of the movie.
+            theClient = input("Choose a client: ")
+            theMovie = input("Choose a movie: ")
+
+            # Try to attach the movie to the clients - rented movies list.
+            self.controller.rentMovies(theClient, theMovie)
 
             # Ask the user if he wants to continue
             if not self.exit():
@@ -341,6 +365,9 @@ class consoleUI(UI):
                         self.searchClients()
                     elif option == "3":
                         break
+
+            elif option == "5":
+                self.rentMovies()
 
             elif option == "8":
                 break
