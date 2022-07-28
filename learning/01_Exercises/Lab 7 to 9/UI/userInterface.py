@@ -32,6 +32,10 @@ class consoleUI(UI):
                     "2. Update clients\n" \
                     "3. Return to Main Menu"
 
+    searchSubMenu = "1. Search for movies\n" \
+                    "2. Search for clients\n" \
+                    "3. Return to Main Menu"
+
     def __init__(self, controller):
         self.controller = controller
 
@@ -57,6 +61,10 @@ class consoleUI(UI):
         # It displays the sub menu for the Remove section.
         print(self.updateSubMenu)
 
+    def findingSubMenu(self):
+        # It displays the sub menu for Search section.
+        print(self.searchSubMenu)
+
     def exit(self):
         # The method takes and input from the user, and it returns True or False.
         option = input("Do you want to continue (N/Y): ")
@@ -68,11 +76,16 @@ class consoleUI(UI):
     def refreshScreen(self):
         return os.system("cls")
 
+    def collectWord(self):
+        # Ask the user for a word.
+        word = input("Search: ")
+        return word
+
     def collectID(self):
-        # Ask the user for an ID
+        # Ask the user for an ID.
         print("\nPlease insert an ID")
-        movieID = input("Write ID: ")
-        return movieID
+        ID = input("Write ID: ")
+        return ID
 
     def collectMovieData(self):
         # Collects the data from the user, and it returns an entity/object.
@@ -194,7 +207,7 @@ class consoleUI(UI):
 
             # Collect the movie ID.
             ID = self.collectID()
-            if not self.controller.validatorForMovie.checkID(ID, self.controller.idList()):
+            if not self.controller.validatorForMovie.checkID(ID, self.controller.movieIDList()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
@@ -206,6 +219,70 @@ class consoleUI(UI):
 
             # Try to update by ID.
             self.controller.updateMovie(ID, newMovie)
+
+            # Ask the user if he wants to continue
+            if not self.exit():
+                break
+
+    def updateClients(self):
+        while True:
+            # Refresh the screen.
+            self.refreshScreen()
+
+            # Display the title and the current list with clients.
+            print("UPDATE CLIENTS")
+            self.displayClients()
+
+            # Collect the client's ID.
+            ID = self.collectID()
+            if not self.controller.validatorForClient.checkID(ID, self.controller.clientIDList()):
+                # You must raise an error/message for the user to know what's going on.
+                continue
+
+            # Collect new data to update the list.
+            newClient = self.collectClientsData()
+            if not self.controller.validatorForClient.validator(newClient):
+                # You must raise an error/message for the user to know what's going on.
+                continue
+
+            # Try to update by ID.
+            self.controller.updateClient(ID, newClient)
+
+            # Ask the user if he wants to continue
+            if not self.exit():
+                break
+
+    def searchMovies(self):
+        while True:
+            # Refresh the screen.
+            self.refreshScreen()
+
+            # Display the title.
+            print("SEARCH FOR MOVIES")
+
+            # Collect the name of the movie.
+            findMovie = self.collectWord()
+
+            # Try to find the movie in the movie database.
+            self.controller.searchMovies(findMovie)
+
+            # Ask the user if he wants to continue
+            if not self.exit():
+                break
+
+    def searchClients(self):
+        while True:
+            # Refresh the screen.
+            self.refreshScreen()
+
+            # Display the title.
+            print("SEARCH FOR CLIENTS")
+
+            # Collect the name of the movie.
+            findClient = self.collectWord()
+
+            # Try to find the movie in the movie database.
+            self.controller.searchClients(findClient)
 
             # Ask the user if he wants to continue
             if not self.exit():
@@ -249,7 +326,19 @@ class consoleUI(UI):
                     if option == "1":
                         self.updateMovies()
                     elif option == "2":
-                        pass
+                        self.updateClients()
+                    elif option == "3":
+                        break
+
+            elif option == "4":
+                while True:
+                    self.refreshScreen(), self.findingSubMenu()
+                    option = self.userInput()
+
+                    if option == "1":
+                        self.searchMovies()
+                    elif option == "2":
+                        self.searchClients()
                     elif option == "3":
                         break
 

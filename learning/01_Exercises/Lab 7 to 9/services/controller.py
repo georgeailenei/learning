@@ -9,9 +9,20 @@ class Controller:
         self.validatorForMovie = validatorForMovie
         self.validatorForClient = validatorForClient
 
-    # GET ID LIST
-    def idList(self):
+    # CLEAN THIS CODE IS USELESS
+    # GET MOVIE & CLIENT'S ID LIST
+    def movieIDList(self):
         return self.moviesRepository.getID()
+
+    def clientIDList(self):
+        return self.clientsRepository.getID()
+
+    # GET MOVIE & CLIENT'S NAME LIST
+    def movieNameList(self):
+        return self.moviesRepository.getNames()
+
+    def clientNameList(self):
+        return self.clientsRepository.getNames()
 
     # DISPLAY LISTS - movies & clients.
     def movieList(self):
@@ -21,6 +32,7 @@ class Controller:
     def clientList(self):
         # Get all the clients from the list.
         return self.clientsRepository.getAll()
+    # CLEAN THIS CODE IS USELESS
 
     # ADD SECTION - add movies & clients.
     def addMovie(self, movie):
@@ -42,9 +54,7 @@ class Controller:
     # REMOVE SECTION - remove movies & clients.
     def removeMovie(self, ID):
         # Remove a movie by ID.
-        idList = self.moviesRepository.getID()
-
-        if ID in idList:
+        if ID in self.movieIDList():
             newMovieList = self.moviesRepository.remove(ID)
             self.moviesRepository.removeAll()
             self.moviesRepository.saveAll(newMovieList)
@@ -54,7 +64,7 @@ class Controller:
 
     def removeClient(self, ID):
         # Remove a client by ID.
-        if ID in self.idList():
+        if ID in self.clientIDList():
             newClientList = self.clientsRepository.remove(ID)
             self.clientsRepository.removeAll()
             self.clientsRepository.saveAll(newClientList)
@@ -62,9 +72,34 @@ class Controller:
         else:
             print(f"\nThe ID: {ID} is invalid! Please try again.")
 
-    # UPDATE Section - update movies & clients.
+    # UPDATE SECTION - update movies & clients.
     def updateMovie(self, ID, newMovie):
-        if self.validatorForMovie.checkID(ID, self.idList()):
+        if self.validatorForMovie.checkID(ID, self.movieIDList()):
             self.moviesRepository.update(ID, newMovie)
         else:
             print(f"\nThe ID: {ID} is invalid! Please try again.")
+
+    def updateClient(self, ID, newClient):
+        if self.validatorForMovie.checkID(ID, self.clientIDList()):
+            self.clientsRepository.update(ID, newClient)
+        else:
+            print(f"\nThe ID: {ID} is invalid! Please try again.")
+
+    # SEARCH SECTION - update movies & clients.
+    def searchMovies(self, findMovie):
+        if findMovie in self.movieNameList():
+            for movie in self.movieList():
+                if movie.title == findMovie:
+                    print(f"{findMovie} | Found! | Full information: ")
+                    print(f"{movie}")
+        else:
+            print(f"{findMovie} | Could not been found! Please try again.")
+
+    def searchClients(self, findClient):
+        if findClient in self.clientNameList():
+            for client in self.clientList():
+                if client.name == findClient:
+                    print(f"{findClient} | Found! | Full information: ")
+                    print(f"{client}")
+        else:
+            print(f"{findClient} | Could not been found! Please try again.")
