@@ -4,15 +4,20 @@ from repository.repository import repository
 class moviesRepository(repository):
     def __init__(self):
         self.database = []
-        self.rentedMovies = []
         self.currentID = 1
+        self.currentCount = 0
         self.currentAvailability = "Available"
+        self.trackRentedMovies = {}
 
     def save(self, movie):
         movie.id = self.currentID
         movie.availability = self.currentAvailability
         self.database.append(movie)
+        self.trackRentedMovies[movie.title] = self.currentCount
         self.currentID += 1
+
+    def addCount(self, movie):
+        self.trackRentedMovies[movie] += 1
 
     def update(self, ID, newMovie):
         updatedDatabase = []

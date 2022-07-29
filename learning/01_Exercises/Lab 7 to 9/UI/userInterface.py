@@ -36,6 +36,11 @@ class consoleUI(UI):
                     "2. Search for clients\n" \
                     "3. Return to Main Menu"
 
+    reportsSubMenu = "1. Display clients\n" \
+                     "2. Display most rented movies\n" \
+                     "3. Display top 3 clients with most rented movies\n" \
+                     "4. Return to Main Menu"
+
     def __init__(self, controller):
         self.controller = controller
 
@@ -64,6 +69,10 @@ class consoleUI(UI):
     def findingSubMenu(self):
         # It displays the sub menu for Search section.
         print(self.searchSubMenu)
+
+    def reportSubMenu(self):
+        # It displays the sub menu for Report section.
+        print(self.reportsSubMenu)
 
     def exit(self):
         # The method takes and input from the user, and it returns True or False.
@@ -119,6 +128,20 @@ class consoleUI(UI):
             print("- no clients")
         for Client in allClients:
             print(Client)
+
+    def displayMoviesCount(self):
+        print("The current count for each movie")
+        for theMovie, theCount in self.controller.moviesRepository.trackRentedMovies.items():
+            print(theMovie, theCount)
+
+    def displayClientsMovieCount(self):
+        print("The current list with clients and their rented movie count")
+        for theClient, theCount in self.controller.clientsRepository.trackClientRentedMovies.items():
+            print(theClient, theCount)
+
+    def displayTop30Clients(self, clients):
+        for client, count in clients.items():
+            print(client, count)
 
     def addMovie(self):
         while True:
@@ -312,6 +335,78 @@ class consoleUI(UI):
             if not self.exit():
                 break
 
+    def returnMovies(self):
+        while True:
+            # Refresh the screen.
+            self.refreshScreen()
+
+            # Display the title and the movie list.
+            print("RETURN MOVIES")
+            self.displayMovies()
+
+            # Display the client list.
+            print("\nTHE CLIENT LIST")
+            self.displayClients()
+
+            # Collect the name of the client and the name of the movie.
+            theClient = input("Choose a client: ")
+            theMovie = input("Choose a movie: ")
+
+            # Try to attach the movie to the clients - rented movies list.
+            self.controller.returnMovies(theClient, theMovie)
+
+            # Ask the user if he wants to continue
+            if not self.exit():
+                break
+
+    def displayClientsInOrder(self):
+        while True:
+            # Refresh the screen.
+            self.refreshScreen()
+
+            # Display the title.
+            print("THIS IS THE CLIENTS LIST")
+
+            # Try to display the client's list in order.
+            self.controller.displayClientsInOrder()
+
+            # Ask the user if he wants to continue
+            if not self.exit():
+                break
+
+    def displayMostRentedMovies(self):
+        while True:
+            # Refresh the screen.
+            self.refreshScreen()
+
+            # Display the movie count.
+            self.displayMoviesCount()
+
+            # Display the most rented movie
+            print("\nMost rented movie: ")
+            self.controller.displayMostRentedMovies()
+
+            # Ask the user if he wants to continue
+            if not self.exit():
+                break
+
+    def displayClientsWithMostMovies(self):
+        while True:
+            # Refresh the screen.
+            self.refreshScreen()
+
+            # Display the clients and movie count.
+            self.displayClientsMovieCount()
+
+            # Display top 30% clients that hold most movies rented.
+            print("\nTOP 30% clients are: ")
+            top30 = self.controller.displayClientsWithMostMovies()
+            self.displayTop30Clients(top30)
+
+            # Ask the user if he wants to continue
+            if not self.exit():
+                break
+
     def start(self):
         while True:
             self.refreshScreen(), self.mainMenu()
@@ -368,6 +463,23 @@ class consoleUI(UI):
 
             elif option == "5":
                 self.rentMovies()
+
+            elif option == "6":
+                self.returnMovies()
+
+            elif option == "7":
+                while True:
+                    self.refreshScreen(), self.reportSubMenu()
+                    option = self.userInput()
+
+                    if option == "1":
+                        self.displayClientsInOrder()
+                    elif option == "2":
+                        self.displayMostRentedMovies()
+                    elif option == "3":
+                        self.displayClientsWithMostMovies()
+                    elif option == "4":
+                        break
 
             elif option == "8":
                 break

@@ -55,6 +55,11 @@ class clientValidator(validate):
         except ValidatorError():
             print("Ceva Error")
 
+    def moviesRented(self, client):
+        trueOrFalse = True if len(client.rentedMovies) > 0 else False
+        return trueOrFalse
+
+
     def validator(self, Client):
         # This method check if the name and CNP are correct. returns True or False.
         return self.checkCnpLength(Client.CNP) and self.checkCnpInt(Client.CNP) and self.checkWord(Client.name)

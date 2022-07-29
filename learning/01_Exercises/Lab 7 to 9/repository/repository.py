@@ -2,11 +2,9 @@ from abc import ABC, abstractmethod
 
 
 class repository(ABC):
+    @abstractmethod
     def save(self, item):
-        # Save the movie given by the user and implement a unique ID.
-        item.id = self.currentID
-        self.database.append(item)
-        self.currentID += 1
+        pass
 
     def saveAll(self, items):
         # Save all the movies to the movieRepo.

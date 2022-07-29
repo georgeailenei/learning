@@ -1,3 +1,6 @@
+import itertools
+
+
 class ControllerError(Exception):
     pass
 
@@ -111,9 +114,78 @@ class Controller:
                 if self.validatorForMovie.checkAvailability(self.moviesRepository.getMovie(theMovie).availability):
                     self.clientsRepository.saveMovie(theClient, self.moviesRepository.getMovie(theMovie).title)
                     self.moviesRepository.getMovie(theMovie).availability = "NOT AVAILABLE"
+                    self.moviesRepository.addCount(theMovie)
+                    self.clientsRepository.addCount(theClient)
                 else:
                     print(f"\n{theMovie} is not available")
             else:
-                print(f"\nWe do not have the movie: {theMovie}")
+                print(f"\nWe do not have {theMovie} in our store.")
         else:
             print(f"\n{theClient} is not in the client list.")
+
+    # RETURN SECTION
+    def returnMovies(self, theClient, theMovie):
+        if theClient in self.clientNameList():
+            if theMovie in self.movieNameList():
+                if theMovie in self.clientsRepository.getClient(theClient).rentedMovies:
+                    self.clientsRepository.removeMovie(self.moviesRepository.getMovie(theMovie).title)
+                    self.moviesRepository.getMovie(theMovie).availability = "Available"
+                    print(f"\nThank Mr.{theClient} for returning the movie: {theMovie}")
+                else:
+                    print(f"\n{theMovie} is not rented by {theClient}")
+            else:
+                print(f"\nWe do not have {theMovie} in our store.")
+        else:
+            print(f"\n{theClient} is not in the client list.")
+
+    # REPORT SECTION
+    # DISPLAY THE CLIENTS THAT HAVE MOVIES IN ALPHABETICAL ORDER
+    def displayClientsInOrder(self):
+        clientsWithMovies = []
+        for client in self.clientsRepository.getAll():
+            if self.validatorForClient.moviesRented(client):
+                clientsWithMovies.append(client.name)
+
+        clients = sorted(clientsWithMovies)
+        if len(clientsWithMovies) == 0:
+            print("NONE OF THE MOVIES ARE RENTED")
+        else:
+            for client in clients:
+                print(client + " | Rented: " + str(len(self.clientsRepository.getClient(client).rentedMovies)) + " movie/s")
+
+    # DISPLAY THE MOST RENTED MOVIE
+    def displayMostRentedMovies(self):
+        values = [count for movie, count in self.moviesRepository.trackRentedMovies.items()]
+        if max(values) != 0:
+            for movie, count in self.moviesRepository.trackRentedMovies.items():
+                if count == max(values):
+                    print(movie)
+        else:
+            print("NONE OF THE MOVIES")
+
+    # DISPLAY TOP 30% CLIENTS
+    def displayClientsWithMostMovies(self):
+        values = [count for count in self.clientsRepository.trackClientRentedMovies.values()]
+        keys = [name for name in self.clientsRepository.trackClientRentedMovies.keys()]
+        clients = self.clientsRepository.trackClientRentedMovies
+        values.sort(), values.reverse()
+
+        clientsInOrder = {}
+        check = 0
+        valueChecker = 0
+
+        while len(values) > check:
+            if values[check] == clients[keys[valueChecker]]:
+                clientsInOrder[keys[valueChecker]] = values[check]
+                check += 1
+                valueChecker = 0
+            else:
+                valueChecker += 1
+
+        x = (len(clientsInOrder) * 30) / 100
+        top30 = dict(itertools.islice(clientsInOrder.items(), round(x)))
+
+        if len(top30) == 0:
+            print("NONE OF THE CLIENTS")
+
+        return top30
