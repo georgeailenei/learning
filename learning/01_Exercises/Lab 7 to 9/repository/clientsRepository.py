@@ -9,7 +9,6 @@ class clientsRepository(repository):
         self.currentCount = 0
 
     def save(self, client):
-        # Save the movie given by the user and implement a unique ID.
         client.id = self.currentID
         self.database.append(client)
         self.trackClientRentedMovies[client.name] = self.currentCount
@@ -47,3 +46,6 @@ class clientsRepository(repository):
         for client in self.database:
             if movie in client.rentedMovies:
                 client.rentedMovies.remove(movie)
+
+    def get(self):
+        pass

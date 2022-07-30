@@ -39,3 +39,6 @@ class moviesRepository(repository):
         for movie in self.getAll():
             if theMovie == movie.title:
                 return movie
+
+    def get(self):
+        pass

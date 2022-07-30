@@ -1,4 +1,4 @@
-from UI.userInterface import consoleUI
+from UI.userInterface import UI
 from services.controller import Controller
 from repository.moviesRepository import moviesRepository
 from repository.clientsRepository import clientsRepository
@@ -14,18 +14,18 @@ def main():
     clientsRepo = clientsRepository()
     controller = Controller(moviesRepo, clientsRepo, validatorForMovie, validatorForClient)
 
-    # Same movie samples
+    # Some movie samples
     controller.addMovie(movie("Avengers", "The Avengers were a team of extraordinary individuals.", "Action"))
     controller.addMovie(movie("Never Back Down", "It tells the story of a frustrated and conflicted teenager.", "Romance"))
     controller.addMovie(movie("Batman", "Is the superhero protector of Gotham City.", "Crime"))
 
-    # Same client samples
+    # Some client samples
     controller.addClient(client("George", "459"))
     controller.addClient(client("Shawn", "879"))
     controller.addClient(client("Dan", "687"))
 
-    userInterface = consoleUI(controller)
-    userInterface.start()
+    userInterface = UI(controller)
+    userInterface.run()
 
 
 if __name__ == "__main__":

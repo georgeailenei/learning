@@ -1,15 +1,8 @@
-from abc import ABC, abstractmethod
 from domain.entity import movie, client
 import os
 
 
-class UI(ABC):
-    @abstractmethod
-    def userInput(self):
-        pass
-
-
-class consoleUI(UI):
+class UI:
     mainTitle = "This app manages movies and clients for Company X"
     Menu = '1. Add\n' \
            '2. Remove\n' \
@@ -114,7 +107,7 @@ class consoleUI(UI):
     def displayMovies(self):
         # It prints all the movies that are currently in movieRepo.
         print("This is the current list with movies")
-        allMovies = self.controller.movieList()
+        allMovies = self.controller.moviesRepository.getAll()
         if len(allMovies) == 0:
             print("- no movies")
         for m in allMovies:
@@ -123,7 +116,7 @@ class consoleUI(UI):
     def displayClients(self):
         # It prints all the movies that are currently in clientRepo.
         print("This is the current list with clients")
-        allClients = self.controller.clientList()
+        allClients = self.controller.clientsRepository.getAll()
         if len(allClients) == 0:
             print("- no clients")
         for Client in allClients:
@@ -258,7 +251,7 @@ class consoleUI(UI):
 
             # Collect the client's ID.
             ID = self.collectID()
-            if not self.controller.validatorForClient.checkID(ID, self.controller.clientIDList()):
+            if not self.controller.validatorForClient.checkID(ID, self.controller.clientsRepository.getID()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
@@ -407,15 +400,14 @@ class consoleUI(UI):
             if not self.exit():
                 break
 
-    def start(self):
+    def run(self):
         while True:
             self.refreshScreen(), self.mainMenu()
             option = self.userInput()
 
             if option == "1":
                 while True:
-                    self.refreshScreen()
-                    self.subMenu()
+                    self.refreshScreen(), self.subMenu()
                     option = self.userInput()
 
                     if option == "1":
