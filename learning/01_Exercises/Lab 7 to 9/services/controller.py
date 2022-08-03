@@ -28,7 +28,7 @@ class Controller:
             print(f"\n{Client} has been added to the list.")
         else:
             print(f"The {Client}'s details appears to be wrong, please try again.")
-    #
+
     # # REMOVE SECTION - remove movies & clients.
     # def removeMovie(self, ID):
     #     # Remove a movie by ID.
@@ -39,17 +39,17 @@ class Controller:
     #         print(f"\nThe movie with {ID} id has been removed.")
     #     else:
     #         print(f"\nThe ID: {ID} is invalid! Please try again.")
-    #
-    # def removeClient(self, ID):
-    #     # Remove a client by ID.
-    #     if ID in self.clientsRepository.getID():
-    #         newClientList = self.clientsRepository.remove(ID)
-    #         self.clientsRepository.removeAll()
-    #         self.clientsRepository.saveAll(newClientList)
-    #         print(f"\nThe client with {ID} id has been removed.")
-    #     else:
-    #         print(f"\nThe ID: {ID} is invalid! Please try again.")
-    #
+
+    def removeClient(self, ID):
+        # Remove a client by ID.
+        if ID in self.clientsRepository.getID():
+            newClientList = self.clientsRepository.remove(ID)
+            self.clientsRepository.removeAll()
+            self.clientsRepository.saveAll(newClientList)
+            print(f"\nThe client with {ID} id has been removed.")
+        else:
+            print(f"\nThe ID: {ID} is invalid! Please try again.")
+
     # # UPDATE SECTION - update movies & clients.
     # def updateMovie(self, ID, newMovie):
     #     if self.validatorForMovie.checkID(ID, self.moviesRepository.getID()):
