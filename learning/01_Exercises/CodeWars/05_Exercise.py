@@ -1,56 +1,58 @@
 # def top_3_words(text):
-#     allLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', "'"]
-#     symbol = ["'", "''", "'''", "''''", "'''''", "''''''"]
-#     theListWithWords = text.split()
-#     listsWithLetters = [list(word.lower()) for word in theListWithWords]
+#     words = []
 #
-#     theListWithWordsUpdated = []
-#     finalList = None
-#     count = 0
+#     for letter in text:
+#         if letter.isalpha() or letter == "'" or letter == " ":
+#             words.append(letter)
 #
-#     while len(listsWithLetters) > count:
-#         word = [letter for letter in listsWithLetters[count] if letter in allLetters]
-#         theListWithWordsUpdated.append("".join(word).split())
-#         lastCheck = ["".join(word) for word in theListWithWordsUpdated if word != []]
-#         finalList = lastCheck
-#         count += 1
+#     words = "".join(words).strip().lower()
+#     words = words.split()
 #
-#     finalCheck = [word for word in finalList if word not in symbol]
-#     if not finalCheck:
+#     commas = ["'", "''", "'''", "''''", "'''''", "''''''"]
+#     for word in words:
+#         if word in commas:
+#             words = []
+#
+#     if len(words) == 0:
 #         return []
+#     elif len(words) < 3:
+#         return words
+#     elif len(words) >= 3:
+#         topWords = {}
+#         for word in words:
+#             topWords[word] = words.count(word)
 #
-#     topThreeWords = []
-#     checkedWords = []
-#     countList = []
+#         counts = [value for value in topWords.values()]
+#         counts.sort(), counts.reverse()
 #
-#     for word in finalCheck:
-#         if word not in checkedWords:
-#             countList.append(finalCheck.count(word))
-#             checkedWords.append(word)
+#         return sorted(topWords, key=topWords.get, reverse=True)[:3]
 #
-#     checker = 0
-#
-#     while True:
-#         findNumber = max(countList) - checker
-#         checker += 1
-#
-#         if findNumber in countList:
-#             topThreeWords.append(checkedWords[countList.index(findNumber)])
-#
-#         if len(topThreeWords) == 3:
-#             break
-#         elif len(topThreeWords) == len(countList):
-#             break
-#
-#     print(topThreeWords)
-#
-#
-# # print(top_3_words("e e e e DDD ddd DdD: ddd ddd aa aA Aa, bb cc cC e e e"))
+# top_3_words("e e e e DDD ddd DdD: ddd ddd aa aA Aa, bb cc cC e e e")
 # top_3_words("a a a  b  c c  d d d d  e e e e e")
-# # top_3_words("  //wont won't won't ")
-# # top_3_words("  '  ")
-# # top_3_words("  ...  ")
-# # top_3_words("  '''  ")
-# # top_3_words("  , e   .. ")
+# top_3_words("  //wont won't won't ")
+# top_3_words("  , e   .. ")
+# top_3_words("  ...  ")
+# top_3_words("  '  ")
+# top_3_words("  '''  ")
+# top_3_words("spwlgogdke")
+#
 
+def findNumber(num):
+    randomNumbers = [2, 9, 23, 55, 12, 15, 21, 85, 20, 5]
+    randomNumbers.sort()
 
+    count = int(len(randomNumbers) / 2)
+    answer = None
+
+    step = 1
+    i = 0
+    while answer is None:
+        print(f"Step nr: {step}")
+        step += 1
+        if num in randomNumbers[i:count]:
+            return "FOUND"
+        else:
+            i = count
+            count = count + int(count / 2)
+
+print(findNumber(21))
