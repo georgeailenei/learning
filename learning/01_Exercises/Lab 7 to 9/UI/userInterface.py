@@ -111,7 +111,10 @@ class UI:
         if len(allMovies) == 0:
             print("- no movies")
         for m in allMovies:
-            print(m)
+            if str(m)[-1] == "\n":
+                print(str(m)[:-1])
+            else:
+                print(m)
 
     def displayClients(self):
         # It prints all the movies that are currently in clientRepo.
@@ -120,7 +123,10 @@ class UI:
         if len(allClients) == 0:
             print("- no clients")
         for Client in allClients:
-            print(Client)
+            if str(Client)[-1] == "\n":
+                print(str(Client)[:-1])
+            else:
+                print(Client)
 
     def displayMoviesCount(self):
         print("The current count for each movie")

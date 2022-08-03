@@ -2,6 +2,8 @@ from UI.userInterface import UI
 from services.controller import Controller
 from repository.moviesRepository import moviesRepository
 from repository.clientsRepository import clientsRepository
+from repository.fileRepository import clientFileRepository
+from repository.fileRepository import moviesFileRepository
 from domain.validator import movieValidator
 from domain.validator import clientValidator
 from domain.entity import movie, client
@@ -10,8 +12,8 @@ from domain.entity import movie, client
 def main():
     validatorForMovie = movieValidator()
     validatorForClient = clientValidator()
-    moviesRepo = moviesRepository()
-    clientsRepo = clientsRepository()
+    moviesRepo = moviesFileRepository()
+    clientsRepo = clientFileRepository()
     controller = Controller(moviesRepo, clientsRepo, validatorForMovie, validatorForClient)
 
     # Some movie samples

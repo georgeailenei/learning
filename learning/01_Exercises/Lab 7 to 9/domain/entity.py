@@ -7,8 +7,11 @@ class movie:
         self.genre = genre
         self.availability = None
 
+    def __str__(self):
+        return f"{self.id} : {self.title} | {self.description} | {self.genre} | {self.availability}"
+
     def __repr__(self):
-        return f"{self.id} - {self.title} | {self.description} | {self.genre} | {self.availability}"
+        return f"{self.id} : {self.title} | {self.description} | {self.genre} | {self.availability}"
 
 
 class client:
@@ -18,5 +21,8 @@ class client:
         self.CNP = CNP
         self.rentedMovies = []
 
+    def __str__(self):
+        return f"{self.id} : {self.name} | {self.CNP} | {self.rentedMovies}"
+
     def __repr__(self):
-        return f"{self.id} | {self.name} | {self.CNP} | {self.rentedMovies}"
+        return f"{self.id} : {self.name} | {self.CNP} | {self.rentedMovies}"
