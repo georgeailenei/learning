@@ -12,7 +12,7 @@ class Controller:
         self.validatorForMovie = validatorForMovie
         self.validatorForClient = validatorForClient
 
-    # ADD SECTION - add movies & clients.
+    # ADD SECTION
     def addMovie(self, movie):
         # Save the movie information in the list by validating the information given.
         if self.validatorForMovie.validator(movie):
@@ -29,75 +29,70 @@ class Controller:
         else:
             print(f"The {Client}'s details appears to be wrong, please try again.")
 
-    # # REMOVE SECTION - remove movies & clients.
-    # def removeMovie(self, ID):
-    #     # Remove a movie by ID.
-    #     if ID in self.moviesRepository.getID():
-    #         newMovieList = self.moviesRepository.remove(ID)
-    #         self.moviesRepository.removeAll()
-    #         self.moviesRepository.saveAll(newMovieList)
-    #         print(f"\nThe movie with {ID} id has been removed.")
-    #     else:
-    #         print(f"\nThe ID: {ID} is invalid! Please try again.")
+    # REMOVE SECTION
+    def removeMovie(self, ID):
+        if ID in self.moviesRepository.getID():
+            newMovieList = self.moviesRepository.remove(ID)
+            self.moviesRepository.removeAll(), self.moviesRepository.saveAll(newMovieList)
+            print(f"\nThe movie with {ID} id has been removed.")
+        else:
+            print(f"\nThe ID: {ID} is invalid! Please try again.")
 
     def removeClient(self, ID):
-        # Remove a client by ID.
         if ID in self.clientsRepository.getID():
             newClientList = self.clientsRepository.remove(ID)
-            self.clientsRepository.removeAll()
-            self.clientsRepository.saveAll(newClientList)
+            self.clientsRepository.removeAll(), self.clientsRepository.saveAll(newClientList)
             print(f"\nThe client with {ID} id has been removed.")
         else:
             print(f"\nThe ID: {ID} is invalid! Please try again.")
 
-    # # UPDATE SECTION - update movies & clients.
-    # def updateMovie(self, ID, newMovie):
-    #     if self.validatorForMovie.checkID(ID, self.moviesRepository.getID()):
-    #         self.moviesRepository.update(ID, newMovie)
-    #     else:
-    #         print(f"\nThe ID: {ID} is invalid! Please try again.")
-    #
-    # def updateClient(self, ID, newClient):
-    #     if self.validatorForMovie.checkID(ID, self.clientsRepository.getID()):
-    #         self.clientsRepository.update(ID, newClient)
-    #     else:
-    #         print(f"\nThe ID: {ID} is invalid! Please try again.")
-    #
-    # # SEARCH SECTION - update movies & clients.
-    # def searchMovies(self, findMovie):
-    #     if findMovie in self.moviesRepository.getNames():
-    #         for movie in self.moviesRepository.getAll():
-    #             if movie.title == findMovie:
-    #                 print(f"{findMovie} | Found! | Full information: ")
-    #                 print(f"{movie}")
-    #     else:
-    #         print(f"{findMovie} | Could not been found! Please try again.")
-    #
-    # def searchClients(self, findClient):
-    #     if findClient in self.clientsRepository.getNames():
-    #         for client in self.clientsRepository.getAll():
-    #             if client.name == findClient:
-    #                 print(f"{findClient} | Found! | Full information: ")
-    #                 print(f"{client}")
-    #     else:
-    #         print(f"{findClient} | Could not been found! Please try again.")
-    #
-    # # RENT SECTION - Where clients can rent movies.
-    # def rentMovies(self, theClient, theMovie):
-    #     if theClient in self.clientsRepository.getNames():
-    #         if theMovie in self.moviesRepository.getNames():
-    #             if self.validatorForMovie.checkAvailability(self.moviesRepository.getMovie(theMovie).availability):
-    #                 self.clientsRepository.saveMovie(theClient, self.moviesRepository.getMovie(theMovie).title)
-    #                 self.moviesRepository.getMovie(theMovie).availability = "NOT AVAILABLE"
-    #                 self.moviesRepository.addCount(theMovie)
-    #                 self.clientsRepository.addCount(theClient)
-    #             else:
-    #                 print(f"\n{theMovie} is not available")
-    #         else:
-    #             print(f"\nWe do not have {theMovie} in our store.")
-    #     else:
-    #         print(f"\n{theClient} is not in the client list.")
-    #
+    # UPDATE SECTION
+    def updateMovie(self, ID, newMovie):
+        if self.validatorForMovie.checkID(ID, self.moviesRepository.getID()):
+            self.moviesRepository.update(ID, newMovie)
+        else:
+            print(f"\nThe ID: {ID} is invalid! Please try again.")
+
+    def updateClient(self, ID, newClient):
+        if self.validatorForMovie.checkID(ID, self.clientsRepository.getID()):
+            self.clientsRepository.update(ID, newClient)
+        else:
+            print(f"\nThe ID: {ID} is invalid! Please try again.")
+
+    # SEARCH SECTION
+    def searchMovies(self, findMovie):
+        if findMovie in self.moviesRepository.getNames():
+            for movie in self.moviesRepository.getAll():
+                if movie.title == findMovie:
+                    print(f"{findMovie} | Found! | Full information: ")
+                    print(f"{movie}")
+        else:
+            print(f"{findMovie} | Could not been found! Please try again.")
+
+    def searchClients(self, findClient):
+        if findClient in self.clientsRepository.getNames():
+            for client in self.clientsRepository.getAll():
+                if client.name == findClient:
+                    print(f"{findClient} | Found! | Full information: ")
+                    print(f"{client}")
+        else:
+            print(f"{findClient} | Could not been found! Please try again.")
+
+    # RENT SECTION
+    def rentMovies(self, theClient, theMovie):
+        if theClient in self.clientsRepository.getNames():
+            if theMovie in self.moviesRepository.getNames():
+                if self.validatorForMovie.checkAvailability(self.moviesRepository.getMovie(theMovie).availability):
+                    self.clientsRepository.saveMovie(theClient, self.moviesRepository.getMovie(theMovie).title)
+                    self.moviesRepository.getMovie(theMovie).availability = "NOT AVAILABLE"
+                    # self.moviesRepository.addCount(theMovie), self.clientsRepository.addCount(theClient)
+                else:
+                    print(f"\n{theMovie} is not available")
+            else:
+                print(f"\nWe do not have {theMovie} in our store.")
+        else:
+            print(f"\n{theClient} is not in the client list.")
+
     # # RETURN SECTION
     # def returnMovies(self, theClient, theMovie):
     #     if theClient in self.clientsRepository.getNames():

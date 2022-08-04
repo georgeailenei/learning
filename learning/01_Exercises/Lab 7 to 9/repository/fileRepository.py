@@ -3,33 +3,25 @@ from abc import ABC, abstractmethod
 
 
 class fileRepository(ABC):
-    def save(self, item):
-        file = open(self.fileName, "a")
-        size = len(self.getAll())
-        ID = 0
-
-        if size == 0:
-            item.id = self.currentID
-        else:
-            lastLine = self.getAll()[-1].split()
-            item.id = int(lastLine[ID]) + 1
-
-        file.write(str(item) + "\n")
-        file.close()
+    @abstractmethod
+    def update(self, ID, item):
+        pass
 
     @abstractmethod
-    def remove(self, ID):
+    def save(self, item):
         pass
 
     def saveAll(self, items):
         for item in items:
             self.save(item)
 
+    @abstractmethod
     def getAll(self):
-        file = open(self.fileName, "r")
-        lines = file.readlines()
-        file.close()
-        return lines
+        pass
+
+    def remove(self, ID):
+        updateRepo = [item for item in self.getAll() if ID != item.id]
+        return updateRepo
 
     def getID(self):
         if len(self.getAll()) == 0:
@@ -38,7 +30,7 @@ class fileRepository(ABC):
             file = open(self.fileName, "r")
             lines = file.readlines()
             ID = 0
-            idList = [line.split()[ID] for line in lines]
+            idList = [line.split(":")[ID].strip() for line in lines]
             file.close()
             return idList
 
@@ -46,58 +38,129 @@ class fileRepository(ABC):
         file = open(self.fileName, "w")
         file.close()
 
+    def getNames(self):
+        file = open(self.fileName, "r")
+        lines = file.readlines()
+        listWithNames = []
+        name = 1
+
+        for info in lines:
+            info = info.split(":")
+            listWithNames.append(info[name].strip())
+        file.close()
+        return listWithNames
+
 
 class clientFileRepository(fileRepository):
     def __init__(self):
         self.fileName = "repository/clients.text"
+        self.trackClientRentedMovies = {}
+        self.currentCount = 0
         self.currentID = 1
 
-    def remove(self, ID):
-        file = open(self.fileName, "r")
-        lines = file.readlines()
-        uniqueNr, name, CNP = 0, 2, 4
+    def getAll(self):
+        with open(self.fileName, "r") as file:
+            lines = file.readlines()
+            clientsList = []
+            uniqueNr, name, CNP, rentedMovies = 0, 1, 2, 3
 
+            for info in lines:
+                info = info.split(":")
+                clientInfo = client(info[name].strip(), info[CNP].strip())
+                clientInfo.id = info[uniqueNr].strip()
+                # Review below line of code.
+                if len(clientInfo.rentedMovies) == 0:
+                    pass
+                clientsList.append(clientInfo)
+            return clientsList
+
+    def save(self, clientInfo):
+        with open(self.fileName, "a") as file:
+            if len(self.getAll()) == 0:
+                clientInfo.id = self.currentID
+            else:
+                clientInfo.id = int(self.getAll()[-1].id) + 1
+            file.write(str(clientInfo) + "\n")
+
+    def update(self, ID, newClient):
         updatedList = []
-        for info in lines:
-            if ID != info.split()[uniqueNr]:
-                updatedList.append(client(info.split()[name], info.split()[CNP]))
-        file.close()
-        return updatedList
+        for clientInfo in self.getAll():
+            if ID == clientInfo.id:
+                clientInfo.name = newClient.name
+                clientInfo.CNP = newClient.CNP
+                clientInfo.rentedMovies = newClient.rentedMovies
+                updatedList.append(clientInfo)
+            else:
+                updatedList.append(clientInfo)
+        self.removeAll(), self.saveAll(updatedList)
+
+    # Review the code below
+    def saveMovie(self, theClient, theMovie):
+        for clientInfo in self.getAll():
+            if theClient == clientInfo.name:
+                clientInfo.rentedMovies.append(theMovie)
+
+    def addCount(self, theClient):
+        self.trackClientRentedMovies[theClient] += 1
 
 
 class moviesFileRepository(fileRepository):
     def __init__(self):
         self.fileName = "repository/movies.text"
+        self.currentAvailability = "Available"
+        self.trackRentedMovies = {}
         self.currentID = 1
 
-    def remove(self, ID):
-        file = open(self.fileName, "r")
-        lines = file.readlines()
-        uniqueNr, title, description, genre = 0, [], [], []
+    def getAll(self):
+        with open(self.fileName, "r") as file:
+            lines = file.readlines()
+            movieList = []
+            uniqueNr, title, description, genre, availability = 0, 1, 2, 3, 4
 
+            for info in lines:
+                info = info.split(":")
+                movieInfo = movie(info[title].strip(), info[description].strip(), info[genre].strip())
+                movieInfo.id = info[uniqueNr].strip()
+                movieInfo.availability = info[availability].strip()
+                movieList.append(movieInfo)
+            return movieList
+
+    def save(self, movieInfo):
+        with open(self.fileName, "a") as file:
+            if len(self.getAll()) == 0:
+                movieInfo.id = self.currentID
+            else:
+                movieInfo.id = int(self.getAll()[-1].id) + 1
+            movieInfo.availability = self.currentAvailability
+            file.write(str(movieInfo) + "\n")
+
+    def update(self, ID, newMovie):
         updatedList = []
-        count = 4
+        for movieInfo in self.getAll():
+            if ID == movieInfo.id:
+                movieInfo.title = newMovie.title
+                movieInfo.description = newMovie.description
+                movieInfo.genre = newMovie.genre
+                updatedList.append(movieInfo)
+            else:
+                updatedList.append(movieInfo)
+        self.removeAll(), self.saveAll(updatedList)
 
-        for info in lines:
-            if ID != info.split()[uniqueNr]:
-                for word in range(count, len(info)):
-                    if info[word] != "|":
-                        title.append(info[word])
-                    else:
-                        count = info.index(info[word]) + 1
-                        break
+    def getMovie(self, theMovie):
+        for movieInfo in self.getAll():
+            if theMovie == movieInfo.title:
+                return movieInfo
 
-                title = "".join(title[:-1])
+    def getMovieAvailability(self, theMovie):
+        with open(self.fileName, "r") as file:
+            lines = file.readlines()
+            title = 1
+            availability = 4
 
-                for word in range(count, len(info)):
-                    if info[word] != "|":
-                        description.append(info[word])
-                    else:
-                        count = info.index(info[word]) + 1
-                        break
+            for info in lines:
+                info = info.split(":")
+                if info[title].strip() == theMovie:
+                    return info[availability].strip()
 
-                description = "".join(description[1:-1])
-                updatedList.append(movie(title, description, genre))
-
-        file.close()
-        return updatedList
+    def addCount(self, theMovie):
+        self.trackRentedMovies[theMovie] += 1

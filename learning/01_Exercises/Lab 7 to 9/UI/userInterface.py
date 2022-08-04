@@ -110,23 +110,18 @@ class UI:
         allMovies = self.controller.moviesRepository.getAll()
         if len(allMovies) == 0:
             print("- no movies")
-        for m in allMovies:
-            if str(m)[-1] == "\n":
-                print(str(m)[:-1])
-            else:
-                print(m)
+        else:
+            for theMovie in allMovies:
+                print(theMovie)
 
     def displayClients(self):
         # It prints all the movies that are currently in clientRepo.
         print("This is the current list with clients")
         allClients = self.controller.clientsRepository.getAll()
         if len(allClients) == 0:
-            print("- no clients")
-        for Client in allClients:
-            if str(Client)[-1] == "\n":
-                print(str(Client)[:-1])
-            else:
-                print(Client)
+            print("- no clients info")
+        for clientInfo in allClients:
+            print(clientInfo)
 
     def displayMoviesCount(self):
         print("The current count for each movie")
@@ -229,7 +224,7 @@ class UI:
 
             # Collect the movie ID.
             ID = self.collectID()
-            if not self.controller.validatorForMovie.checkID(ID, self.controller.movieIDList()):
+            if not self.controller.validatorForMovie.checkID(ID, self.controller.moviesRepository.getID()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
