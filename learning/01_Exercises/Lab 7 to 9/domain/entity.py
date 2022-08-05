@@ -19,7 +19,7 @@ class client:
         self.id = None
         self.name = name
         self.CNP = CNP
-        self.rentedMovies = []
+        self.rentedMovies = ""
 
     def __str__(self):
         return f"{self.id} : {self.name} : {self.CNP} : {self.rentedMovies}"

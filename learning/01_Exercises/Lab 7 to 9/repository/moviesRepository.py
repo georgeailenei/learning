@@ -22,7 +22,7 @@ class moviesRepository(repository):
     def update(self, ID, newMovie):
         updatedDatabase = []
         for movie in self.database:
-            if ID in movie.__repr__():
+            if ID == str(movie.id):
                 movie.title = newMovie.title
                 movie.description = newMovie.description
                 movie.genre = newMovie.genre

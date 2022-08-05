@@ -47,6 +47,20 @@ class clientFileRepository(fileRepository):
         self.currentCount = 0
         self.currentID = 1
 
+    def loadTrackClientRentedMovie(self):
+        with open("repository/Track_Client_Rented_Movie.text", "r") as f:
+            lines = f.readlines()
+
+            for line in lines:
+                static = line.split(":")
+                self.trackClientRentedMovies[static[0].strip()] = int(static[1].strip())
+
+    def saveTrackClientRentedMovies(self):
+        with open("repository/Track_Client_Rented_Movie.text", "w") as file:
+            for key, value in self.trackClientRentedMovies.items():
+                file.write(key + ": ")
+                file.write(str(value) + "\n")
+
     def addCount(self, theClient):
         self.trackClientRentedMovies[theClient] += 1
 
@@ -79,8 +93,8 @@ class clientFileRepository(fileRepository):
                 pass
             else:
                 clientInfo.rentedMovies = self.rentedMovies
-
-            self.trackClientRentedMovies[clientInfo.name] = self.currentCount
+            if clientInfo.name not in self.trackClientRentedMovies:
+                self.trackClientRentedMovies[clientInfo.name] = self.currentCount
             file.write(str(clientInfo) + "\n")
 
     def update(self, ID, newClient):
@@ -139,6 +153,20 @@ class moviesFileRepository(fileRepository):
         self.trackRentedMovies = {}
         self.currentID = 1
 
+    def loadTrackRentedMovies(self):
+        with open("repository/Track_Rented_Movies.text", "r") as f:
+            lines = f.readlines()
+
+            for line in lines:
+                static = line.split(":")
+                self.trackRentedMovies[static[0].strip()] = int(static[1].strip())
+
+    def saveTrackRentedMovies(self):
+        with open("repository/Track_Rented_Movies.text", "w") as file:
+            for key, value in self.trackRentedMovies.items():
+                file.write(key + ": ")
+                file.write(str(value) + "\n")
+
     def addCount(self, theMovie):
         self.trackRentedMovies[theMovie] += 1
 
@@ -174,7 +202,6 @@ class moviesFileRepository(fileRepository):
 
             if movieInfo.title not in self.trackRentedMovies:
                 self.trackRentedMovies[movieInfo.title] = 0
-
             file.write(str(movieInfo) + "\n")
 
     def update(self, ID, newMovie):

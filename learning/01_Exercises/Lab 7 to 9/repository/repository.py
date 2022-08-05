@@ -14,6 +14,18 @@ class repository(ABC):
     def get(self):
         pass
 
+    def loadTrackClientRentedMovie(self):
+        pass
+
+    def loadTrackRentedMovies(self):
+        pass
+
+    def saveTrackClientRentedMovies(self):
+        pass
+
+    def saveTrackRentedMovies(self):
+        pass
+
     def saveAll(self, items):
         self.currentID = 1
         for movie in items:
@@ -30,6 +42,6 @@ class repository(ABC):
     def getAll(self):
         return self.database
 
-    def getID(self):
-        idList = [item.id.__repr__() for item in self.database]
+    def getIdList(self):
+        idList = [str(item.id) for item in self.database]
         return idList

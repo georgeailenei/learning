@@ -6,6 +6,7 @@ class clientsRepository(repository):
         self.database = []
         self.currentID = 1
         self.trackClientRentedMovies = {}
+        self.rentedMovies = []
         self.currentCount = 0
 
     def save(self, client):
@@ -20,7 +21,7 @@ class clientsRepository(repository):
     def update(self, ID, newClient):
         updatedDatabase = []
         for client in self.database:
-            if ID in client.__repr__():
+            if ID in str(client.id):
                 client.name = newClient.name
                 client.CNP = newClient.CNP
                 updatedDatabase.append(client)

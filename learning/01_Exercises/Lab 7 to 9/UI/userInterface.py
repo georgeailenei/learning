@@ -224,13 +224,13 @@ class UI:
 
             # Collect the movie ID.
             ID = self.collectID()
-            if not self.controller.validatorForMovie.checkID(ID, self.controller.moviesRepository.getID()):
+            if not self.controller.validatorForMovie.checkID(ID, self.controller.moviesRepository.getIdList()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
             # Collect new data to update the list.
             newMovie = self.collectMovieData()
-            if not self.controller.validatorForMovie.validator(newMovie):
+            if not self.controller.validatorForMovie.validator(newMovie, self.controller.moviesRepository.getNames()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
@@ -252,13 +252,13 @@ class UI:
 
             # Collect the client's ID.
             ID = self.collectID()
-            if not self.controller.validatorForClient.checkID(ID, self.controller.clientsRepository.getID()):
+            if not self.controller.validatorForClient.checkID(ID, self.controller.clientsRepository.getIdList()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
             # Collect new data to update the list.
             newClient = self.collectClientsData()
-            if not self.controller.validatorForClient.validator(newClient):
+            if not self.controller.validatorForClient.validator(newClient, self.controller.clientsRepository.getNames()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
@@ -402,6 +402,11 @@ class UI:
                 break
 
     def run(self):
+        # Load Statistics
+        self.controller.clientsRepository.loadTrackClientRentedMovie()
+        self.controller.moviesRepository.loadTrackRentedMovies()
+
+        # Load Menu and Submenus
         while True:
             self.refreshScreen(), self.mainMenu()
             option = self.userInput()
@@ -475,4 +480,7 @@ class UI:
                         break
 
             elif option == "8":
+                # Save statistics before closing the app.
+                self.controller.clientsRepository.saveTrackClientRentedMovies()
+                self.controller.moviesRepository.saveTrackRentedMovies()
                 break
