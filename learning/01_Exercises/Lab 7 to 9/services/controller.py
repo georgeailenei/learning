@@ -15,7 +15,7 @@ class Controller:
     # ADD SECTION
     def addMovie(self, movie):
         # Save the movie information in the list by validating the information given.
-        if self.validatorForMovie.validator(movie):
+        if self.validatorForMovie.validator(movie, self.moviesRepository.getNames()):
             self.moviesRepository.save(movie)
             print(f"\n{movie} has been added to the list.")
         else:
@@ -23,7 +23,7 @@ class Controller:
 
     def addClient(self, Client):
         # Save the client's information in the list.
-        if self.validatorForClient.validator(Client):
+        if self.validatorForClient.validator(Client, self.clientsRepository.getNames()):
             self.clientsRepository.save(Client)
             print(f"\n{Client} has been added to the list.")
         else:
@@ -31,7 +31,7 @@ class Controller:
 
     # REMOVE SECTION
     def removeMovie(self, ID):
-        if ID in self.moviesRepository.getID():
+        if ID in self.moviesRepository.getIdList():
             newMovieList = self.moviesRepository.remove(ID)
             self.moviesRepository.removeAll(), self.moviesRepository.saveAll(newMovieList)
             print(f"\nThe movie with {ID} id has been removed.")
@@ -39,7 +39,7 @@ class Controller:
             print(f"\nThe ID: {ID} is invalid! Please try again.")
 
     def removeClient(self, ID):
-        if ID in self.clientsRepository.getID():
+        if ID in self.clientsRepository.getIdList():
             newClientList = self.clientsRepository.remove(ID)
             self.clientsRepository.removeAll(), self.clientsRepository.saveAll(newClientList)
             print(f"\nThe client with {ID} id has been removed.")
@@ -48,13 +48,13 @@ class Controller:
 
     # UPDATE SECTION
     def updateMovie(self, ID, newMovie):
-        if self.validatorForMovie.checkID(ID, self.moviesRepository.getID()):
+        if self.validatorForMovie.checkID(ID, self.moviesRepository.getIdList()):
             self.moviesRepository.update(ID, newMovie)
         else:
             print(f"\nThe ID: {ID} is invalid! Please try again.")
 
     def updateClient(self, ID, newClient):
-        if self.validatorForMovie.checkID(ID, self.clientsRepository.getID()):
+        if self.validatorForMovie.checkID(ID, self.clientsRepository.getIdList()):
             self.clientsRepository.update(ID, newClient)
         else:
             print(f"\nThe ID: {ID} is invalid! Please try again.")
@@ -84,8 +84,8 @@ class Controller:
             if theMovie in self.moviesRepository.getNames():
                 if self.validatorForMovie.checkAvailability(self.moviesRepository.getMovie(theMovie).availability):
                     self.clientsRepository.saveMovie(theClient, self.moviesRepository.getMovie(theMovie).title)
-                    self.moviesRepository.getMovie(theMovie).availability = "NOT AVAILABLE"
-                    # self.moviesRepository.addCount(theMovie), self.clientsRepository.addCount(theClient)
+                    self.moviesRepository.updateStatus(self.moviesRepository.getMovie(theMovie))
+                    self.moviesRepository.addCount(theMovie), self.clientsRepository.addCount(theClient)
                 else:
                     print(f"\n{theMovie} is not available")
             else:
@@ -93,46 +93,46 @@ class Controller:
         else:
             print(f"\n{theClient} is not in the client list.")
 
-    # # RETURN SECTION
-    # def returnMovies(self, theClient, theMovie):
-    #     if theClient in self.clientsRepository.getNames():
-    #         if theMovie in self.moviesRepository.getNames():
-    #             if theMovie in self.clientsRepository.getClient(theClient).rentedMovies:
-    #                 self.clientsRepository.removeMovie(self.moviesRepository.getMovie(theMovie).title)
-    #                 self.moviesRepository.getMovie(theMovie).availability = "Available"
-    #                 print(f"\nThank Mr.{theClient} for returning the movie: {theMovie}")
-    #             else:
-    #                 print(f"\n{theMovie} is not rented by {theClient}")
-    #         else:
-    #             print(f"\nWe do not have {theMovie} in our store.")
-    #     else:
-    #         print(f"\n{theClient} is not in the client list.")
-    #
-    # # REPORT SECTION
-    # # DISPLAY THE CLIENTS THAT HAVE MOVIES IN ALPHABETICAL ORDER
-    # def displayClientsInOrder(self):
-    #     clientsWithMovies = []
-    #     for client in self.clientsRepository.getAll():
-    #         if self.validatorForClient.moviesRented(client):
-    #             clientsWithMovies.append(client.name)
-    #
-    #     clients = sorted(clientsWithMovies)
-    #     if len(clientsWithMovies) == 0:
-    #         print("NONE OF THE MOVIES ARE RENTED")
-    #     else:
-    #         for client in clients:
-    #             print(client + " | Rented: " + str(len(self.clientsRepository.getClient(client).rentedMovies)) + " movie/s")
-    #
-    # # DISPLAY THE MOST RENTED MOVIE
-    # def displayMostRentedMovies(self):
-    #     values = [count for movie, count in self.moviesRepository.trackRentedMovies.items()]
-    #     if max(values) != 0:
-    #         for movie, count in self.moviesRepository.trackRentedMovies.items():
-    #             if count == max(values):
-    #                 print(movie)
-    #     else:
-    #         print("NONE OF THE MOVIES")
-    #
+    # RETURN SECTION
+    def returnMovies(self, theClient, theMovie):
+        if theClient in self.clientsRepository.getNames():
+            if theMovie in self.moviesRepository.getNames():
+                if theMovie in self.clientsRepository.getClient(theClient).rentedMovies:
+                    self.clientsRepository.removeMovie(self.moviesRepository.getMovie(theMovie).title)
+                    self.moviesRepository.updateStatus(self.moviesRepository.getMovie(theMovie))
+                    print(f"\nThank Mr.{theClient} for returning the movie: {theMovie}")
+                else:
+                    print(f"\n{theMovie} is not rented by {theClient}")
+            else:
+                print(f"\nWe do not have {theMovie} in our store.")
+        else:
+            print(f"\n{theClient} is not in the client list.")
+
+    # REPORT SECTION
+    # DISPLAY THE CLIENTS THAT HAVE MOVIES IN ALPHABETICAL ORDER
+    def displayClientsInOrder(self):
+        clientsWithMovies = []
+        for client in self.clientsRepository.getAll():
+            if self.validatorForClient.moviesRented(client):
+                clientsWithMovies.append(client.name)
+
+        clients = sorted(clientsWithMovies)
+        if len(clientsWithMovies) == 0:
+            print("NONE OF THE MOVIES ARE RENTED")
+        else:
+            for client in clients:
+                print(client + " has " + str(self.clientsRepository.getMovieCount(client)) + " movie/s")
+
+    # DISPLAY THE MOST RENTED MOVIE
+    def displayMostRentedMovies(self):
+        values = [count for movie, count in self.moviesRepository.trackRentedMovies.items()]
+        if max(values, default=0) != 0:
+            for movie, count in self.moviesRepository.trackRentedMovies.items():
+                if count == max(values):
+                    print(movie)
+        else:
+            print("NONE OF THE MOVIES")
+
     # # DISPLAY TOP 30% CLIENTS
     # def displayClientsWithMostMovies(self):
     #     values = [count for count in self.clientsRepository.trackClientRentedMovies.values()]

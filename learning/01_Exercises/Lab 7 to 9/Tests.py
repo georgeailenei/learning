@@ -1,4 +1,3 @@
 
-file = open("tests", "r")
-line = file.readline().strip()
-rez = []
+ceva = {"Batman": 2, "Avengers": 3}
+

@@ -34,9 +34,13 @@ class movieValidator(validate):
         trueOrFalse = False if len(description) < 3 or len(description) > 100 else True
         return trueOrFalse
 
-    def validator(self, movie):
+    def checkTitle(self, title, movieNames):
+        trueOrFalse = False if title in movieNames else True
+        return trueOrFalse
+
+    def validator(self, movie, movieNames=None):
         # This method check if the genre, length and tittle are correct. returns True or False.
-        return self.checkGenre(movie.genre) and self.checkDescriptionLength(movie.description) and self.checkWord(movie.title)
+        return self.checkGenre(movie.genre) and self.checkDescriptionLength(movie.description) and self.checkWord(movie.title) and self.checkTitle(movie.title, movieNames)
 
 
 class clientValidator(validate):
@@ -59,7 +63,11 @@ class clientValidator(validate):
         trueOrFalse = True if len(client.rentedMovies) > 0 else False
         return trueOrFalse
 
+    def checkName(self, client, clientNames):
+        trueOrFalse = False if client in clientNames else True
+        return trueOrFalse
 
-    def validator(self, Client):
+    def validator(self, Client, clientNames=None):
         # This method check if the name and CNP are correct. returns True or False.
-        return self.checkCnpLength(Client.CNP) and self.checkCnpInt(Client.CNP) and self.checkWord(Client.name)
+        return self.checkCnpLength(Client.CNP) and self.checkCnpInt(Client.CNP) and self.checkWord(Client.name) and self.checkName(Client.name, clientNames)
+    
