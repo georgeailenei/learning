@@ -359,7 +359,7 @@ class UI:
             self.refreshScreen()
 
             # Display the title.
-            print("THIS IS THE CLIENTS LIST")
+            print("DISPLAY CLIENTS WITH MOVIES")
 
             # Try to display the client's list in order.
             self.controller.displayClientsInOrder()

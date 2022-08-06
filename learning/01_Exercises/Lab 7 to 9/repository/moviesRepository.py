@@ -9,6 +9,9 @@ class moviesRepository(repository):
         self.currentAvailability = "Available"
         self.trackRentedMovies = {}
 
+    def get(self):
+        pass
+
     def save(self, movie):
         movie.id = self.currentID
         movie.availability = self.currentAvailability
@@ -40,5 +43,8 @@ class moviesRepository(repository):
             if theMovie == movie.title:
                 return movie
 
-    def get(self):
-        pass
+    def updateStatus(self, theMovie):
+        if theMovie.availability == "Available":
+            theMovie.availability = "NOT AVAILABLE"
+        elif theMovie.availability == "NOT AVAILABLE":
+            theMovie.availability = "Available"

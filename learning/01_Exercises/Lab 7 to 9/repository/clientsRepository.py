@@ -6,7 +6,7 @@ class clientsRepository(repository):
         self.database = []
         self.currentID = 1
         self.trackClientRentedMovies = {}
-        self.rentedMovies = []
+        self.rentedMovies = ""
         self.currentCount = 0
 
     def save(self, client):
@@ -41,12 +41,22 @@ class clientsRepository(repository):
     def saveMovie(self, theClient, movie):
         for client in self.database:
             if theClient == client.name:
-                client.rentedMovies.append(movie)
+                client.rentedMovies = client.rentedMovies + " " + movie + ";"
 
     def removeMovie(self, movie):
         for client in self.database:
             if movie in client.rentedMovies:
-                client.rentedMovies.remove(movie)
+                movieList = str(client.rentedMovies).split(";")
+                movieList = [name.strip() for name in movieList]
+                movieList.remove(movie)
+                client.rentedMovies = "; ".join(movieList)
+
+    def getMovieCount(self, theClient):
+        for client in self.getAll():
+            if client.name == theClient:
+                movieList = str(client.rentedMovies).split(";")
+                count = len(movieList) - 1
+                return count
 
     def get(self):
         pass
