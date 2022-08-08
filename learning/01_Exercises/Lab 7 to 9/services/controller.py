@@ -31,7 +31,8 @@ class Controller:
     def removeMovie(self, ID):
         if ID in self.moviesRepository.getIdList():
             newMovieList = self.moviesRepository.remove(ID)
-            self.moviesRepository.removeAll(), self.moviesRepository.saveAll(newMovieList)
+            self.moviesRepository.removeAll()
+            self.moviesRepository.saveAll(newMovieList)
             print(f"\nThe movie with {ID} id has been removed.")
         else:
             print(f"\nThe ID: {ID} is invalid! Please try again.")
@@ -39,7 +40,8 @@ class Controller:
     def removeClient(self, ID):
         if ID in self.clientsRepository.getIdList():
             newClientList = self.clientsRepository.remove(ID)
-            self.clientsRepository.removeAll(), self.clientsRepository.saveAll(newClientList)
+            self.clientsRepository.removeAll()
+            self.clientsRepository.saveAll(newClientList)
             print(f"\nThe client with {ID} id has been removed.")
         else:
             print(f"\nThe ID: {ID} is invalid! Please try again.")

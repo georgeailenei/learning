@@ -107,7 +107,8 @@ class ClientFileRepository(FileRepository):
                 updatedList.append(clientInfo)
             else:
                 updatedList.append(clientInfo)
-        self.removeAll(), self.saveAll(updatedList)
+        self.removeAll()
+        self.saveAll(updatedList)
 
     def saveMovie(self, theClient, theMovie):
         for clientInfo in self.getAll():
@@ -215,7 +216,8 @@ class MoviesFileRepository(FileRepository):
                 updatedList.append(movieInfo)
             else:
                 updatedList.append(movieInfo)
-        self.removeAll(), self.saveAll(updatedList)
+        self.removeAll()
+        self.saveAll(updatedList)
 
     def getMovie(self, theMovie):
         for movieInfo in self.getAll():

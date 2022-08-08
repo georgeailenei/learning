@@ -32,7 +32,8 @@ class MoviesRepository(Repository):
                 updatedDatabase.append(movie)
             else:
                 updatedDatabase.append(movie)
-        self.removeAll(), self.saveAll(updatedDatabase)
+        self.removeAll()
+        self.saveAll(updatedDatabase)
 
     def getNames(self):
         nameList = [movie.title for movie in self.database]

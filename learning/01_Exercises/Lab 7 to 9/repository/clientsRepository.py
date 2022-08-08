@@ -27,7 +27,8 @@ class ClientsRepository(Repository):
                 updatedDatabase.append(client)
             else:
                 updatedDatabase.append(client)
-        self.removeAll(), self.saveAll(updatedDatabase)
+        self.removeAll()
+        self.saveAll(updatedDatabase)
 
     def getNames(self):
         nameList = [client.name for client in self.database]

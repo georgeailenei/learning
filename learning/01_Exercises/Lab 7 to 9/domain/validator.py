@@ -40,8 +40,13 @@ class MovieValidator(Validate):
 
     def validator(self, movie, movieNames):
         # This method check if the genre, length and tittle are correct. returns True or False.
-        return self.checkGenre(movie.genre) and self.checkDescriptionLength(movie.description) and self.checkWord(movie.title) and self.checkTitle(movie.title, movieNames)
-
+        return (
+            self.checkGenre(movie.genre)
+            and self.checkDescriptionLength(movie.description)
+            and self.checkWord(movie.title)
+            and self.checkTitle(movie.title, movieNames)
+        )
+    
 
 class ClientValidator(Validate):
     def checkCnpLength(self, CNP):
@@ -69,5 +74,10 @@ class ClientValidator(Validate):
 
     def validator(self, Client, clientNames):
         # This method check if the name and CNP are correct. returns True or False.
-        return self.checkCnpLength(Client.CNP) and self.checkCnpInt(Client.CNP) and self.checkWord(Client.name) and self.checkName(Client.name, clientNames)
+        return (
+            self.checkCnpLength(Client.CNP)
+            and self.checkCnpInt(Client.CNP)
+            and self.checkWord(Client.name)
+            and self.checkName(Client.name, clientNames)
+        )
     
