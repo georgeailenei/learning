@@ -1,6 +1,6 @@
 
-class movie:
-    def __init__(self, title, description, genre):
+class Movie:
+    def __init__(self, title: str, description: str, genre: str):
         self.id = None
         self.title = title
         self.description = description
@@ -14,8 +14,8 @@ class movie:
         return f"{self.id} : {self.title} : {self.description} : {self.genre} : {self.availability}"
 
 
-class client:
-    def __init__(self, name, CNP):
+class Client:
+    def __init__(self, name: str, CNP):
         self.id = None
         self.name = name
         self.CNP = CNP

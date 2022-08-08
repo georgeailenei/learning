@@ -2,7 +2,7 @@ class ValidatorError(Exception):
     pass
 
 
-class validate:
+class Validate:
     def checkWord(self, word):
         # The title must contain only letters and spaces. It returns True or False.
         allLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
@@ -16,7 +16,7 @@ class validate:
         return trueOrFalse
 
 
-class movieValidator(validate):
+class MovieValidator(Validate):
     def checkAvailability(self, availability):
         trueOrFalse = True if availability == "Available" else False
         return trueOrFalse
@@ -43,7 +43,7 @@ class movieValidator(validate):
         return self.checkGenre(movie.genre) and self.checkDescriptionLength(movie.description) and self.checkWord(movie.title) and self.checkTitle(movie.title, movieNames)
 
 
-class clientValidator(validate):
+class ClientValidator(Validate):
     def checkCnpLength(self, CNP):
         # The method checks if the CNP is longer or smaller than 3 digits, and it returns True or False.
         trueOrFalse = True if len(CNP) == 3 else False

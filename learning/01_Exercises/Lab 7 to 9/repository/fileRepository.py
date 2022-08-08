@@ -1,8 +1,8 @@
-from domain.entity import client, movie
+from domain.entity import Client, Movie
 from abc import ABC, abstractmethod
 
 
-class fileRepository(ABC):
+class FileRepository(ABC):
     @abstractmethod
     def update(self, ID, item):
         pass
@@ -39,7 +39,7 @@ class fileRepository(ABC):
             return idList
 
 
-class clientFileRepository(fileRepository):
+class ClientFileRepository(FileRepository):
     def __init__(self):
         self.fileName = "repository/clients.text"
         self.trackClientRentedMovies = {}
@@ -76,7 +76,7 @@ class clientFileRepository(fileRepository):
 
             for info in lines:
                 info = info.split(":")
-                clientInfo = client(info[name].strip(), info[CNP].strip())
+                clientInfo = Client(info[name].strip(), info[CNP].strip())
                 clientInfo.id = info[uniqueNr].strip()
                 clientInfo.rentedMovies = info[rentedMovies].strip()
                 clientsList.append(clientInfo)
@@ -146,7 +146,7 @@ class clientFileRepository(fileRepository):
                 return count
 
 
-class moviesFileRepository(fileRepository):
+class MoviesFileRepository(FileRepository):
     def __init__(self):
         self.fileName = "repository/movies.text"
         self.currentAvailability = "Available"
@@ -182,7 +182,7 @@ class moviesFileRepository(fileRepository):
 
             for info in lines:
                 info = info.split(":")
-                movieInfo = movie(info[title].strip(), info[description].strip(), info[genre].strip())
+                movieInfo = Movie(info[title].strip(), info[description].strip(), info[genre].strip())
                 movieInfo.id = info[uniqueNr].strip()
                 movieInfo.availability = info[availability].strip()
                 movieList.append(movieInfo)

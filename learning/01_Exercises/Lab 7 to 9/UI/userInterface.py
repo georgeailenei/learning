@@ -1,4 +1,4 @@
-from domain.entity import movie, client
+from domain.entity import Movie, Client
 import os
 
 
@@ -95,14 +95,14 @@ class UI:
         title = input("Movie title: ")
         description = input("Description: ")
         genre = input("Genre: ")
-        return movie(title, description, genre)
+        return Movie(title, description, genre)
 
     def collectClientsData(self):
         # Collects the data from the user, and it returns an entity/object.
         print("\nPlease insert the following information")
         name = input("Name: ")
         CNP = input("CNP: ")
-        return client(name, CNP)
+        return Client(name, CNP)
 
     def displayMovies(self):
         # It prints all the movies that are currently in movieRepo.

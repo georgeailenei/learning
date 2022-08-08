@@ -1,7 +1,7 @@
-from repository.repository import repository
+from repository.repository import Repository
 
 
-class moviesRepository(repository):
+class MoviesRepository(Repository):
     def __init__(self):
         self.database = []
         self.currentID = 1

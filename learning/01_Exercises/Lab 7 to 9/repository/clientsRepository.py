@@ -1,7 +1,7 @@
-from repository.repository import repository
+from repository.repository import Repository
 
 
-class clientsRepository(repository):
+class ClientsRepository(Repository):
     def __init__(self):
         self.database = []
         self.currentID = 1

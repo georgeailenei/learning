@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class repository(ABC):
+class Repository(ABC):
     @abstractmethod
     def save(self, item):
         pass
