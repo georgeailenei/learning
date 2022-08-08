@@ -14,7 +14,6 @@ class Controller:
 
     # ADD SECTION
     def addMovie(self, movie):
-        # Save the movie information in the list by validating the information given.
         if self.validatorForMovie.validator(movie, self.moviesRepository.getNames()):
             self.moviesRepository.save(movie)
             print(f"\n{movie} has been added to the list.")
@@ -22,7 +21,6 @@ class Controller:
             print(f"The {movie} contains some wrong information")
 
     def addClient(self, Client):
-        # Save the client's information in the list.
         if self.validatorForClient.validator(Client, self.clientsRepository.getNames()):
             self.clientsRepository.save(Client)
             print(f"\n{Client} has been added to the list.")
