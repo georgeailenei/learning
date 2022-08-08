@@ -46,7 +46,7 @@ class MovieValidator(Validate):
             and self.checkWord(movie.title)
             and self.checkTitle(movie.title, movieNames)
         )
-    
+
 
 class ClientValidator(Validate):
     def checkCnpLength(self, CNP):

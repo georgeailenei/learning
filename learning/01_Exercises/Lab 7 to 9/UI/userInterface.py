@@ -45,7 +45,7 @@ class UI:
         print(self.mainTitle)
         print(self.Menu)
 
-    def subMenu(self):
+    def adSubMenu(self):
         print(self.addSubMenu)
 
     def rmvSubMenu(self):
@@ -307,7 +307,7 @@ class UI:
             if option == "1":
                 while True:
                     self.refreshScreen()
-                    self.subMenu()
+                    self.adSubMenu()
                     option = self.userInput()
 
                     if option == "1":
