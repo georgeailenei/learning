@@ -4,14 +4,14 @@ from repository.moviesRepository import MoviesRepository
 from repository.clientsRepository import ClientsRepository
 from repository.fileRepository import ClientFileRepository
 from repository.fileRepository import MoviesFileRepository
-from domain.validator import MovieValidator
-from domain.validator import ClientValidator
+from domain.validator import ValidateMovie
+from domain.validator import ValidateClient
 from domain.entity import Movie, Client
 
 
 def main():
-    validatorForMovie = MovieValidator()
-    validatorForClient = ClientValidator()
+    validatorForMovie = ValidateMovie()
+    validatorForClient = ValidateClient()
     moviesRepo = MoviesFileRepository()
     clientsRepo = ClientFileRepository()
     controller = Controller(moviesRepo, clientsRepo, validatorForMovie, validatorForClient)

@@ -16,7 +16,7 @@ class Validate:
         return true_or_false
 
 
-class MovieValidator(Validate):
+class ValidateMovie(Validate):
     def check_availability(self, availability):
         true_or_false = True if availability == "Available" else False
         return true_or_false
@@ -48,7 +48,7 @@ class MovieValidator(Validate):
         )
 
 
-class ClientValidator(Validate):
+class ValidateClient(Validate):
     def check_cnp_length(self, cnp):
         # The method checks if the CNP is longer or smaller than 3 digits, and it returns True or False.
         true_or_false = True if len(cnp) == 3 else False
