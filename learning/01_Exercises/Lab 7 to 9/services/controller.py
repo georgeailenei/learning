@@ -6,11 +6,11 @@ class ControllerError(Exception):
 
 
 class Controller:
-    def __init__(self, movies_repository, clients_repository, movie_validator, client_validator):
-        self.movies_repo = movies_repository
-        self.clients_repo = clients_repository
-        self.validate_movie = movie_validator
-        self.validate_client = client_validator
+    def __init__(self, movies_repo, clients_repo, validate_movie, validate_client):
+        self.movies_repo = movies_repo
+        self.clients_repo = clients_repo
+        self.validate_movie = validate_movie
+        self.validate_client = validate_client
 
     # ADD SECTION
     def add_movie(self, movie):
@@ -58,21 +58,11 @@ class Controller:
     # SEARCH SECTION
     def search_movie(self, find_movie):
         if find_movie in self.movies_repo.get_names():
-            for movie in self.movies_repo.get_all():
-                if movie.title == find_movie:
-                    print(f"{find_movie} | Found! | Full information: ")
-                    print(f"{movie}")
-        else:
-            print(f"{find_movie} | Could not been found! Please try again.")
+            return True
 
     def search_client(self, find_client):
         if find_client in self.clients_repo.get_names():
-            for client in self.clients_repo.get_all():
-                if client.name == find_client:
-                    print(f"{find_client} | Found! | Full information: ")
-                    print(f"{client}")
-        else:
-            print(f"{find_client} | Could not been found! Please try again.")
+            return True
 
     # RENT SECTION
     def rent_movies(self, the_client, the_movie):

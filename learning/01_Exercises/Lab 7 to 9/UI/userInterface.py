@@ -216,8 +216,15 @@ class Ui:
             self.refresh_screen()
             print("SEARCH FOR MOVIES")
 
-            find_movie = self.collect_word()
-            self.controller.search_movie(find_movie)
+            search_term = self.collect_word()
+            if self.controller.search_movie(search_term):
+                for movie in self.controller.movies_repo.get_all():
+                    if movie.title == search_term:
+                        print(f"{search_term} | Found! | Full information: ")
+                        print(f"{movie}")
+            else:
+                print(f"{search_term} | Could not been found! Please try again.")
+
             if not self.exit():
                 break
 
@@ -226,8 +233,15 @@ class Ui:
             self.refresh_screen()
             print("SEARCH FOR CLIENTS")
 
-            find_client = self.collect_word()
-            self.controller.search_client(find_client)
+            search_term = self.collect_word()
+            if self.controller.search_client(search_term):
+                for client in self.controller.clients_repo.get_all():
+                    if client.name == search_term:
+                        print(f"{search_term} | Found! | Full information: ")
+                        print(f"{client}")
+            else:
+                print(f"{search_term} | Could not been found! Please try again.")
+
             if not self.exit():
                 break
 
