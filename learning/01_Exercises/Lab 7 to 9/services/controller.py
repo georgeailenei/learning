@@ -30,18 +30,14 @@ class Controller:
     # REMOVE SECTION
     def remove_movie(self, unique_id):
         if unique_id in self.movies_repo.get_id_list():
-            new_movie_list = self.movies_repo.remove(unique_id)
-            self.movies_repo.remove_all()
-            self.movies_repo.save_all(new_movie_list)
+            self.movies_repo.remove(unique_id)
             print(f"\nThe movie with {unique_id} id has been removed.")
         else:
             print(f"\nThe ID: {unique_id} is invalid! Please try again.")
 
     def remove_clients(self, unique_id):
         if unique_id in self.clients_repo.get_id_list():
-            new_client_list = self.clients_repo.remove(unique_id)
-            self.clients_repo.remove_all()
-            self.clients_repo.save_all(new_client_list)
+            self.clients_repo.remove(unique_id)
             print(f"\nThe client with {unique_id} id has been removed.")
         else:
             print(f"\nThe ID: {unique_id} is invalid! Please try again.")

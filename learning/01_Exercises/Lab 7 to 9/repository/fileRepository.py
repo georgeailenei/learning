@@ -24,8 +24,9 @@ class FileRepository(ABC):
             self.save(item)
 
     def remove(self, unique_id):
-        updateRepo = [item for item in self.get_all() if unique_id != item.id]
-        return updateRepo
+        update_repo = [item for item in self.get_all() if unique_id != item.id]
+        self.remove_all()
+        self.save_all(update_repo)
 
     def remove_all(self):
         file = open(self.file_name, "w")
