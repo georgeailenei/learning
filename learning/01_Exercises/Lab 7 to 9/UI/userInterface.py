@@ -94,7 +94,7 @@ class Ui:
 
     def display_movies(self):
         print("This is the current list with movies")
-        all_movies = self.controller.moviesRepository.get_all()
+        all_movies = self.controller.movies_repo.get_all()
         if len(all_movies) == 0:
             print("- no movies")
         else:
@@ -103,7 +103,7 @@ class Ui:
 
     def display_clients(self):
         print("This is the current list with clients")
-        all_clients = self.controller.clientsRepository.get_all()
+        all_clients = self.controller.clients_repo.get_all()
         if len(all_clients) == 0:
             print("- no clients info")
         for client_info in all_clients:
@@ -111,12 +111,12 @@ class Ui:
 
     def display_movie_count(self):
         print("The current count for each movie")
-        for the_movie, the_count in self.controller.moviesRepository.track_rented_movies.items():
+        for the_movie, the_count in self.controller.movies_repo.track_rented_movies.items():
             print(the_movie, the_count)
 
     def display_clients_movie_count(self):
         print("The current list with clients and their rented movie count")
-        for the_client, the_count in self.controller.clientsRepository.track_clients_movies.items():
+        for the_client, the_count in self.controller.clients_repo.track_clients_movies.items():
             print(the_client, the_count)
 
     def display_top30_clients(self, clients):
@@ -175,13 +175,13 @@ class Ui:
 
             # Collect the movie unique_id.
             unique_id = self.collect_id()
-            if not self.controller.validatorForMovie.check_id(unique_id, self.controller.moviesRepository.get_id_list()):
+            if not self.controller.validate_movie.check_id(unique_id, self.controller.movies_repo.get_id_list()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
             # Collect new data to update the list.
             newMovie = self.collect_movie_data()
-            if not self.controller.validatorForMovie.validator(newMovie, self.controller.moviesRepository.get_names()):
+            if not self.controller.validate_movie.validator(newMovie, self.controller.movies_repo.get_names()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
@@ -197,13 +197,13 @@ class Ui:
 
             # Collect the client's unique_id.
             unique_id = self.collect_id()
-            if not self.controller.validatorForClient.check_id(unique_id, self.controller.clientsRepository.get_id_list()):
+            if not self.controller.validate_client.check_id(unique_id, self.controller.clients_repo.get_id_list()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
             # Collect new data to update the list.
             new_client = self.collect_client_data()
-            if not self.controller.validatorForClient.validator(new_client, self.controller.clientsRepository.get_names()):
+            if not self.controller.validate_client.validator(new_client, self.controller.clients_repo.get_names()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
@@ -295,8 +295,8 @@ class Ui:
 
     def run(self):
         # Load Statistics
-        self.controller.clientsRepository.load_tracked_clients_movies()
-        self.controller.moviesRepository.load_tracked_movies()
+        self.controller.clients_repo.load_tracked_clients_movies()
+        self.controller.movies_repo.load_tracked_movies()
 
         # Load Menu and Submenus
         while True:
@@ -379,6 +379,6 @@ class Ui:
 
             elif option == "8":
                 # Save statistics before closing the app.
-                self.controller.clientsRepository.save_tracked_clients_movies()
-                self.controller.moviesRepository.save_tracked_movies()
+                self.controller.clients_repo.save_tracked_clients_movies()
+                self.controller.movies_repo.save_tracked_movies()
                 break
