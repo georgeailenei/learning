@@ -19,10 +19,10 @@ class Client:
         self.id = None
         self.name = name
         self.CNP = CNP
-        self.rentedMovies = ""
+        self.rented_movies = ""
 
     def __str__(self):
-        return f"{self.id} : {self.name} : {self.CNP} : {self.rentedMovies}"
+        return f"{self.id} : {self.name} : {self.CNP} : {self.rented_movies}"
 
     def __repr__(self):
-        return f"{self.id} : {self.name} : {self.CNP} : {self.rentedMovies}"
+        return f"{self.id} : {self.name} : {self.CNP} : {self.rented_movies}"

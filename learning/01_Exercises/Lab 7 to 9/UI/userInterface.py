@@ -2,9 +2,9 @@ from domain.entity import Movie, Client
 import os
 
 
-class UI:
-    mainTitle = "This app manages movies and clients for Company X"
-    Menu = '1. Add\n' \
+class Ui:
+    main_title = "This app manages movies and clients for Company X"
+    menu = '1. Add\n' \
            '2. Remove\n' \
            '3. Update\n' \
            '4. Search\n' \
@@ -13,52 +13,52 @@ class UI:
            '7. Reports\n' \
            '8. Exit'
 
-    addSubMenu = "1. Add movies\n" \
-                 "2. Add clients\n" \
-                 "3. Return to Main Menu"
+    sub_menu_add = "1. Add movies\n" \
+                   "2. Add clients\n" \
+                   "3. Return to Main Menu"
 
-    removeSubMenu = "1. Remove movies\n" \
-                    "2. Remove clients\n" \
-                    "3. Return to Main Menu"
+    sub_menu_remove = "1. Remove movies\n" \
+                      "2. Remove clients\n" \
+                      "3. Return to Main Menu"
 
-    updateSubMenu = "1. Update movies\n" \
-                    "2. Update clients\n" \
-                    "3. Return to Main Menu"
+    sub_menu_update = "1. Update movies\n" \
+                      "2. Update clients\n" \
+                      "3. Return to Main Menu"
 
-    searchSubMenu = "1. Search for movies\n" \
-                    "2. Search for clients\n" \
-                    "3. Return to Main Menu"
+    sub_menu_search = "1. Search for movies\n" \
+                      "2. Search for clients\n" \
+                      "3. Return to Main Menu"
 
-    reportsSubMenu = "1. Display clients\n" \
-                     "2. Display most rented movies\n" \
-                     "3. Display top 3 clients with most rented movies\n" \
-                     "4. Return to Main Menu"
+    sub_menu_reports = "1. Display clients\n" \
+                       "2. Display most rented movies\n" \
+                       "3. Display top 3 clients with most rented movies\n" \
+                       "4. Return to Main Menu"
 
     def __init__(self, controller):
         self.controller = controller
 
-    def userInput(self):
+    def user_input(self):
         option = input("Choose option: ")
         return option
 
-    def mainMenu(self):
-        print(self.mainTitle)
-        print(self.Menu)
+    def main_menu(self):
+        print(self.main_title)
+        print(self.menu)
 
-    def adSubMenu(self):
-        print(self.addSubMenu)
+    def add_sub_menu(self):
+        print(self.sub_menu_add)
 
-    def rmvSubMenu(self):
-        print(self.removeSubMenu)
+    def remove_sub_menu(self):
+        print(self.sub_menu_remove)
 
-    def updSubMenu(self):
-        print(self.updateSubMenu)
+    def update_sub_menu(self):
+        print(self.sub_menu_update)
 
-    def findingSubMenu(self):
-        print(self.searchSubMenu)
+    def search_sub_menu(self):
+        print(self.sub_menu_search)
 
-    def reportSubMenu(self):
-        print(self.reportsSubMenu)
+    def reports_sub_menu(self):
+        print(self.sub_menu_reports)
 
     def exit(self):
         option = input("Do you want to continue (N/Y): ")
@@ -67,318 +67,318 @@ class UI:
         elif option == "Y":
             return True
 
-    def refreshScreen(self):
+    def refresh_screen(self):
         return os.system("cls")
 
-    def collectWord(self):
+    def collect_word(self):
         word = input("Search: ")
         return word
 
-    def collectID(self):
+    def collect_id(self):
         print("\nPlease insert an ID")
-        ID = input("Write ID: ")
-        return ID
+        unique_id = input("Write ID: ")
+        return unique_id
 
-    def collectMovieData(self):
+    def collect_movie_data(self):
         print("\nPlease insert the following information")
         title = input("Movie title: ")
         description = input("Description: ")
         genre = input("Genre: ")
         return Movie(title, description, genre)
 
-    def collectClientsData(self):
+    def collect_client_data(self):
         print("\nPlease insert the following information")
         name = input("Name: ")
-        CNP = input("CNP: ")
-        return Client(name, CNP)
+        cnp = input("CNP: ")
+        return Client(name, cnp)
 
-    def displayMovies(self):
+    def display_movies(self):
         print("This is the current list with movies")
-        allMovies = self.controller.moviesRepository.getAll()
-        if len(allMovies) == 0:
+        all_movies = self.controller.moviesRepository.get_all()
+        if len(all_movies) == 0:
             print("- no movies")
         else:
-            for theMovie in allMovies:
-                print(theMovie)
+            for the_movie in all_movies:
+                print(the_movie)
 
-    def displayClients(self):
+    def display_clients(self):
         print("This is the current list with clients")
-        allClients = self.controller.clientsRepository.getAll()
-        if len(allClients) == 0:
+        all_clients = self.controller.clientsRepository.get_all()
+        if len(all_clients) == 0:
             print("- no clients info")
-        for clientInfo in allClients:
-            print(clientInfo)
+        for client_info in all_clients:
+            print(client_info)
 
-    def displayMoviesCount(self):
+    def display_movie_count(self):
         print("The current count for each movie")
-        for theMovie, theCount in self.controller.moviesRepository.trackRentedMovies.items():
-            print(theMovie, theCount)
+        for the_movie, the_count in self.controller.moviesRepository.track_rented_movies.items():
+            print(the_movie, the_count)
 
-    def displayClientsMovieCount(self):
+    def display_clients_movie_count(self):
         print("The current list with clients and their rented movie count")
-        for theClient, theCount in self.controller.clientsRepository.trackClientRentedMovies.items():
-            print(theClient, theCount)
+        for the_client, the_count in self.controller.clientsRepository.track_clients_movies.items():
+            print(the_client, the_count)
 
-    def displayTop30Clients(self, clients):
+    def display_top30_clients(self, clients):
         for client, count in clients.items():
             print(client, count)
 
-    def addMovie(self):
+    def add_movie(self):
         while True:
-            self.refreshScreen()
+            self.refresh_screen()
             print("ADD MOVIES")
 
-            self.displayMovies()
-            newMovie = self.collectMovieData()
-            self.controller.addMovie(newMovie)
+            self.display_movies()
+            new_movie = self.collect_movie_data()
+            self.controller.add_movie(new_movie)
             if not self.exit():
                 break
 
-    def addClients(self):
+    def add_client(self):
         while True:
-            self.refreshScreen()
+            self.refresh_screen()
             print("ADD CLIENTS")
 
-            self.displayClients()
-            Client = self.collectClientsData()
-            self.controller.addClient(Client)
+            self.display_clients()
+            client = self.collect_client_data()
+            self.controller.add_client(client)
             if not self.exit():
                 break
 
-    def removeMovies(self):
+    def remove_movie(self):
         while True:
-            self.refreshScreen()
+            self.refresh_screen()
             print("REMOVE MOVIES")
 
-            self.displayMovies()
-            ID = self.collectID()
-            self.controller.removeMovie(ID)
+            self.display_movies()
+            unique_id = self.collect_id()
+            self.controller.remove_movie(unique_id)
             if not self.exit():
                 break
 
-    def removeClient(self):
+    def remove_client(self):
         while True:
-            self.refreshScreen()
+            self.refresh_screen()
             print("REMOVE CLIENTS")
-            self.displayClients()
+            self.display_clients()
 
-            ID = self.collectID()
-            self.controller.removeClient(ID)
+            unique_id = self.collect_id()
+            self.controller.remove_clients(unique_id)
             if not self.exit():
                 break
 
-    def updateMovies(self):
+    def update_movie(self):
         while True:
-            self.refreshScreen()
+            self.refresh_screen()
             print("UPDATE MOVIES")
-            self.displayMovies()
+            self.display_movies()
 
-            # Collect the movie ID.
-            ID = self.collectID()
-            if not self.controller.validatorForMovie.checkID(ID, self.controller.moviesRepository.getIdList()):
+            # Collect the movie unique_id.
+            unique_id = self.collect_id()
+            if not self.controller.validatorForMovie.check_id(unique_id, self.controller.moviesRepository.get_id_list()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
             # Collect new data to update the list.
-            newMovie = self.collectMovieData()
-            if not self.controller.validatorForMovie.validator(newMovie, self.controller.moviesRepository.getNames()):
+            newMovie = self.collect_movie_data()
+            if not self.controller.validatorForMovie.validator(newMovie, self.controller.moviesRepository.get_names()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
-            self.controller.updateMovie(ID, newMovie)
+            self.controller.update_movie(unique_id, newMovie)
             if not self.exit():
                 break
 
-    def updateClients(self):
+    def update_clients(self):
         while True:
-            self.refreshScreen()
+            self.refresh_screen()
             print("UPDATE CLIENTS")
-            self.displayClients()
+            self.display_clients()
 
-            # Collect the client's ID.
-            ID = self.collectID()
-            if not self.controller.validatorForClient.checkID(ID, self.controller.clientsRepository.getIdList()):
+            # Collect the client's unique_id.
+            unique_id = self.collect_id()
+            if not self.controller.validatorForClient.check_id(unique_id, self.controller.clientsRepository.get_id_list()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
             # Collect new data to update the list.
-            newClient = self.collectClientsData()
-            if not self.controller.validatorForClient.validator(newClient, self.controller.clientsRepository.getNames()):
+            new_client = self.collect_client_data()
+            if not self.controller.validatorForClient.validator(new_client, self.controller.clientsRepository.get_names()):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 
-            self.controller.updateClient(ID, newClient)
+            self.controller.update_client(unique_id, new_client)
             if not self.exit():
                 break
 
-    def searchMovies(self):
+    def search_movies(self):
         while True:
-            self.refreshScreen()
+            self.refresh_screen()
             print("SEARCH FOR MOVIES")
 
-            findMovie = self.collectWord()
-            self.controller.searchMovies(findMovie)
+            find_movie = self.collect_word()
+            self.controller.search_movie(find_movie)
             if not self.exit():
                 break
 
-    def searchClients(self):
+    def search_clients(self):
         while True:
-            self.refreshScreen()
+            self.refresh_screen()
             print("SEARCH FOR CLIENTS")
 
-            findClient = self.collectWord()
-            self.controller.searchClients(findClient)
+            find_client = self.collect_word()
+            self.controller.search_client(find_client)
             if not self.exit():
                 break
 
-    def rentMovies(self):
+    def rent_movies(self):
         while True:
-            self.refreshScreen()
+            self.refresh_screen()
 
             print("RENT MOVIES")
-            self.displayMovies()
+            self.display_movies()
 
             print("\nTHE CLIENT LIST")
-            self.displayClients()
+            self.display_clients()
 
-            theClient = input("Choose a client: ")
-            theMovie = input("Choose a movie: ")
-            self.controller.rentMovies(theClient, theMovie)
+            the_client = input("Choose a client: ")
+            the_movie = input("Choose a movie: ")
+            self.controller.rent_movies(the_client, the_movie)
             if not self.exit():
                 break
 
-    def returnMovies(self):
+    def return_movies(self):
         while True:
-            self.refreshScreen()
+            self.refresh_screen()
             print("RETURN MOVIES")
-            self.displayMovies()
+            self.display_movies()
 
             print("\nTHE CLIENT LIST")
-            self.displayClients()
+            self.display_clients()
 
-            theClient = input("Choose a client: ")
-            theMovie = input("Choose a movie: ")
+            the_client = input("Choose a client: ")
+            the_movie = input("Choose a movie: ")
 
-            self.controller.returnMovies(theClient, theMovie)
+            self.controller.return_movies(the_client, the_movie)
             if not self.exit():
                 break
 
-    def displayClientsInOrder(self):
+    def display_clients_in_order(self):
         while True:
-            self.refreshScreen()
+            self.refresh_screen()
             print("DISPLAY CLIENTS WITH MOVIES")
 
-            self.controller.displayClientsInOrder()
+            self.controller.display_clients_in_order()
             if not self.exit():
                 break
 
-    def displayMostRentedMovies(self):
+    def display_most_rented_movies(self):
         while True:
-            self.refreshScreen()
-            self.displayMoviesCount()
+            self.refresh_screen()
+            self.display_movie_count()
 
             print("\nMost rented movie: ")
-            self.controller.displayMostRentedMovies()
+            self.controller.display_most_rented_movies()
             if not self.exit():
                 break
 
-    def displayClientsWithMostMovies(self):
+    def display_clients_with_most_movies(self):
         while True:
-            self.refreshScreen()
-            self.displayClientsMovieCount()
+            self.refresh_screen()
+            self.display_clients_movie_count()
 
             print("\nTOP 30% clients are: ")
-            top30 = self.controller.displayClientsWithMostMovies()
-            self.displayTop30Clients(top30)
+            top30 = self.controller.display_clients_with_most_movies()
+            self.display_top30_clients(top30)
             if not self.exit():
                 break
 
     def run(self):
         # Load Statistics
-        self.controller.clientsRepository.loadTrackClientRentedMovie()
-        self.controller.moviesRepository.loadTrackRentedMovies()
+        self.controller.clientsRepository.load_tracked_clients_movies()
+        self.controller.moviesRepository.load_tracked_movies()
 
         # Load Menu and Submenus
         while True:
-            self.refreshScreen()
-            self.mainMenu()
-            option = self.userInput()
+            self.refresh_screen()
+            self.main_menu()
+            option = self.user_input()
 
             if option == "1":
                 while True:
-                    self.refreshScreen()
-                    self.adSubMenu()
-                    option = self.userInput()
+                    self.refresh_screen()
+                    self.add_sub_menu()
+                    option = self.user_input()
 
                     if option == "1":
-                        self.addMovie()
+                        self.add_movie()
                     elif option == "2":
-                        self.addClients()
+                        self.add_client()
                     elif option == "3":
                         break
 
             elif option == "2":
                 while True:
-                    self.refreshScreen()
-                    self.rmvSubMenu()
-                    option = self.userInput()
+                    self.refresh_screen()
+                    self.remove_sub_menu()
+                    option = self.user_input()
 
                     if option == "1":
-                        self.removeMovies()
+                        self.remove_movie()
                     elif option == "2":
-                        self.removeClient()
+                        self.remove_client()
                     elif option == "3":
                         break
 
             elif option == "3":
                 while True:
-                    self.refreshScreen()
-                    self.updSubMenu()
-                    option = self.userInput()
+                    self.refresh_screen()
+                    self.update_sub_menu()
+                    option = self.user_input()
 
                     if option == "1":
-                        self.updateMovies()
+                        self.update_movie()
                     elif option == "2":
-                        self.updateClients()
+                        self.update_clients()
                     elif option == "3":
                         break
 
             elif option == "4":
                 while True:
-                    self.refreshScreen()
-                    self.findingSubMenu()
-                    option = self.userInput()
+                    self.refresh_screen()
+                    self.search_sub_menu()
+                    option = self.user_input()
 
                     if option == "1":
-                        self.searchMovies()
+                        self.search_movies()
                     elif option == "2":
-                        self.searchClients()
+                        self.search_clients()
                     elif option == "3":
                         break
 
             elif option == "5":
-                self.rentMovies()
+                self.rent_movies()
 
             elif option == "6":
-                self.returnMovies()
+                self.return_movies()
 
             elif option == "7":
                 while True:
-                    self.refreshScreen()
-                    self.reportSubMenu()
-                    option = self.userInput()
+                    self.refresh_screen()
+                    self.reports_sub_menu()
+                    option = self.user_input()
 
                     if option == "1":
-                        self.displayClientsInOrder()
+                        self.display_clients_in_order()
                     elif option == "2":
-                        self.displayMostRentedMovies()
+                        self.display_most_rented_movies()
                     elif option == "3":
-                        self.displayClientsWithMostMovies()
+                        self.display_clients_with_most_movies()
                     elif option == "4":
                         break
 
             elif option == "8":
                 # Save statistics before closing the app.
-                self.controller.clientsRepository.saveTrackClientRentedMovies()
-                self.controller.moviesRepository.saveTrackRentedMovies()
+                self.controller.clientsRepository.save_tracked_clients_movies()
+                self.controller.moviesRepository.save_tracked_movies()
                 break

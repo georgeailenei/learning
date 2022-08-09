@@ -4,59 +4,59 @@ from repository.repository import Repository
 class ClientsRepository(Repository):
     def __init__(self):
         self.database = []
-        self.currentID = 1
-        self.trackClientRentedMovies = {}
-        self.rentedMovies = ""
-        self.currentCount = 0
+        self.current_id = 1
+        self.track_clients_movies = {}
+        self.rented_movies = ""
+        self.current_count = 0
 
     def save(self, client):
-        client.id = self.currentID
+        client.id = self.current_id
         self.database.append(client)
-        self.trackClientRentedMovies[client.name] = self.currentCount
-        self.currentID += 1
+        self.track_clients_movies[client.name] = self.current_count
+        self.current_id += 1
 
-    def addCount(self, client):
-        self.trackClientRentedMovies[client] += 1
+    def add_count(self, client):
+        self.track_clients_movies[client] += 1
 
-    def update(self, ID, newClient):
-        updatedDatabase = []
+    def update(self, unique_id, new_client):
+        updated_database = []
         for client in self.database:
-            if ID in str(client.id):
-                client.name = newClient.name
-                client.CNP = newClient.CNP
-                updatedDatabase.append(client)
+            if unique_id in str(client.id):
+                client.name = new_client.name
+                client.CNP = new_client.CNP
+                updated_database.append(client)
             else:
-                updatedDatabase.append(client)
-        self.removeAll()
-        self.saveAll(updatedDatabase)
+                updated_database.append(client)
+        self.remove_all()
+        self.save_all(updated_database)
 
-    def getNames(self):
-        nameList = [client.name for client in self.database]
-        return nameList
+    def get_names(self):
+        name_list = [client.name for client in self.database]
+        return name_list
 
-    def getClient(self, theClient):
-        for client in self.getAll():
-            if theClient == client.name:
+    def get_client(self, the_client):
+        for client in self.get_all():
+            if the_client == client.name:
                 return client
 
-    def saveMovie(self, theClient, movie):
+    def save_movie(self, the_client, movie):
         for client in self.database:
-            if theClient == client.name:
-                client.rentedMovies = client.rentedMovies + " " + movie + ";"
+            if the_client == client.name:
+                client.rented_movies = client.rented_movies + " " + movie + ";"
 
-    def removeMovie(self, movie):
+    def remove_movie(self, movie):
         for client in self.database:
-            if movie in client.rentedMovies:
-                movieList = str(client.rentedMovies).split(";")
-                movieList = [name.strip() for name in movieList]
-                movieList.remove(movie)
-                client.rentedMovies = "; ".join(movieList)
+            if movie in client.rented_movies:
+                movie_list = str(client.rented_movies).split(";")
+                movie_list = [name.strip() for name in movie_list]
+                movie_list.remove(movie)
+                client.rented_movies = "; ".join(movie_list)
 
-    def getMovieCount(self, theClient):
-        for client in self.getAll():
-            if client.name == theClient:
-                movieList = str(client.rentedMovies).split(";")
-                count = len(movieList) - 1
+    def get_movie_count(self, the_client):
+        for client in self.get_all():
+            if client.name == the_client:
+                movie_list = str(client.rented_movies).split(";")
+                count = len(movie_list) - 1
                 return count
 
     def get(self):

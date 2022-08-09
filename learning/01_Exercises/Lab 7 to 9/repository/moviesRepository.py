@@ -4,48 +4,48 @@ from repository.repository import Repository
 class MoviesRepository(Repository):
     def __init__(self):
         self.database = []
-        self.currentID = 1
-        self.currentCount = 0
-        self.currentAvailability = "Available"
-        self.trackRentedMovies = {}
+        self.current_id = 1
+        self.current_count = 0
+        self.current_availability = "Available"
+        self.track_rented_movies = {}
 
     def get(self):
         pass
 
     def save(self, movie):
-        movie.id = self.currentID
-        movie.availability = self.currentAvailability
+        movie.id = self.current_id
+        movie.availability = self.current_availability
         self.database.append(movie)
-        self.trackRentedMovies[movie.title] = self.currentCount
-        self.currentID += 1
+        self.track_rented_movies[movie.title] = self.current_count
+        self.current_id += 1
 
-    def addCount(self, movie):
-        self.trackRentedMovies[movie] += 1
+    def add_count(self, movie):
+        self.track_rented_movies[movie] += 1
 
-    def update(self, ID, newMovie):
-        updatedDatabase = []
+    def update(self, unique_id, new_movie):
+        updated_database = []
         for movie in self.database:
-            if ID == str(movie.id):
-                movie.title = newMovie.title
-                movie.description = newMovie.description
-                movie.genre = newMovie.genre
-                updatedDatabase.append(movie)
+            if unique_id == str(movie.id):
+                movie.title = new_movie.title
+                movie.description = new_movie.description
+                movie.genre = new_movie.genre
+                updated_database.append(movie)
             else:
-                updatedDatabase.append(movie)
-        self.removeAll()
-        self.saveAll(updatedDatabase)
+                updated_database.append(movie)
+        self.remove_all()
+        self.save_all(updated_database)
 
-    def getNames(self):
-        nameList = [movie.title for movie in self.database]
-        return nameList
+    def get_names(self):
+        name_list = [movie.title for movie in self.database]
+        return name_list
 
-    def getMovie(self, theMovie):
-        for movie in self.getAll():
-            if theMovie == movie.title:
+    def get_movie(self, the_movie):
+        for movie in self.get_all():
+            if the_movie == movie.title:
                 return movie
 
-    def updateStatus(self, theMovie):
-        if theMovie.availability == "Available":
-            theMovie.availability = "NOT AVAILABLE"
-        elif theMovie.availability == "NOT AVAILABLE":
-            theMovie.availability = "Available"
+    def update_status(self, the_movie):
+        if the_movie.availability == "Available":
+            the_movie.availability = "NOT AVAILABLE"
+        elif the_movie.availability == "NOT AVAILABLE":
+            the_movie.availability = "Available"

@@ -14,34 +14,34 @@ class Repository(ABC):
     def get(self):
         pass
 
-    def loadTrackClientRentedMovie(self):
+    def load_tracked_clients_movies(self):
         pass
 
-    def loadTrackRentedMovies(self):
+    def load_tracked_movies(self):
         pass
 
-    def saveTrackClientRentedMovies(self):
+    def save_tracked_clients_movies(self):
         pass
 
-    def saveTrackRentedMovies(self):
+    def save_tracked_movies(self):
         pass
 
-    def saveAll(self, items):
-        self.currentID = 1
+    def save_all(self, items):
+        self.current_id = 1
         for movie in items:
             self.save(movie)
         return self.database
 
     def remove(self, ID):
-        updateRepo = [item for item in self.database if ID not in item.__repr__()]
-        return updateRepo
+        update_repo = [item for item in self.database if ID not in item.__repr__()]
+        return update_repo
 
-    def removeAll(self):
+    def remove_all(self):
         return self.database.clear()
 
-    def getAll(self):
+    def get_all(self):
         return self.database
 
-    def getIdList(self):
-        idList = [str(item.id) for item in self.database]
-        return idList
+    def get_id_list(self):
+        id_list = [str(item.id) for item in self.database]
+        return id_list
