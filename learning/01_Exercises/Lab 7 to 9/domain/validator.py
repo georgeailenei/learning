@@ -24,9 +24,9 @@ class ValidateMovie(Validate):
     def check_genre(self, genre):
         # This method checks if the genre given by the user exists.
         movie_genres = ["Action", "Crime", "Drama", "Fantasy", "Horror",
-                       "Comedy", "Romance", "Science Fiction", "Sports",
-                       "Thriller", "Mystery", "War", "Western"]
-        genre_is_valid = True if genre in movie_genres else False
+                        "Comedy", "Romance", "Science Fiction", "Sports",
+                        "Thriller", "Mystery", "War", "Western"]
+        genre_is_valid = genre in movie_genres
         return genre_is_valid
 
     def check_description_length(self, description):
@@ -35,7 +35,7 @@ class ValidateMovie(Validate):
         return length_is_valid
 
     def check_title(self, title, movie_names):
-        title_is_available = False if title in movie_names else True
+        title_is_available = title in movie_names
         return title_is_available
 
     def validator(self, movie, movie_names):
@@ -69,7 +69,7 @@ class ValidateClient(Validate):
         return movies_is_available
 
     def check_name(self, client, clients_names):
-        name_is_available = False if client in clients_names else True
+        name_is_available = client in clients_names
         return name_is_available
 
     def validator(self, client, clients_names):
