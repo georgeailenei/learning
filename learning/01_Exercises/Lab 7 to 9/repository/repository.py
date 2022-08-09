@@ -34,7 +34,8 @@ class Repository(ABC):
 
     def remove(self, ID):
         update_repo = [item for item in self.database if ID not in item.__repr__()]
-        return update_repo
+        self.remove_all()
+        self.save_all(update_repo)
 
     def remove_all(self):
         return self.database.clear()
