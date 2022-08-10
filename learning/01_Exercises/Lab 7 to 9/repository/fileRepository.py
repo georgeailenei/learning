@@ -148,8 +148,8 @@ class ClientFileRepository(FileRepository):
 
 
 class MoviesFileRepository(FileRepository):
-    def __init__(self):
-        self.file_name = "repository/movies.text"
+    def __init__(self, file_name):
+        self.file_name = file_name
         self.current_availability = "Available"
         self.track_rented_movies = {}
         self.current_id = 1

@@ -12,7 +12,7 @@ from domain.entity import Movie, Client
 def main():
     validatorForMovie = ValidateMovie()
     validatorForClient = ValidateClient()
-    moviesRepo = MoviesFileRepository()
+    moviesRepo = MoviesFileRepository("repository/movies.text")
     clientsRepo = ClientFileRepository()
     controller = Controller(moviesRepo, clientsRepo, validatorForMovie, validatorForClient)
 
