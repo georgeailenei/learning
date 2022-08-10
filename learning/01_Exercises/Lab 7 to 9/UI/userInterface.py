@@ -1,4 +1,5 @@
 from domain.entity import Movie, Client
+from services.controller import ControllerError
 import os
 
 
@@ -75,9 +76,13 @@ class Ui:
         return word
 
     def collect_id(self):
-        print("\nPlease insert an ID")
-        unique_id = input("Write ID: ")
-        return unique_id
+        while True:
+            print("\nPlease insert an ID")
+            unique_id = input("Write ID: ")
+            if unique_id.isnumeric():
+                return int(unique_id)
+            else:
+                print(f'This is not a number {unique_id}')
 
     def collect_movie_data(self):
         print("\nPlease insert the following information")
@@ -194,7 +199,10 @@ class Ui:
 
             newMovie = self.collect_movie_data()
 
-            self.controller.update_movie(unique_id, newMovie)
+            try:
+                self.controller.update_movie(unique_id, newMovie)
+            except ControllerError as ex:
+                print(str(ex))
 
             if not self.exit():
                 break
@@ -213,7 +221,7 @@ class Ui:
 
             # Collect new data to update the list.
             new_client = self.collect_client_data()
-            if not self.controller.validate_client.validator(new_client, self.controller.clients_repo.get_names()):
+            if not self.controller.validate_client.validator(new_client):
                 # You must raise an error/message for the user to know what's going on.
                 continue
 

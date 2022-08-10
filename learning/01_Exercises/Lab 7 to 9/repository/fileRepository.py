@@ -1,6 +1,8 @@
 from domain.entity import Client, Movie
 from abc import ABC, abstractmethod
 
+class RepositoryError:
+    pass
 
 class FileRepository(ABC):
     @abstractmethod
@@ -208,8 +210,10 @@ class MoviesFileRepository(FileRepository):
 
     def update(self, unique_id, new_movie):
         updated_list = []
+        updated_movie = False
         for movie_info in self.get_all():
             if unique_id == movie_info.id:
+                updated_movie = True
                 movie_info.title = new_movie.title
                 movie_info.description = new_movie.description
                 movie_info.genre = new_movie.genre
@@ -217,6 +221,10 @@ class MoviesFileRepository(FileRepository):
                 updated_list.append(movie_info)
             else:
                 updated_list.append(movie_info)
+
+        if updated_movie is False:
+            raise RepositoryError(f'Movie with id {unique_id} does not exist')
+
         self.remove_all()
         self.save_all(updated_list)
 

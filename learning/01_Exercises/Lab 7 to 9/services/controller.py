@@ -1,5 +1,6 @@
 import itertools
 
+from domain.validator import ValidatorError
 
 class ControllerError(Exception):
     pass
@@ -42,16 +43,17 @@ class Controller:
     #     else:
     #         return False
     #
-    # # UPDATE SECTION
-    # def update_movie(self, unique_id, new_movie):
-    #     if self.validate_movie.check_id(unique_id):
-    #         if unique_id in self.movies_repo.get_id_list():
-    #             self.movies_repo.update(unique_id, new_movie)
-    #             return True
-    #         else:
-    #             return False
-    #     else:
-    #         return False
+    # UPDATE SECTION
+    def update_movie(self, unique_id: int, new_movie):
+        if unique_id not in self.movies_repo.get_id_list():
+            return ControllerError(f'Movie with id {unique_id} does not exist in repository')
+
+        try:
+            self.validate_movie.validator(new_movie)
+        except ValidatorError as ex:
+            raise ControllerError(str(ex))
+
+        return self.movies_repo.update(unique_id, new_movie)
 
     # def update_client(self, unique_id, new_client):
     #     if self.validate_movie.check_id(unique_id, self.clients_repo.get_id_list()):

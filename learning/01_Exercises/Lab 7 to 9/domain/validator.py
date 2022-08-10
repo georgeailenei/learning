@@ -8,8 +8,8 @@ class Validate:
         all_letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                       't', 'u', 'v', 'w', 'x', 'y', 'z', " ", "."]
         unwanted_letters = [letter for letter in word if letter.lower() not in all_letters]
-        word_is_valid = False if len(unwanted_letters) > 0 else True
-        return word_is_valid
+        if len(unwanted_letters):
+            self.validation_errors.append(f'Word {word} contains unwanted characters (only letters allowed)')
 
     def check_id(self, unique_id):
         try:
@@ -31,21 +31,25 @@ class ValidateMovie(Validate):
         movie_genres = ["Action", "Crime", "Drama", "Fantasy", "Horror",
                         "Comedy", "Romance", "Science Fiction", "Sports",
                         "Thriller", "Mystery", "War", "Western"]
-        genre_is_valid = genre in movie_genres
-        return genre_is_valid
+        if genre not in movie_genres:
+            self.validation_errors.append(f'Movie should have one of the genres: {" ".join(movie_genres)}')
 
     def check_description_length(self, description):
         # The method returns True or False depending on the description length.
-        length_is_valid = False if len(description) < 3 or len(description) > 100 else True
-        return length_is_valid
+        if len(description) < 3 or len(description) > 100:
+            self.validation_errors.append('Description should have between 3 and 100 characters')
 
     def validator(self, movie):
+        self.validation_errors = []
+
+        self.check_genre(movie.genre)
+        self.check_description_length(movie.description)
+        self.check_word(movie.title)
+
+        if len(self.validation_errors) > 0:
+            raise ValidatorError('\n'.join(self.validation_errors))
+
         # This method check if the genre, length and tittle are correct. returns True or False.
-        return (
-            self.check_genre(movie.genre)
-            and self.check_description_length(movie.description)
-            and self.check_word(movie.title)
-        )
 
 
 class ValidateClient(Validate):
