@@ -127,10 +127,14 @@ class Ui:
         while True:
             self.refresh_screen()
             print("ADD MOVIES")
-
             self.display_movies()
+
             new_movie = self.collect_movie_data()
-            self.controller.add_movie(new_movie)
+            if self.controller.add_movie(new_movie):
+                print(f"\n{new_movie} has been added to the list.")
+            else:
+                print(f"The {new_movie} contains some wrong information")
+
             if not self.exit():
                 break
 
@@ -138,10 +142,14 @@ class Ui:
         while True:
             self.refresh_screen()
             print("ADD CLIENTS")
-
             self.display_clients()
+
             client = self.collect_client_data()
-            self.controller.add_client(client)
+            if self.controller.add_client(client):
+                print(f"\n{client} has been added to the list.")
+            else:
+                print(f"The {client}'s details appears to be wrong, please try again.")
+
             if not self.exit():
                 break
 
@@ -149,10 +157,14 @@ class Ui:
         while True:
             self.refresh_screen()
             print("REMOVE MOVIES")
-
             self.display_movies()
+
             unique_id = self.collect_id()
-            self.controller.remove_movie(unique_id)
+            if self.controller.remove_movie(unique_id):
+                print(f"\nThe movie with {unique_id} id has been removed.")
+            else:
+                print(f"\nThe ID: {unique_id} is invalid! Please try again.")
+
             if not self.exit():
                 break
 
@@ -163,7 +175,11 @@ class Ui:
             self.display_clients()
 
             unique_id = self.collect_id()
-            self.controller.remove_clients(unique_id)
+            if self.controller.remove_clients(unique_id):
+                print(f"\nThe client with {unique_id} id has been removed.")
+            else:
+                print(f"\nThe ID: {unique_id} is invalid! Please try again.")
+
             if not self.exit():
                 break
 
@@ -175,17 +191,11 @@ class Ui:
 
             # Collect the movie unique_id.
             unique_id = self.collect_id()
-            if not self.controller.validate_movie.check_id(unique_id, self.controller.movies_repo.get_id_list()):
-                # You must raise an error/message for the user to know what's going on.
-                continue
 
-            # Collect new data to update the list.
             newMovie = self.collect_movie_data()
-            if not self.controller.validate_movie.validator(newMovie, self.controller.movies_repo.get_names()):
-                # You must raise an error/message for the user to know what's going on.
-                continue
 
             self.controller.update_movie(unique_id, newMovie)
+
             if not self.exit():
                 break
 
