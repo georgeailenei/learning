@@ -46,7 +46,7 @@ class Controller:
     # UPDATE SECTION
     def update_movie(self, unique_id: int, new_movie):
         if unique_id not in self.movies_repo.get_id_list():
-            return ControllerError(f'Movie with id {unique_id} does not exist in repository')
+            raise ControllerError(f'Movie with id {unique_id} does not exist in repository')
 
         try:
             self.validate_movie.validator(new_movie)
