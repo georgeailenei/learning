@@ -35,11 +35,8 @@ class FileRepository(ABC):
         file.close()
 
     def get_id_list(self):
-        if len(self.get_all()) == 0:
-            return []
-        else:
-            id_list = [item.id for item in self.get_all()]
-            return id_list
+        id_list = [item.id for item in self.get_all()]
+        return id_list
 
 
 class ClientFileRepository(FileRepository):
@@ -187,7 +184,7 @@ class MoviesFileRepository(FileRepository):
             for info in lines:
                 info = info.split(":")
                 movie_info = Movie(info[title].strip(), info[description].strip(), info[genre].strip())
-                movie_info.id = info[unique_id].strip()
+                movie_info.id = int(info[unique_id].strip())
                 movie_info.availability = info[availability].strip()
                 movie_list.append(movie_info)
             return movie_list

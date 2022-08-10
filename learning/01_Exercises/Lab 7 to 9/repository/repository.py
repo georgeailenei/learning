@@ -44,5 +44,5 @@ class Repository(ABC):
         return self.database
 
     def get_id_list(self):
-        id_list = [str(item.id) for item in self.database]
+        id_list = [item.id for item in self.database]
         return id_list
