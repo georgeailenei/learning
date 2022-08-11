@@ -123,21 +123,17 @@ class Controller:
                 clients_with_movies.append(client.name)
 
         clients = sorted(clients_with_movies)
-        if len(clients_with_movies) == 0:
-            print("NONE OF THE MOVIES ARE RENTED")
-        else:
-            for client in clients:
-                print(client + " has " + str(self.clients_repo.get_movie_count(client)) + " movie/s")
+        return clients
 
     # DISPLAY THE MOST RENTED MOVIE
-    def display_most_rented_movies(self):
+    def display_most_rented_movie(self):
         values = [count for movie, count in self.movies_repo.track_rented_movies.items()]
         if max(values, default=0) != 0:
             for movie, count in self.movies_repo.track_rented_movies.items():
                 if count == max(values):
-                    print(movie)
+                    return movie
         else:
-            print("NONE OF THE MOVIES")
+            return None
 
     # DISPLAY TOP 30% CLIENTS
     def display_clients_with_most_movies(self):
@@ -160,8 +156,4 @@ class Controller:
 
         x = (len(clients_in_order) * 30) / 100
         top30 = dict(itertools.islice(clients_in_order.items(), round(x)))
-
-        if len(top30) == 0:
-            print("NONE OF THE CLIENTS")
-
         return top30

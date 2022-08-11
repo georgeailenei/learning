@@ -316,17 +316,29 @@ class Ui:
             self.refresh_screen()
             print("DISPLAY CLIENTS WITH MOVIES")
 
-            self.controller.display_clients_in_order()
+            clients = self.controller.display_clients_in_order()
+
+            if len(clients) == 0:
+                print("NONE OF THE MOVIES ARE RENTED")
+            else:
+                for client in clients:
+                    print(client + " has " + str(self.controller.clients_repo.get_movie_count(client)) + " movie/s")
+
             if not self.exit():
                 break
 
-    def display_most_rented_movies(self):
+    def display_most_rented_movie(self):
         while True:
             self.refresh_screen()
             self.display_movie_count()
 
             print("\nMost rented movie: ")
-            self.controller.display_most_rented_movies()
+            movie = self.controller.display_most_rented_movie()
+            if movie is None:
+                print("NONE OF THE MOVIES")
+            else:
+                print(f"{movie}")
+
             if not self.exit():
                 break
 
@@ -337,7 +349,12 @@ class Ui:
 
             print("\nTOP 30% clients are: ")
             top30 = self.controller.display_clients_with_most_movies()
-            self.display_top30_clients(top30)
+
+            if len(top30) == 0:
+                print("NONE OF THE CLIENTS")
+            else:
+                self.display_top30_clients(top30)
+
             if not self.exit():
                 break
 
@@ -419,7 +436,7 @@ class Ui:
                     if option == "1":
                         self.display_clients_in_order()
                     elif option == "2":
-                        self.display_most_rented_movies()
+                        self.display_most_rented_movie()
                     elif option == "3":
                         self.display_clients_with_most_movies()
                     elif option == "4":
