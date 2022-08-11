@@ -1,8 +1,10 @@
 from domain.entity import Client, Movie
 from abc import ABC, abstractmethod
 
-class RepositoryError:
+
+class RepositoryError(Exception):
     pass
+
 
 class FileRepository(ABC):
     @abstractmethod
@@ -25,8 +27,8 @@ class FileRepository(ABC):
         for item in items:
             self.save(item)
 
-    def remove(self, unique_id):
-        update_repo = [item for item in self.get_all() if unique_id != item.id]
+    def remove(self, unique_id: int):
+        update_repo = [item for item in self.get_all() if unique_id != int(item.id)]
         self.remove_all()
         self.save_all(update_repo)
 
@@ -35,7 +37,7 @@ class FileRepository(ABC):
         file.close()
 
     def get_id_list(self):
-        id_list = [item.id for item in self.get_all()]
+        id_list = [int(item.id) for item in self.get_all()]
         return id_list
 
 
@@ -100,7 +102,7 @@ class ClientFileRepository(FileRepository):
     def update(self, unique_id, new_client):
         updated_list = []
         for client_info in self.get_all():
-            if unique_id == client_info.id:
+            if unique_id == int(client_info.id):
                 client_info.name = new_client.name
                 client_info.CNP = new_client.CNP
                 client_info.rented_movies = new_client.rented_movies
@@ -114,7 +116,7 @@ class ClientFileRepository(FileRepository):
         for client_info in self.get_all():
             if the_client == client_info.name:
                 client_info.rented_movies = client_info.rented_movies + " " + the_movie + ";"
-                self.update(client_info.id, client_info)
+                self.update(int(client_info.id), client_info)
 
     def remove_movie(self, the_movie):
         for client_info in self.get_all():
@@ -123,7 +125,7 @@ class ClientFileRepository(FileRepository):
                 movie_list = [name.strip() for name in movie_list]
                 movie_list.remove(the_movie)
                 client_info.rented_movies = "; ".join(movie_list)
-                self.update(client_info.id, client_info)
+                self.update(int(client_info.id), client_info)
 
     def get_names(self):
         client_names = [client_info.name for client_info in self.get_all()]
@@ -145,6 +147,10 @@ class ClientFileRepository(FileRepository):
                 movie_list = str(client_info.rented_movies).split(";")
                 count = len(movie_list) - 1
                 return count
+
+    def get_rented_movies(self, the_client):
+        client = self.get_client(the_client)
+        return client.rented_movies
 
 
 class MoviesFileRepository(FileRepository):
@@ -209,7 +215,7 @@ class MoviesFileRepository(FileRepository):
         updated_list = []
         updated_movie = False
         for movie_info in self.get_all():
-            if unique_id == movie_info.id:
+            if unique_id == int(movie_info.id):
                 updated_movie = True
                 movie_info.title = new_movie.title
                 movie_info.description = new_movie.description

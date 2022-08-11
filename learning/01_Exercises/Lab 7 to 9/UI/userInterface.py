@@ -135,10 +135,11 @@ class Ui:
             self.display_movies()
 
             new_movie = self.collect_movie_data()
-            if self.controller.add_movie(new_movie):
-                print(f"\n{new_movie} has been added to the list.")
-            else:
-                print(f"The {new_movie} contains some wrong information")
+
+            try:
+                self.controller.add_movie(new_movie)
+            except ControllerError as e:
+                print(str(e))
 
             if not self.exit():
                 break
@@ -150,10 +151,11 @@ class Ui:
             self.display_clients()
 
             client = self.collect_client_data()
-            if self.controller.add_client(client):
-                print(f"\n{client} has been added to the list.")
-            else:
-                print(f"The {client}'s details appears to be wrong, please try again.")
+
+            try:
+                self.controller.add_client(client)
+            except ControllerError as e:
+                print(str(e))
 
             if not self.exit():
                 break
@@ -165,10 +167,13 @@ class Ui:
             self.display_movies()
 
             unique_id = self.collect_id()
-            if self.controller.remove_movie(unique_id):
-                print(f"\nThe movie with {unique_id} id has been removed.")
+
+            try:
+                self.controller.remove_movie(unique_id)
+            except ControllerError as e:
+                print(str(e))
             else:
-                print(f"\nThe ID: {unique_id} is invalid! Please try again.")
+                print(f"\nThe movie with {unique_id} id has been removed.")
 
             if not self.exit():
                 break
@@ -180,10 +185,13 @@ class Ui:
             self.display_clients()
 
             unique_id = self.collect_id()
-            if self.controller.remove_clients(unique_id):
-                print(f"\nThe client with {unique_id} id has been removed.")
+
+            try:
+                self.controller.remove_clients(unique_id)
+            except ControllerError as e:
+                print(str(e))
             else:
-                print(f"\nThe ID: {unique_id} is invalid! Please try again.")
+                print(f"\nThe ID: {unique_id} has been removed.")
 
             if not self.exit():
                 break
@@ -194,15 +202,15 @@ class Ui:
             print("UPDATE MOVIES")
             self.display_movies()
 
-            # Collect the movie unique_id.
             unique_id = self.collect_id()
-
             newMovie = self.collect_movie_data()
 
             try:
                 self.controller.update_movie(unique_id, newMovie)
             except ControllerError as ex:
                 print(str(ex))
+            else:
+                print(f"The movie with id: {unique_id} has been updated!")
 
             if not self.exit():
                 break
@@ -213,19 +221,16 @@ class Ui:
             print("UPDATE CLIENTS")
             self.display_clients()
 
-            # Collect the client's unique_id.
             unique_id = self.collect_id()
-            if not self.controller.validate_client.check_id(unique_id, self.controller.clients_repo.get_id_list()):
-                # You must raise an error/message for the user to know what's going on.
-                continue
-
-            # Collect new data to update the list.
             new_client = self.collect_client_data()
-            if not self.controller.validate_client.validator(new_client):
-                # You must raise an error/message for the user to know what's going on.
-                continue
 
-            self.controller.update_client(unique_id, new_client)
+            try:
+                self.controller.update_client(unique_id, new_client)
+            except ControllerError as e:
+                print(str(e))
+            else:
+                print(f"The client with id: {unique_id} has been updated!")
+
             if not self.exit():
                 break
 
@@ -275,7 +280,12 @@ class Ui:
 
             the_client = input("Choose a client: ")
             the_movie = input("Choose a movie: ")
-            self.controller.rent_movies(the_client, the_movie)
+
+            try:
+                self.controller.rent_movies(the_client, the_movie)
+            except ControllerError as e:
+                print(str(e))
+
             if not self.exit():
                 break
 
@@ -291,7 +301,13 @@ class Ui:
             the_client = input("Choose a client: ")
             the_movie = input("Choose a movie: ")
 
-            self.controller.return_movies(the_client, the_movie)
+            try:
+                self.controller.return_movies(the_client, the_movie)
+            except ControllerError as e:
+                print(str(e))
+            else:
+                print(f"\nThank Mr.{the_client} for returning the movie: {the_movie}")
+
             if not self.exit():
                 break
 
