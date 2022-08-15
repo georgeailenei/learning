@@ -54,8 +54,8 @@ class ClientFileRepository(FileRepository):
             lines = f.readlines()
 
             for line in lines:
-                static = line.split(":")
-                self.track_clients_movies[static[0].strip()] = int(static[1].strip())
+                statistic = line.split(":")
+                self.track_clients_movies[statistic[0].strip()] = int(statistic[1].strip())
 
     def save_tracked_clients_movies(self):
         with open("repository/Track_Client_Rented_Movie.text", "w") as file:

@@ -9,16 +9,22 @@ class ClientsRepository(Repository):
         self.rented_movies = ""
         self.current_count = 0
 
-    def save(self, client):
+    def get(self):
+        pass
+
+    # Tested
+    def save(self, client: object):
         client.id = self.current_id
         self.database.append(client)
         self.track_clients_movies[client.name] = self.current_count
         self.current_id += 1
 
-    def add_count(self, client):
+    # Tested
+    def add_count(self, client: str):
         self.track_clients_movies[client] += 1
 
-    def update(self, unique_id, new_client):
+    # Tested
+    def update(self, unique_id: str, new_client: object):
         updated_database = []
         for client in self.database:
             if unique_id in str(client.id):
@@ -30,21 +36,25 @@ class ClientsRepository(Repository):
         self.remove_all()
         self.save_all(updated_database)
 
+    # Tested
     def get_names(self):
         name_list = [client.name for client in self.database]
         return name_list
 
-    def get_client(self, the_client):
+    # Tested
+    def get_client(self, the_client: str):
         for client in self.get_all():
             if the_client == client.name:
                 return client
 
-    def save_movie(self, the_client, movie):
+    # Tested
+    def save_movie(self, the_client: str, movie: str):
         for client in self.database:
             if the_client == client.name:
                 client.rented_movies = client.rented_movies + " " + movie + ";"
 
-    def remove_movie(self, movie):
+    # Tested
+    def remove_movie(self, movie: str):
         for client in self.database:
             if movie in client.rented_movies:
                 movie_list = str(client.rented_movies).split(";")
@@ -52,12 +62,10 @@ class ClientsRepository(Repository):
                 movie_list.remove(movie)
                 client.rented_movies = "; ".join(movie_list)
 
-    def get_movie_count(self, the_client):
+    # Tested
+    def get_movie_count(self, the_client: str):
         for client in self.get_all():
             if client.name == the_client:
                 movie_list = str(client.rented_movies).split(";")
                 count = len(movie_list) - 1
                 return count
-
-    def get(self):
-        pass

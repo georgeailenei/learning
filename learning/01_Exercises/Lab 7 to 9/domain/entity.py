@@ -16,6 +16,7 @@ class Movie:
     def __eq__(self, other):
         return self.id == other.id and self.title == other.title and self.genre == other.genre and self.availability == other.availability
 
+
 class Client:
     def __init__(self, name: str, CNP):
         self.id = None

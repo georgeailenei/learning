@@ -7,7 +7,7 @@ class Repository(ABC):
         pass
 
     @abstractmethod
-    def update(self):
+    def update(self, unique_id, name):
         pass
 
     @abstractmethod
